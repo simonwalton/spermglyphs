@@ -14330,16 +14330,22 @@ myospermglyph.server.create_head = function(a, b) {
   return myospermglyph.server.attr.call(null, a.ellipse(200, 200, (new cljs.core.Keyword("\ufdd0:headwidth")).call(null, b) * (new cljs.core.Keyword("\ufdd0:hscale")).call(null, myospermglyph.server.globals) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals), (new cljs.core.Keyword("\ufdd0:headlength")).call(null, b) * (new cljs.core.Keyword("\ufdd0:hscale")).call(null, myospermglyph.server.globals) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals)), 
   cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "black", "\ufdd0:fill", myospermglyph.server.raphaelcolour.call(null, (new cljs.core.Keyword("\ufdd0:nouncertainty")).call(null, myospermglyph.server.colours)), "\ufdd0:stroke-width", 1], !0))
 };
+myospermglyph.server.create_arc = function(a, b, c) {
+  return myospermglyph.server.attr.call(null, a.path(cljs.core.format.call(null, "M%d,%d m%d,%d a%d,%d %d %d,%d %d,%d", 200, 200, 0, -c, c, c, 0, 1, 1, c, c)), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "black", "\ufdd0:fill", "none", "\ufdd0:stroke-width", 1], !0)).transform(cljs.core.format.call(null, "t%d,%dr-45", -c, c))
+};
 myospermglyph.server.create_vcl = function(a, b) {
   var c = ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, myospermglyph.server.globals) + (new cljs.core.Keyword("\ufdd0:vcl")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals);
-  cljs.core.PersistentVector.fromArray([myospermglyph.server.startAngle, 240, cljs.core._STAR_, 16], !0);
-  cljs.core.PersistentVector.fromArray([myospermglyph.server.endAngle, -300, cljs.core._STAR_, 16], !0);
-  return myospermglyph.server.attr.call(null, a.path(cljs.core.format.call(null, "M%d,%d m%d,%d a%d,%d %d %d,%d %d,%d", 200, 200, 0, -c, c, c, 0, 1, 1, c, c)), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "black", "\ufdd0:fill", "none", "\ufdd0:stroke-width", 1], !0)).transform(cljs.core.format.call(null, "t%d,%dr-45", -c, c))
+  return myospermglyph.server.create_arc.call(null, a, b, c)
+};
+myospermglyph.server.create_vsl = function(a, b) {
+  var c = ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, myospermglyph.server.globals) + (new cljs.core.Keyword("\ufdd0:vsl")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals);
+  return myospermglyph.server.create_arc.call(null, a, b, c)
 };
 myospermglyph.server.draw = function() {
   var a = Raphael(0, 0, 640, 480);
   myospermglyph.server.create_head.call(null, a, myospermglyph.server.sperm);
   myospermglyph.server.create_vcl.call(null, a, myospermglyph.server.sperm);
+  myospermglyph.server.create_vsl.call(null, a, myospermglyph.server.sperm);
   return null
 };
 goog.exportSymbol("myospermglyph.server.draw", myospermglyph.server.draw);

@@ -41,17 +41,23 @@
       (attr {:stroke "black", :fill (raphaelcolour (:nouncertainty colours)), :stroke-width 1}))
   )
 
+(defn create-arc [paper sperm radius]
+    (-> (.path paper (format "M%d,%d m%d,%d a%d,%d %d %d,%d %d,%d" 200 200 0 (- radius) radius radius 0 1 1 radius radius ))
+        (attr {:stroke "black", :fill "none", :stroke-width 1})
+        (.transform (format "t%d,%dr-45" (- radius) radius))
+  ))
+
 (defn create-vcl [paper sperm]
   (let [rvsl (/ (+ (:cbase globals) (:vcl sperm)) (:cscale globals))]
-      [startAngle 240 * 16]
-      [endAngle -300 * 16]
-    (-> (.path paper (format "M%d,%d m%d,%d a%d,%d %d %d,%d %d,%d" 200 200 0 (- rvsl) rvsl rvsl 0 1 1 rvsl rvsl ))
-        (attr {:stroke "black", :fill "none", :stroke-width 1})
-        (.transform (format "t%d,%dr-45" (- rvsl) rvsl))
-  )))
+    (-> (create-arc paper sperm rvsl))))
+
+(defn create-vsl [paper sperm]
+  (let [rvsl (/ (+ (:cbase globals) (:vsl sperm)) (:cscale globals))]
+    (-> (create-arc paper sperm rvsl))))
 
 (defn ^:export draw []
   (let [paper (js/Raphael 0 0 640 480)]
     (let [head (create-head paper sperm)]
-      (let [vcl (create-vcl paper sperm)]
-    ))))
+    (let [vcl (create-vcl paper sperm)]
+    (let [vsl (create-vsl paper sperm)]
+  )))))
