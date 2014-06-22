@@ -18,8 +18,11 @@
   (view-layout
        [:h2 "Project-Name"]
        [:p {:id "clickhere"} "Get yourself a nice alert by clicking here."]
-       [:script {:src "/js/jquery-1.10.2.min.js"}]
-       [:script {:src "/js/cljs.js"}]))
+       [:script {:src "/assets/js/jquery.min.js"}]
+       [:script {:src "/assets/js/raphael-min.js"}]
+       [:script {:src "/js/cljs.js"}]
+       [:script "myospermglyph.server.draw()"]
+    ))
 
 (defroutes main-routes
   (GET "/" []
