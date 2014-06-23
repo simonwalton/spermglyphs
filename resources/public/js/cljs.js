@@ -3389,22 +3389,22 @@ cljs.core.with_meta = function with_meta(b, c) {
   var d = cljs.core.fn_QMARK_.call(null, b);
   d && (d = b ? ((d = b.cljs$lang$protocol_mask$partition0$ & 262144) ? d : b.cljs$core$IWithMeta$) || (b.cljs$lang$protocol_mask$partition0$ ? 0 : cljs.core.type_satisfies_.call(null, cljs.core.IWithMeta, b)) : cljs.core.type_satisfies_.call(null, cljs.core.IWithMeta, b), d = !d);
   return d ? with_meta.call(null, function() {
-    if(void 0 === cljs.core.t3586) {
-      cljs.core.t3586 = {};
-      cljs.core.t3586 = function(b, c, d, e) {
+    if(void 0 === cljs.core.t5216) {
+      cljs.core.t5216 = {};
+      cljs.core.t5216 = function(b, c, d, e) {
         this.meta = b;
         this.o = c;
         this.with_meta = d;
-        this.meta3587 = e;
+        this.meta5217 = e;
         this.cljs$lang$protocol_mask$partition1$ = 0;
         this.cljs$lang$protocol_mask$partition0$ = 393217
       };
-      cljs.core.t3586.cljs$lang$type = !0;
-      cljs.core.t3586.cljs$lang$ctorStr = "cljs.core/t3586";
-      cljs.core.t3586.cljs$lang$ctorPrWriter = function(b, c) {
-        return cljs.core._write.call(null, c, "cljs.core/t3586")
+      cljs.core.t5216.cljs$lang$type = !0;
+      cljs.core.t5216.cljs$lang$ctorStr = "cljs.core/t5216";
+      cljs.core.t5216.cljs$lang$ctorPrWriter = function(b, c) {
+        return cljs.core._write.call(null, c, "cljs.core/t5216")
       };
-      var d = cljs.core.t3586.prototype, f = function(b, c) {
+      var d = cljs.core.t5216.prototype, f = function(b, c) {
         return cljs.core.apply.call(null, b.o, c)
       }, g = function(b, c) {
         var b = this, d = null;
@@ -3418,19 +3418,19 @@ cljs.core.with_meta = function with_meta(b, c) {
       };
       g.cljs$core$IFn$_invoke$arity$variadic = f;
       d.call = g;
-      cljs.core.t3586.prototype.apply = function(b, c) {
+      cljs.core.t5216.prototype.apply = function(b, c) {
         b = this;
         return b.call.apply(b, [b].concat(c.slice()))
       };
-      cljs.core.t3586.prototype.cljs$core$Fn$ = !0;
-      cljs.core.t3586.prototype.cljs$core$IMeta$_meta$arity$1 = function() {
-        return this.meta3587
+      cljs.core.t5216.prototype.cljs$core$Fn$ = !0;
+      cljs.core.t5216.prototype.cljs$core$IMeta$_meta$arity$1 = function() {
+        return this.meta5217
       };
-      cljs.core.t3586.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = function(b, c) {
-        return new cljs.core.t3586(this.meta, this.o, this.with_meta, c)
+      cljs.core.t5216.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = function(b, c) {
+        return new cljs.core.t5216(this.meta, this.o, this.with_meta, c)
       }
     }
-    return new cljs.core.t3586(c, b, with_meta, null)
+    return new cljs.core.t5216(c, b, with_meta, null)
   }(), c) : cljs.core._with_meta.call(null, b, c)
 };
 cljs.core.meta = function(a) {
@@ -14313,12 +14313,20 @@ jayq.core.ajax_m = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:return", cljs
   return jayq.core.done.call(null, jayq.core.ajax.call(null, a), b)
 }, "\ufdd0:zero", cljs.core.identity], !0);
 var myospermglyph = {server:{}};
-myospermglyph.server.$clickhere = jayq.core.$.call(null, "\ufdd0:#clickhere");
 myospermglyph.server.globals = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:cscale", 3, "\ufdd0:cbase", 100, "\ufdd0:hscale", 4, "\ufdd0:tscale", 1.5], !0);
-myospermglyph.server.sperm = cljs.core.PersistentHashMap.fromArrays("\ufdd0:vap \ufdd0:headlength \ufdd0:bcf \ufdd0:vcl \ufdd0:name \ufdd0:headwidth \ufdd0:mad \ufdd0:alh \ufdd0:arclength \ufdd0:vsl".split(" "), [128.54, 8.27, 30.96, 205.26, "Human", 3.65, 36, 47.12, 125, 77.4]);
+myospermglyph.server.sperm = cljs.core.PersistentHashMap.fromArrays("\ufdd0:vap \ufdd0:headlength \ufdd0:bcf \ufdd0:vcl \ufdd0:name \ufdd0:headwidth \ufdd0:mad \ufdd0:alh \ufdd0:arclength \ufdd0:headuncertainty \ufdd0:vsl".split(" "), [128.54, 8.27, 30.96, 205.26, "Human", 3.65, 36, 47.12, 125, 0.4, 77.4]);
 myospermglyph.server.colours = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:nouncertainty", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:red", 0.32941176, "\ufdd0:green", 0.32941176, "\ufdd0:blue", 0.84705882], !0)], !0);
+myospermglyph.server.colourmaps = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:uncertainty", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:red", cljs.core.PersistentVector.fromArray([0.804, 1, 0.549], !0), "\ufdd0:green", cljs.core.PersistentVector.fromArray([1, 0.59, 0], !0), "\ufdd0:blue", cljs.core.PersistentVector.fromArray([0.8, 0.18, 0], !0)], !0)], !0);
 myospermglyph.server.raphaelcolour = function(a) {
   return Raphael.getRGB(cljs.core.format.call(null, "rgb(%d,%d,%d)", 255 * (new cljs.core.Keyword("\ufdd0:red")).call(null, a) | 0, 255 * (new cljs.core.Keyword("\ufdd0:green")).call(null, a) | 0, 255 * (new cljs.core.Keyword("\ufdd0:blue")).call(null, a) | 0))
+};
+myospermglyph.server.lerp = function(a, b, c) {
+  return a + (b - a) * c
+};
+myospermglyph.server.sample_colourmap = function(a, b) {
+  var c = b * (cljs.core.count.call(null, (new cljs.core.Keyword("\ufdd0:red")).call(null, a)) - 1), d = Math.floor(c), e = Math.ceil(c), f = c - d, c = myospermglyph.server.lerp.call(null, cljs.core.get.call(null, (new cljs.core.Keyword("\ufdd0:red")).call(null, a), 0), cljs.core.get.call(null, (new cljs.core.Keyword("\ufdd0:red")).call(null, a), 1), f), g = myospermglyph.server.lerp.call(null, cljs.core.get.call(null, (new cljs.core.Keyword("\ufdd0:green")).call(null, a), d), cljs.core.get.call(null, 
+  (new cljs.core.Keyword("\ufdd0:green")).call(null, a), e), f), d = myospermglyph.server.lerp.call(null, cljs.core.get.call(null, (new cljs.core.Keyword("\ufdd0:blue")).call(null, a), d), cljs.core.get.call(null, (new cljs.core.Keyword("\ufdd0:blue")).call(null, a), e), f);
+  return myospermglyph.server.raphaelcolour.call(null, cljs.core.PersistentArrayMap.fromArray(["\ufdd0:red", c, "\ufdd0:green", g, "\ufdd0:blue", d], !0))
 };
 myospermglyph.server.attr = function(a, b) {
   return a.attr(cljs.core.clj__GT_js.call(null, b))
@@ -14330,6 +14338,14 @@ myospermglyph.server.create_head = function(a, b) {
 myospermglyph.server.create_ring = function(a, b) {
   var c = ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, myospermglyph.server.globals) + b) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals);
   return myospermglyph.server.attr.call(null, a.path(cljs.core.format.call(null, "M%d,%d m%d,%d a%d,%d %d %d,%d %d,%d", 200, 200, 0, -c, c, c, 0, 1, 1, c, c)), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "black", "\ufdd0:fill", "none", "\ufdd0:stroke-width", 1], !0)).transform(cljs.core.format.call(null, "t%d,%dr-45", -c, c))
+};
+myospermglyph.server.create_filled_ring = function(a, b, c, d) {
+  c = ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, myospermglyph.server.globals) + c) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals);
+  d = ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, myospermglyph.server.globals) + d) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals);
+  return myospermglyph.server.attr.call(null, a.path(cljs.core.format.call(null, "M%d,%d   m%d,%d          v%d         a%d,%d    %d     %d,%d    %d,%d   h%d   Z           ", 200, 200, 0, -c, -(d - c), d, d, 0, 1, 0, d, d, -(d - c))), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "none", "\ufdd0:fill", b, "\ufdd0:stroke-width", 1], !0)).transform("r135")
+};
+myospermglyph.server.create_interior_coloured_arc = function(a, b) {
+  return myospermglyph.server.create_filled_ring.call(null, a, myospermglyph.server.sample_colourmap.call(null, (new cljs.core.Keyword("\ufdd0:uncertainty")).call(null, myospermglyph.server.colourmaps), (new cljs.core.Keyword("\ufdd0:headuncertainty")).call(null, b)), 0, (new cljs.core.Keyword("\ufdd0:vsl")).call(null, b))
 };
 myospermglyph.server.create_vcl = function(a, b) {
   return myospermglyph.server.create_ring.call(null, a, (new cljs.core.Keyword("\ufdd0:vcl")).call(null, b))
@@ -14346,6 +14362,7 @@ myospermglyph.server.create_inner = function(a) {
 };
 myospermglyph.server.draw = function() {
   var a = Raphael("spermdiv", 500, 480);
+  myospermglyph.server.create_interior_coloured_arc.call(null, a, myospermglyph.server.sperm);
   myospermglyph.server.create_inner.call(null, a, myospermglyph.server.sperm);
   myospermglyph.server.create_head.call(null, a, myospermglyph.server.sperm);
   myospermglyph.server.create_vcl.call(null, a, myospermglyph.server.sperm);

@@ -2,7 +2,8 @@
   (:require
             [compojure.handler :as handler]
             [compojure.route :as route]
-            [ring.util.response :as response])
+            [ring.util.response :as response]
+            [clojure.math.numeric-tower :as math])
   (:use [hiccup.core]
         [compojure.core]))
 
@@ -54,3 +55,6 @@
   (GET "/" []
       (response/redirect "web-page-name.html"))
       (route/resources "/"))
+
+
+

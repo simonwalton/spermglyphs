@@ -1,14 +1,13 @@
 (ns myospermglyph.server
-    (:use [jayq.core :only [$]])
-    (:require [jayq.core :as jq]))
+    (:require [jayq.core :as jq])
+    (:use [jayq.core :only [$]]
+)) 
  
-(def $clickhere ($ :#clickhere))
-
 (def globals {:cscale 3.00
               :cbase 100.0
               :hscale 4.00
-              :tscale 1.50})
- 
+              :tscale 1.50}) 
+
 (def sperm {:name "Human"
           :vcl 205.26
           :vap 128.54
@@ -18,18 +17,40 @@
           :mad 36
           :headlength 8.27
           :headwidth 3.65
-          :arclength 125}
+          :headuncertainty 0.4
+          :arclength 125
+          }
 )
+ 
+; raphael utilities
 
 (def colours {:nouncertainty {:red 0.32941176, :green 0.32941176, :blue 0.84705882 }})
+(def colourmaps {:uncertainty {:red [0.804 1.0 0.549] :green [1.0 0.59 0.0] :blue [0.8 0.18 0.0]}})
+
 (defn raphaelcolour [colour]
   (.getRGB js/Raphael (format "rgb(%d,%d,%d)" 
       (int (* 255 (:red colour))) (int (* 255 (:green colour))) (int (* 255 (:blue colour))))
   )
 ) 
 
+(defn lerp [a b t]
+  (+ a (* (- b a) t )))
 
-;(jq/bind $clickhere :click (fn [evt] (js/alert (:vcl sperm))))
+(defn sample-colourmap [cm t]
+  (let [idx (* t (- (count (:red cm)) 1.0))
+       a (js/Math.floor idx)
+       b (js/Math.ceil idx)
+       rm (- idx a)
+       ; r (lerp (get (:red cm) a) (get (:red cm) b) rm)
+       ; g (lerp (get (:green cm) a) (get (:green cm) b ) rm)
+       ; b (lerp (get (:blue cm) a) (get (:blue cm) b ) rm)
+        r (lerp (get (:red cm) 0) (get (:red cm) 1) rm)
+        g (lerp (get (:green cm) a) (get (:green cm) b ) rm)
+        b (lerp (get (:blue cm) a) (get (:blue cm) b ) rm)
+        ]
+  (-> (raphaelcolour {:red r :green g :blue b}))))
+
+; general drawing 
 
 (defn- attr [object attributes]
   (.attr object (clj->js attributes)))
@@ -48,6 +69,19 @@
         (.transform (format "t%d,%dr-45" (- radius) radius))
   )))
 
+(defn create-filled-ring [paper colour from to]
+  (let  [ra (/ (+ (:cbase globals) from) (:cscale globals))
+        rb (/ (+ (:cbase globals) to) (:cscale globals))]
+    (-> (.path paper (format "M%d,%d   m%d,%d          v%d         a%d,%d    %d     %d,%d    %d,%d   h%d   Z           "                            
+                             200 200   0 (- ra)   (- (- rb ra))    rb rb      0      1 0     rb rb   (- (- rb ra) )))
+        (attr {:stroke "none", :fill colour, :stroke-width 1})
+        (.transform "r135")
+  )))
+
+; semen-specific
+(defn create-interior-coloured-arc [paper sperm]
+  (-> (create-filled-ring paper (sample-colourmap (:uncertainty colourmaps) (:headuncertainty sperm)) 0 (:vsl sperm))))
+
 (defn create-vcl [paper sperm]
   (-> (create-ring paper (:vcl sperm))))
 
@@ -57,6 +91,7 @@
 (defn create-vap [paper sperm]
   (-> (create-ring paper (:vap sperm))))
 
+  
 (defn create-inner [paper sperm]
   (let [radius (/ (:cbase globals) (:cscale globals))]
     (-> (.circle paper 200 200 radius radius)
@@ -65,9 +100,10 @@
 
 (defn ^:export draw []
   (let [paper (js/Raphael "spermdiv" 500 480)]
+    (let [filled-ring (create-interior-coloured-arc paper sperm)]
     (let [inner (create-inner paper sperm)]
     (let [head (create-head paper sperm)]
     (let [vcl (create-vcl paper sperm)]
     (let [vsl (create-vsl paper sperm)]
     (let [vap (create-vap paper sperm)]
-  )))))))
+  ))))))))
