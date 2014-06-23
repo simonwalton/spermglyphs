@@ -38,13 +38,10 @@
 
 (defn sample-colourmap [cm t]
   (let [idx (* t (- (count (:red cm)) 1.0))
-       a (js/Math.floor idx)
-       b (js/Math.ceil idx)
-       rm (- idx a)
-       ; r (lerp (get (:red cm) a) (get (:red cm) b) rm)
-       ; g (lerp (get (:green cm) a) (get (:green cm) b ) rm)
-       ; b (lerp (get (:blue cm) a) (get (:blue cm) b ) rm)
-        r (lerp (get (:red cm) 0) (get (:red cm) 1) rm)
+        a (js/Math.floor idx)
+        b (js/Math.ceil idx)
+        rm (- idx a)
+        r (lerp (get (:red cm) a) (get (:red cm) b) rm)
         g (lerp (get (:green cm) a) (get (:green cm) b ) rm)
         b (lerp (get (:blue cm) a) (get (:blue cm) b ) rm)
         ]
@@ -91,6 +88,11 @@
 (defn create-vap [paper sperm]
   (-> (create-ring paper (:vap sperm))))
 
+(defn create-orientation-arrow [paper sperm]
+  (let [radius (/ (+ (:cbase globals) (:vcl sperm)) (:cscale globals))]
+    (-> (.path paper (format "M%d,%d m%d,%d l%d,%d l%d,%d z " 200 200 (- 10) (- radius) 10 (- 15) 10 15))
+        (attr {:stroke "none", :fill "black" })
+        )))
   
 (defn create-inner [paper sperm]
   (let [radius (/ (:cbase globals) (:cscale globals))]
@@ -106,4 +108,5 @@
     (let [vcl (create-vcl paper sperm)]
     (let [vsl (create-vsl paper sperm)]
     (let [vap (create-vap paper sperm)]
-  ))))))))
+    (let [arrow (create-orientation-arrow paper sperm)]
+  )))))))))
