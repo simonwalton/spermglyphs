@@ -14,7 +14,7 @@
           :vsl 77.4
           :bcf 30.96
           :alh 47.12
-          :mad 36
+          :mad 20
           :headlength 8.27
           :headwidth 3.65
           :headuncertainty 0.4
@@ -35,6 +35,8 @@
 
 (defn lerp [a b t]
   (+ a (* (- b a) t )))
+
+(defn deg-to-rad [d] (* d 0.0174532925))
 
 (defn sample-colourmap [cm t]
   (let [idx (* t (- (count (:red cm)) 1.0))
@@ -93,7 +95,21 @@
     (-> (.path paper (format "M%d,%d m%d,%d l%d,%d l%d,%d z " 200 200 (- 10) (- radius) 10 (- 15) 10 15))
         (attr {:stroke "none", :fill "black" })
         )))
-  
+ 
+(defn create-mad [paper sperm]
+  (let  [ang (deg-to-rad (- 90 (:mad sperm) ))
+         ra 0
+         rb (/ (:cbase globals) (:cscale globals))
+         rbra (- rb ra)
+         firstsnap [ (* rb (js/Math.cos ang)) (- (* rb (js/Math.sin ang)))  ]
+         secondsnap [ (* ra (js/Math.cos ang)) (- (* ra (js/Math.sin ang))) ]
+         ]
+    (-> (.path paper (format "M%d,%d   m0,%d        v%d     a%d,%d    %d     %d,%d                %d,%d                        l%d,%d   Z"                       
+                             200 200   (- ra)   (- rbra)    rb rb      0      0 1  (get firstsnap 0) (+ (get firstsnap 1) rb)  (get secondsnap 0) (+ (get secondsnap 1) ra )))
+        (attr {:stroke "red", :fill "pink"})
+       ; (.transform (format "t%d,%dr%dt%d,%d" (- hrb) hrb (- (* 0.0 (:mad sperm))) hrb (- hrb) ))
+        )))
+
 (defn create-inner [paper sperm]
   (let [radius (/ (:cbase globals) (:cscale globals))]
     (-> (.circle paper 200 200 radius radius)
@@ -108,5 +124,6 @@
     (let [vcl (create-vcl paper sperm)]
     (let [vsl (create-vsl paper sperm)]
     (let [vap (create-vap paper sperm)]
+    (let [mad (create-mad paper sperm)]
     (let [arrow (create-orientation-arrow paper sperm)]
-  )))))))))
+  ))))))))))
