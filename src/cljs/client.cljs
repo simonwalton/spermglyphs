@@ -10,15 +10,15 @@
               :tscale 1.50})
  
 (def sperm {:name "Human"
-          :vcl 57.0
-          :vap 45.0
-          :vsl 45
-          :bcf 4.0
-          :alh 10.3410815
-          :mad 11.86
-          :headlength 5.03
-          :headwidth 3.21
-          :arclength 54.5}
+          :vcl 205.26
+          :vap 128.54
+          :vsl 77.4
+          :bcf 30.96
+          :alh 47.12
+          :mad 36
+          :headlength 8.27
+          :headwidth 3.65
+          :arclength 125}
 )
 
 (def colours {:nouncertainty {:red 0.32941176, :green 0.32941176, :blue 0.84705882 }})
@@ -29,7 +29,7 @@
 ) 
 
 
-(jq/bind $clickhere :click (fn [evt] (js/alert (:vcl sperm))))
+;(jq/bind $clickhere :click (fn [evt] (js/alert (:vcl sperm))))
 
 (defn- attr [object attributes]
   (.attr object (clj->js attributes)))
@@ -41,23 +41,33 @@
       (attr {:stroke "black", :fill (raphaelcolour (:nouncertainty colours)), :stroke-width 1}))
   )
 
-(defn create-arc [paper sperm radius]
+(defn create-ring [paper value]
+  (let [radius (/ (+ (:cbase globals) value) (:cscale globals))]
     (-> (.path paper (format "M%d,%d m%d,%d a%d,%d %d %d,%d %d,%d" 200 200 0 (- radius) radius radius 0 1 1 radius radius ))
         (attr {:stroke "black", :fill "none", :stroke-width 1})
         (.transform (format "t%d,%dr-45" (- radius) radius))
-  ))
+  )))
 
 (defn create-vcl [paper sperm]
-  (let [rvsl (/ (+ (:cbase globals) (:vcl sperm)) (:cscale globals))]
-    (-> (create-arc paper sperm rvsl))))
+  (-> (create-ring paper (:vcl sperm))))
 
 (defn create-vsl [paper sperm]
-  (let [rvsl (/ (+ (:cbase globals) (:vsl sperm)) (:cscale globals))]
-    (-> (create-arc paper sperm rvsl))))
+  (-> (create-ring paper (:vsl sperm))))
+
+(defn create-vap [paper sperm]
+  (-> (create-ring paper (:vap sperm))))
+
+(defn create-inner [paper sperm]
+  (let [radius (/ (:cbase globals) (:cscale globals))]
+    (-> (.circle paper 200 200 radius radius)
+        (attr {:stroke "#666", :stroke-width 1 :fill "#ccc"})
+        )))
 
 (defn ^:export draw []
-  (let [paper (js/Raphael 0 0 640 480)]
+  (let [paper (js/Raphael "spermdiv" 500 480)]
+    (let [inner (create-inner paper sperm)]
     (let [head (create-head paper sperm)]
     (let [vcl (create-vcl paper sperm)]
     (let [vsl (create-vsl paper sperm)]
-  )))))
+    (let [vap (create-vap paper sperm)]
+  )))))))
