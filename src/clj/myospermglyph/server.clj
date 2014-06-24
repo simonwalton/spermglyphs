@@ -39,26 +39,81 @@
     [:script {:src "/assets/js/underscore-min.js"}]
     [:div {:class "container"}
       [:div {:class "container"}
-        [:H1 "Make Your Own Sperm Glyph"]
-        [:p "Use the parameters to change, or try a preset!"]
+        [:div {:class "row"}
+          [:div {:class "pull-left"} [:img {:src "assets/img/logo.png" :class "logo" :width "120" :height "120"}]]
+          [:div {:class "pull-left"} 
+            [:H1 {:class "titlea" } "Make Your Own"]
+            [:H1 {:class "titleb" } "Sperm Glyph"]
+          ]
+        ]
         [:div {:class "row"}
          ; left-hand col
           [:div {:class "col-md-6"}
             [:div {:id "spermdiv"}]]
          ; right-hand col
-          [:div {:class "col-md-6"}
+          [:div {:class "col-md-6 right-controls"}
             [:ul {:class "nav nav-tabs"}
               [:li {:class "active"} [:a {:href "#manual" :data-toggle "tab"} "Manual"]]
               [:li [:a {:href "#preset" :data-toggle "tab"} "Presets"]]]
             [:div {:class "tab-content"}
               ; manual
               [:div {:class "tab-pane active" :id "manual"} 
-                [:div {:class "form-horizontal"}
-                  (spermcontrol-slider "vcl" "0" "50")
-                  (spermcontrol-slider "vap" "0" "50")
-                  (spermcontrol-slider "vsl" "0" "50")
-                  (spermcontrol-slider "bcf" "0" "50")
+                [:div {:class "row"}
+                  ; kinematics
+                  [:div {:class "col-sm-6"}
+                    [:div {:class "bs-callout bs-callout-kinematics"}
+                      [:h4 "Kinematics"]
+                      [:p "Movement characteristics of the head"]
+                        [:div {:class "form-horizontal"}
+                        (spermcontrol-slider "vcl" "80" "300")
+                        (spermcontrol-slider "vap" "30" "70")
+                        (spermcontrol-slider "vsl" "10" "30")
+                        (spermcontrol-slider "bcf" "0" "50")
+                      ]
+                    ]
+                  ]
+                  ; Mechanics
+                  [:div {:class "col-sm-6"}
+                    [:div {:class "bs-callout bs-callout-mechanics"}
+                      [:h4 "Mechanics"]
+                      [:p "Mechanics of the flagella"]
+                        [:div {:class "form-horizontal"}
+                        (spermcontrol-slider "fta" "80" "300")
+                        (spermcontrol-slider "ftc" "30" "70")
+                        (spermcontrol-slider "ftt" "10" "30")
+                        (spermcontrol-slider "fas" "0" "50")
+                      ]
+                    ]
+                  ]
                 ]
+                [:div {:class "row"}
+                  ; Morphological
+                  [:div {:class "col-sm-6"}
+                    [:div {:class "bs-callout bs-callout-morphological"}
+                      [:h4 "Morpholigcal"]
+                      [:p "Head characteristics"]
+                        [:div {:class "form-horizontal"}
+                        (spermcontrol-slider "hl" "80" "300")
+                        (spermcontrol-slider "hw" "30" "70")
+                        (spermcontrol-slider "hr" "10" "30")
+                      ]
+                    ]
+                  ]
+                  ; uncertainty
+                  [:div {:class "col-sm-6"}
+                    [:div {:class "bs-callout bs-callout-uncertainty"}
+                      [:h4 "Uncertainty"]
+                      [:p "Machine vision capture uncertainty"]
+                        [:div {:class "form-horizontal"}
+                        (spermcontrol-slider "uc" "80" "300")
+                        (spermcontrol-slider "uf" "30" "70")
+                      ]
+                    ]
+                  ]
+                ]
+
+
+
               ]
               [:div {:class "tab-pane" :id "preset"} "Presets"]
             ]

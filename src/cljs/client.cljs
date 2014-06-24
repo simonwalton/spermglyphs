@@ -3,9 +3,10 @@
     (:use [jayq.core :only [$]]
 )) 
 
+(def origin {:x 280 :y 300})
 
 (def globals {:cscale 3.00
-              :cbase 100.0
+              :cbase 350.0
               :hscale 4.00
               :tscale 1.50}) 
 
@@ -30,7 +31,6 @@
 
 (def colours {:nouncertainty {:red 0.32941176, :green 0.32941176, :blue 0.84705882 }})
 (def colourmaps {:uncertainty {:red [0.804 1.0 0.549] :green [1.0 0.59 0.0] :blue [0.8 0.18 0.0]}})
-(def origin {:x 200 :y 200})
 
 (defn raphaelcolour [colour]
   (.getRGB js/Raphael (format "rgb(%d,%d,%d)" 
@@ -146,7 +146,7 @@
 
 ; entry
 
-(def mainpaper (js/Raphael "spermdiv" 500 480))
+(def mainpaper (js/Raphael "spermdiv" 600 800))
 
 (defn draw [sperm]
     (.clear mainpaper)
@@ -165,6 +165,9 @@
 
 (defn update []
   (draw (assoc currsperm
+       :vcl (.getValue (js/getSlider "vcl"))
+       :vap (.getValue (js/getSlider "vap"))
+       :vsl (.getValue (js/getSlider "vsl"))
        :bcf (.getValue (js/getSlider "bcf"))
        )))
 
@@ -173,9 +176,5 @@
 (defn ^:export _update [] (update))
 
 ; jq
-
-(jq/bind ($ :#bcf) :mousemove (fn [evt] 
-  (let [v (.prop ($ :#bcf) "value" ) ]
-    (draw (assoc currsperm :bcf v) ))))
 
 

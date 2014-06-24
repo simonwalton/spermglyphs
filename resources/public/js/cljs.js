@@ -14313,11 +14313,11 @@ jayq.core.ajax_m = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:return", cljs
   return jayq.core.done.call(null, jayq.core.ajax.call(null, a), b)
 }, "\ufdd0:zero", cljs.core.identity], !0);
 var myospermglyph = {server:{}};
-myospermglyph.server.globals = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:cscale", 3, "\ufdd0:cbase", 100, "\ufdd0:hscale", 4, "\ufdd0:tscale", 1.5], !0);
+myospermglyph.server.origin = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:x", 280, "\ufdd0:y", 300], !0);
+myospermglyph.server.globals = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:cscale", 3, "\ufdd0:cbase", 350, "\ufdd0:hscale", 4, "\ufdd0:tscale", 1.5], !0);
 myospermglyph.server.currsperm = cljs.core.PersistentHashMap.fromArrays("\ufdd0:vap \ufdd0:fas \ufdd0:headlength \ufdd0:bcf \ufdd0:vcl \ufdd0:name \ufdd0:ftt \ufdd0:headwidth \ufdd0:ftc \ufdd0:mad \ufdd0:alh \ufdd0:fta \ufdd0:headuncertainty \ufdd0:vsl".split(" "), [128.54, -0.1, 8.27, 30.96, 205.26, "Human", 0.87, 3.65, 23, 45, 47.12, 50, 0.4, 77.4]);
 myospermglyph.server.colours = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:nouncertainty", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:red", 0.32941176, "\ufdd0:green", 0.32941176, "\ufdd0:blue", 0.84705882], !0)], !0);
 myospermglyph.server.colourmaps = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:uncertainty", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:red", cljs.core.PersistentVector.fromArray([0.804, 1, 0.549], !0), "\ufdd0:green", cljs.core.PersistentVector.fromArray([1, 0.59, 0], !0), "\ufdd0:blue", cljs.core.PersistentVector.fromArray([0.8, 0.18, 0], !0)], !0)], !0);
-myospermglyph.server.origin = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:x", 200, "\ufdd0:y", 200], !0);
 myospermglyph.server.raphaelcolour = function(a) {
   return Raphael.getRGB(cljs.core.format.call(null, "rgb(%d,%d,%d)", 255 * (new cljs.core.Keyword("\ufdd0:red")).call(null, a) | 0, 255 * (new cljs.core.Keyword("\ufdd0:green")).call(null, a) | 0, 255 * (new cljs.core.Keyword("\ufdd0:blue")).call(null, a) | 0))
 };
@@ -14387,7 +14387,7 @@ myospermglyph.server.create_inner = function(a) {
   var b = (new cljs.core.Keyword("\ufdd0:cbase")).call(null, myospermglyph.server.globals) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals);
   return myospermglyph.server.attr.call(null, a.circle((new cljs.core.Keyword("\ufdd0:x")).call(null, myospermglyph.server.origin), (new cljs.core.Keyword("\ufdd0:y")).call(null, myospermglyph.server.origin), b, b), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "#666", "\ufdd0:stroke-width", 1, "\ufdd0:fill", "#ccc"], !0))
 };
-myospermglyph.server.mainpaper = Raphael("spermdiv", 500, 480);
+myospermglyph.server.mainpaper = Raphael("spermdiv", 600, 800);
 myospermglyph.server.draw = function(a) {
   myospermglyph.server.mainpaper.clear();
   var b = myospermglyph.server.mainpaper;
@@ -14403,7 +14403,7 @@ myospermglyph.server.draw = function(a) {
   return myospermglyph.server.create_orientation_arrow.call(null, b, a)
 };
 myospermglyph.server.update = function() {
-  return myospermglyph.server.draw.call(null, cljs.core.assoc.call(null, myospermglyph.server.currsperm, "\ufdd0:bcf", getSlider("bcf").getValue()))
+  return myospermglyph.server.draw.call(null, cljs.core.assoc.call(null, myospermglyph.server.currsperm, "\ufdd0:vcl", getSlider("vcl").getValue(), "\ufdd0:vap", getSlider("vap").getValue(), "\ufdd0:vsl", getSlider("vsl").getValue(), "\ufdd0:bcf", getSlider("bcf").getValue()))
 };
 myospermglyph.server._init = function() {
   return cljs.core.List.EMPTY
@@ -14417,7 +14417,3 @@ myospermglyph.server._update = function() {
   return myospermglyph.server.update.call(null)
 };
 goog.exportSymbol("myospermglyph.server._update", myospermglyph.server._update);
-jayq.core.bind.call(null, jayq.core.$.call(null, "\ufdd0:#bcf"), "\ufdd0:mousemove", function() {
-  var a = jayq.core.$.call(null, "\ufdd0:#bcf").prop("value");
-  return myospermglyph.server.draw.call(null, cljs.core.assoc.call(null, myospermglyph.server.currsperm, "\ufdd0:bcf", a))
-});

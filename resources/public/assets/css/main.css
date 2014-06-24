@@ -1,4 +1,89 @@
 
+h1, .h1, .titlea {
+	color:#444 !important;
+	font-size:50;
+	font-weight:lighter;
+	margin-bottom:-35px;
+	margin-left:20px;
+}
+
+h1, .h1, .titleb {
+	color:#444 !important;
+	font-size:60;
+	font-weight:bold;
+	margin-left:20px;
+}
+
+.logo {
+	margin:10px;
+}
+
+.right-controls {
+	margin-top:-110px;
+}
+
+h2, .h2 {
+	color:#444 !important;
+	font-size:32px;
+}
+
 .slider-horizontal {
 	margin-top:7px;
+}
+
+.bs-callout {
+	margin: 10px -5px;
+	padding: 35px;
+	border-left: 5px solid;
+}
+
+.bs-callout h4 {
+	margin-top: 0;
+	margin-bottom: 5px;
+}
+
+.bs-callout-kinematics {
+	background-color: #ffc2aa;
+	border-color: #803315;
+	height:300px;
+}
+
+.bs-callout-kinematics {
+	color: #803315;
+}
+
+.bs-callout-mechanics {
+	background-color: #75af96;
+	border-color: #0f5738;
+	height:300px;
+}
+
+.bs-callout-mechanics {
+	color: #0f5738;
+}
+
+.bs-callout-morphological {
+	background-color: #ffe3aa;
+	border-color: #805d15;
+	height: 250px;
+}
+
+.bs-callout-morphological {
+	color: #805d15;
+}
+
+.bs-callout-uncertainty {
+	background-color: #7887ab;
+	border-color: #162856;
+	height: 250px;
+}
+
+.bs-callout-uncertainty {
+	color: #162856;
+}
+
+
+
+.container {
+	margin-top:30px;
 }
