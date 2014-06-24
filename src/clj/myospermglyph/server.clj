@@ -20,20 +20,30 @@
       [:body content]))
 
 
-(defn spermcontrol-slider[property, minval, maxval]
+(defn create-slider[property minval maxval]
   (view-layout 
       [:div {:class "form-group"}
         [:label {:for property :class "col-sm-2 control-label"} property]
         [:div {:class "col-sm-10"}
-          [:input {:type "text" :data-slider-min minval :data-slider-max maxval :id property :class "spermcontrol-slider"}]
+          [:input {:type "text" :data-slider-min (str "\"" minval "\"") :data-slider-max (str "\"" maxval "\"") :id property :class "create-slider"}]
         ]]
       ))
 
-(defn create-thumbnail[img, title]
+(defn create-slider-group[id nicename desc sliders]
+  (view-layout
+    [:div {:class "col-sm-6"}
+      [:div {:class (str "bs-callout bs-callout-" id)}
+        [:h4 nicename]
+        [:p desc]
+          [:div {:class "form-horizontal"}
+            (map (fn [x] (create-slider (:id x) (:min x) (:max x))) sliders)
+        ]]]))
+
+(defn create-thumb[img, title]
   (view-layout
       [:div {:class "col-xs-6 col-md-3 zoo-thumbnail-container"}
         [:div {:class "thumbnail"}
-          [:img {:src img :alt title}
+          [:img {:src (str "assets/img/species/" img) :alt title}
             [:div {:class "caption"}
               [:button {:type "button" :class "btn btn-primary btn-sm btn-zoo"}
                 [:span {:class "glyphicon glyphicon-eye-open"}] (str " " title)
@@ -64,94 +74,51 @@
           [:div {:class "col-md-6 right-controls"}
             [:ul {:class "nav nav-tabs"}
               [:li {:class "active"} [:a {:href "#manual" :data-toggle "tab"} "Manual"]]
-              [:li  [:a {:href "#preset" :data-toggle "tab"} "Sperm Zoo"]]]
+              [:li [:a {:href "#zoo" :data-toggle "tab"} "Sperm Zoo"]]
+              [:li [:a {:href "#human" :data-toggle "tab"} "Human Presets"]]]
             [:div {:class "tab-content"}
-              ; manual
+            ; manual
               [:div {:class "tab-pane active" :id "manual"} 
                 [:div {:class "row"}
-                  ; kinematics
-                  [:div {:class "col-sm-6"}
-                    [:div {:class "bs-callout bs-callout-kinematics"}
-                      [:h4 "Kinematics"]
-                      [:p "Movement characteristics of the head"]
-                        [:div {:class "form-horizontal"}
-                        (spermcontrol-slider "vcl" "80" "300")
-                        (spermcontrol-slider "vap" "30" "70")
-                        (spermcontrol-slider "vsl" "10" "30")
-                        (spermcontrol-slider "bcf" "0" "50")
-                      ]
-                    ]
-                  ]
-                  ; Mechanics
-                  [:div {:class "col-sm-6"}
-                    [:div {:class "bs-callout bs-callout-mechanics"}
-                      [:h4 "Mechanics"]
-                      [:p "Mechanics of the flagella"]
-                        [:div {:class "form-horizontal"}
-                        (spermcontrol-slider "fta" "80" "300")
-                        (spermcontrol-slider "ftc" "30" "70")
-                        (spermcontrol-slider "ftt" "10" "30")
-                        (spermcontrol-slider "fas" "0" "50")
-                      ]
-                    ]
-                  ]
+                  (create-slider-group "kinematics" "Kinematics" "Movement characteristics of the head"
+                    [{:id "vcl" :min 80 :max 300} {:id "vcl" :min 80 :max 300}])
+                  (create-slider-group "mechanics" "Mechanics" "Mechanics of the flagella"
+                    [{:id "fta" :min 80 :max 300} {:id "ftc" :min 80 :max 300} {:id "ftt" :min 80 :max 300} {:id "fas" :min 80 :max 300}])
                 ]
                 [:div {:class "row"}
-                  ; Morphological
-                  [:div {:class "col-sm-6"}
-                    [:div {:class "bs-callout bs-callout-morphological"}
-                      [:h4 "Morpholigcal"]
-                      [:p "Head characteristics"]
-                        [:div {:class "form-horizontal"}
-                        (spermcontrol-slider "hl" "80" "300")
-                        (spermcontrol-slider "hw" "30" "70")
-                        (spermcontrol-slider "hr" "10" "30")
-                      ]
-                    ]
-                  ]
-                  ; uncertainty
-                  [:div {:class "col-sm-6"}
-                    [:div {:class "bs-callout bs-callout-uncertainty"}
-                      [:h4 "Uncertainty"]
-                      [:p "Machine vision capture uncertainty"]
-                        [:div {:class "form-horizontal"}
-                        (spermcontrol-slider "uc" "80" "300")
-                        (spermcontrol-slider "uf" "30" "70")
-                      ]
-                    ]
-                  ]
+                  (create-slider-group "morphological" "Kinematics" "Head characteristics"
+                    [{:id "hl" :min 80 :max 300} {:id "hw" :min 30 :max 70} {:id "hr" :min 10 :max 30}])
+                  (create-slider-group "uncertainty" "Uncertainty" "Machine vision uncertainty"
+                    [{:id "uc" :min 80 :max 300} {:id "uf" :min 30 :max 70}])
                 ]
               ]
-             ; zoo
-              [:div {:class "tab-pane" :id "preset"}
+            ; zoo
+              [:div {:class "tab-pane" :id "zoo"}
                 [:div {:class "row"}
-                  (create-thumbnail "assets/img/species/rat.jpg" "Rat")
-                  (create-thumbnail "assets/img/species/mouse.jpg" "Mouse")
-                  (create-thumbnail "assets/img/species/rabbit.jpg" "Rabbit")
-                  (create-thumbnail "assets/img/species/hamster.jpg" "Marmoset")
+                  (create-thumb "rat.jpg" "Rat") (create-thumb "mouse.jpg" "Mouse") (create-thumb "rabbit.jpg" "Rabbit") (create-thumb "hamster.jpg" "Marmoset")]
+                [:div {:class "row"}
+                  (create-thumb "boar.jpg" "Boar") (create-thumb "bull.jpg" "Bull") (create-thumb "marmoset.jpg" "Marmoset") (create-thumb "donkey.jpg" "Donkey")]
+                [:div {:class "row"}
+                  (create-thumb "spermwhale.jpg" "Sperm Whale") (create-thumb "cat.jpg" "Cat") (create-thumb "gazelle.jpg" "Gazelle")]
+              ]
+            ; human presets
+              [:div {:class "tab-pane" :id "human"}
+                [:div {:class "row"}
+                  (create-thumb "rat.jpg" "Rat") (create-thumb "mouse.jpg" "Mouse") (create-thumb "rabbit.jpg" "Rabbit") (create-thumb "hamster.jpg" "Marmoset")
                 ]
                [:div {:class "row"}
-                  (create-thumbnail "assets/img/species/boar.jpg" "Boar")
-                  (create-thumbnail "assets/img/species/bull.jpg" "Bull")
-                  (create-thumbnail "assets/img/species/marmoset.jpg" "Marmoset")
-                  (create-thumbnail "assets/img/species/donkey.jpg" "Donkey")
+                  (create-thumb "boar.jpg" "Boar") (create-thumb "bull.jpg" "Bull") (create-thumb "marmoset.jpg" "Marmoset") (create-thumb "donkey.jpg" "Donkey")
                 ]
               [:div {:class "row"}
-                  (create-thumbnail "assets/img/species/spermwhale.jpg" "Sperm Whale")
-                  (create-thumbnail "assets/img/species/cat.jpg" "Cat")
-                  (create-thumbnail "assets/img/species/gazelle.jpg" "Gazelle")
+                  (create-thumb "spermwhale.jpg" "Sperm Whale") (create-thumb "cat.jpg" "Cat") (create-thumb "gazelle.jpg" "Gazelle")
                 ]
               ]
-            ]
-          ]
-        ]
-      ]
-    ]
+            ]]]]]
     [:script " var sliders = {} "]
     [:script {:src "/js/cljs.js"}]
     [:script "
         function getSlider(id) { return sliders[id]; }
-        $('.spermcontrol-slider').each(function(i) {
+        $('.create-slider').each(function(i) {
           var sl = $(this).slider().on('slide', function(ev) {
             myospermglyph.server._update();
           }).data('slider');
