@@ -19,10 +19,10 @@
  
 (defn view-content []
   (view-layout
-    [:script {:src "/assets/js/jquery.min.js"}]
     [:script {:src "/assets/js/raphael-min.js"}]
+    [:script {:src "/assets/js/jquery.min.js"}]
     [:script {:src "/assets/bootstrap/js/bootstrap.min.js"}]
-    [:script {:src "/js/cljs.js"}]
+      [:p {:id "clickhere"} "Get yourself a nice alert by clicking here."]
     [:div {:class "container"}
       [:div {:class "jumbotron"}
         [:H1 "Make Your Own Sperm Glyph"]
@@ -37,12 +37,27 @@
               [:li {:class "active"} [:a {:href "#manual" :data-toggle "tab"} "Manual"]]
               [:li [:a {:href "#preset" :data-toggle "tab"} "Presets"]]]
             [:div {:class "tab-content"}
-              [:div {:class "tab-pane active" :id "manual"} "Manual"]
-              [:div {:class "tab-pane" :id "preset"} "Presets"]]]]
-     ]
+              ; manual
+              [:div {:class "tab-pane active" :id "manual"} 
+                [:div {:class "form-horizontal"}
+                  [:div {:class "form-group"}
+                    [:label {:for "bcf" :class "col-sm-2 control-label"} "BCF"]
+                    [:div {:class "col-sm-10"}
+                      [:input {:type "range" :min "0" :max "50" :id "bcf"}]
+                    ]
+                  ]
+                ]
+              ]
+              [:div {:class "tab-pane" :id "preset"} "Presets"]
+            ]
+          ]
+        ]
+      ]
     ]
-    [:script "myospermglyph.server.draw()"]
+    [:script {:src "/js/cljs.js"}]
+    [:script "myospermglyph.server._init(); myospermglyph.server._draw();"]
   ))
+
 
 (defroutes main-routes
   (GET "/" []

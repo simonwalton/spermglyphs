@@ -2,13 +2,14 @@
     (:require [jayq.core :as jq])
     (:use [jayq.core :only [$]]
 )) 
- 
+
+
 (def globals {:cscale 3.00
               :cbase 100.0
               :hscale 4.00
               :tscale 1.50}) 
 
-(def sperm {:name "Human"
+(def currsperm {:name "Human"
           :vcl 205.26
           :vap 128.54
           :vsl 77.4
@@ -89,11 +90,12 @@
          rbra (- rb ra)
          firstsnap [ (* rb (js/Math.cos ang)) (- (* rb (js/Math.sin ang)))  ]
          secondsnap [ (* ra (js/Math.cos ang)) (- (* ra (js/Math.sin ang))) ]
+         thirdsnap [ (* ra (js/Math.cos (deg-to-rad (+ 90)))) (- (* ra (js/Math.sin (deg-to-rad (+ 90))))) ]
          ]
     (-> (.path paper (format "M%d,%d   m0,%d        v%d     a%d,%d    %d     %d,%d                %d,%d                                          l%d,%d    a%d,%d %d %d,%d %d,%d  z"                       
                              (:x origin) (:y origin)   (- ra)   (- rbra)    rb rb      0      0 1  (get firstsnap 0) (+ (get firstsnap 1) rb) 
                              (- (get secondsnap 0) (get firstsnap 0))  (- (get secondsnap 1) (get firstsnap 1)  )
-                             ra ra 0 0 0 (- (get secondsnap 0)) (- rbra))) ; second arc
+                             ra ra 0 0 0 (- (get thirdsnap 0) (get secondsnap 0))  (- (get thirdsnap 1) (get secondsnap 1) ))) ; second arc
                              
         (.transform (format "R%d %d,%d T%d,%d" rotation (:x origin) (:y origin) (get offset 0) (get offset 1) ) )
         )))
@@ -130,8 +132,10 @@
       (attr {:stroke "#666", :fill "#ccc"}))))
 
 (defn create-bcf-ring [paper sperm] 
-  (let [r (/ (+ (:cbase globals) (:vcl sperm)) (:cscale globals))]
-    (-> (create-filled-pie-slice paper sperm r (+ 20 r) 35 [0 0] 270)
+  (let [r (/ (+ (:cbase globals) (:vcl sperm)) (:cscale globals))
+        ang (:bcf sperm)
+        ]
+    (-> (create-filled-pie-slice paper sperm r (+ 20 r) ang [0 0] 270)
       (attr {:stroke "none", :fill "#ccc"}))))
 
 (defn create-inner [paper sperm]
@@ -140,16 +144,32 @@
         (attr {:stroke "#666", :stroke-width 1, :fill "#ccc"})
         )))
 
-(defn ^:export draw []
-  (let [paper (js/Raphael "spermdiv" 500 480)]
-    (let [filled-ring (create-interior-coloured-arc paper sperm)]
-    (let [inner (create-inner paper sperm)]
-    (let [mad (create-mad paper sperm)]
-    (let [head (create-head paper sperm)]
-    (let [bcf (create-bcf-ring paper sperm)]
-    (let [vcl (create-vcl paper sperm)]
-    (let [vsl (create-vsl paper sperm)]
-    (let [vap (create-vap paper sperm)]
-    (let [arc-tail (create-arclength-tail paper sperm)]
-    (let [arrow (create-orientation-arrow paper sperm)]
-  ))))))))))))
+; entry
+
+(def mainpaper (js/Raphael "spermdiv" 500 480))
+
+(defn draw [sperm]
+    (.clear mainpaper)
+    (let [paper mainpaper]
+    (-> (create-interior-coloured-arc paper sperm))
+    (-> (create-inner paper sperm))
+    (-> (create-mad paper sperm))
+    (-> (create-head paper sperm))
+    (-> (create-bcf-ring paper sperm))
+    (-> (create-vcl paper sperm))
+    (-> (create-vsl paper sperm))
+    (-> (create-vap paper sperm))
+    (-> (create-arclength-tail paper sperm))
+    (-> (create-orientation-arrow paper sperm))
+  ))
+
+(defn ^:export _init [] ());def mainpaper (js/Raphael "spermdiv" 500 480)))
+(defn ^:export _draw [] (draw currsperm ) )
+
+; jq
+
+(jq/bind ($ :#bcf) :mousemove (fn [evt] 
+  (let [v (.prop ($ :#bcf) "value" ) ]
+    (draw (assoc currsperm :bcf v) ))))
+
+
