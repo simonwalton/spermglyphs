@@ -29,7 +29,7 @@
 
 (def colours {:nouncertainty {:red 0.32941176, :green 0.32941176, :blue 0.84705882 }})
 (def colourmaps {:uncertainty {:red [0.804 1.0 0.549] :green [1.0 0.59 0.0] :blue [0.8 0.18 0.0]}})
-(def origin {:x 200 :y 200)})
+(def origin {:x 200 :y 200})
 
 (defn raphaelcolour [colour]
   (.getRGB js/Raphael (format "rgb(%d,%d,%d)" 
@@ -90,9 +90,12 @@
          firstsnap [ (* rb (js/Math.cos ang)) (- (* rb (js/Math.sin ang)))  ]
          secondsnap [ (* ra (js/Math.cos ang)) (- (* ra (js/Math.sin ang))) ]
          ]
-    (-> (.path paper (format "M%d,%d   m0,%d        v%d     a%d,%d    %d     %d,%d                %d,%d                               l%d,%d   Z"                       
-                             (:x origin) (:y origin)   (- ra)   (- rbra)    rb rb      0      0 1  (get firstsnap 0) (+ (get firstsnap 1) rb)  (get secondsnap 0) (+ (get secondsnap 1) ra )))
-        (.transform (format "R%d %d,%d R%d %d,%d T%d,%d" (- (* 0.5 angle)) (:x origin) (:y origin) rotation (:x origin) (:y origin) (get offset 0) (get offset 1) ) )
+    (-> (.path paper (format "M%d,%d   m0,%d        v%d     a%d,%d    %d     %d,%d                %d,%d                                          l%d,%d    a%d,%d %d %d,%d %d,%d  z"                       
+                             (:x origin) (:y origin)   (- ra)   (- rbra)    rb rb      0      0 1  (get firstsnap 0) (+ (get firstsnap 1) rb) 
+                             (- (get secondsnap 0) (get firstsnap 0))  (- (get secondsnap 1) (get firstsnap 1)  )
+                             ra ra 0 0 0 (- (get secondsnap 0)) (- rbra))) ; second arc
+                             
+        (.transform (format "R%d %d,%d T%d,%d" rotation (:x origin) (:y origin) (get offset 0) (get offset 1) ) )
         )))
 
 ; semen-specific
@@ -110,12 +113,12 @@
 
 (defn create-orientation-arrow [paper sperm]
   (let [radius (/ (+ (:cbase globals) (:vcl sperm)) (:cscale globals))]
-    (-> (.path paper (format "M%d,%d m%d,%d l%d,%d l%d,%d z " (:x origin) (:x origin) (- 10) (- radius) 10 (- 15) 10 15))
+    (-> (.path paper (format "M%d,%d m%d,%d l%d,%d l%d,%d z " (:x origin) (:y origin) (- 10) (- radius) 10 (- 15) 10 15))
         (attr {:stroke "none", :fill "black" })
         )))
  
 (defn create-mad [paper sperm]
-  (-> (create-filled-pie-slice paper sperm 0 (/ (:cbase globals) (:cscale globals)) (:mad sperm) [0 0] 0)
+  (-> (create-filled-pie-slice paper sperm 0 (/ (:cbase globals) (:cscale globals)) (:mad sperm) [0 0] (- (* 0.5 (:mad sperm))))
         (attr {:stroke "#666", :fill "white"})))
       
 (defn create-arclength-tail [paper sperm]
@@ -123,9 +126,13 @@
         changeinangle (* (:ftc sperm) 16.0)
         flaglength (/ (* (:fta sperm) (:tscale globals)) (:cscale globals))
         ]
-    (-> (create-filled-pie-slice paper sperm 0 (:fta sperm) flaglength [0 zeroring] 180)
+    (-> (create-filled-pie-slice paper sperm 0 (:fta sperm) flaglength [0 zeroring] (- (+ 180 (* 0.5 flaglength))))
       (attr {:stroke "#666", :fill "#ccc"}))))
 
+(defn create-bcf-ring [paper sperm] 
+  (let [r (/ (+ (:cbase globals) (:vcl sperm)) (:cscale globals))]
+    (-> (create-filled-pie-slice paper sperm r (+ 20 r) 35 [0 0] 270)
+      (attr {:stroke "none", :fill "#ccc"}))))
 
 (defn create-inner [paper sperm]
   (let [radius (/ (:cbase globals) (:cscale globals))]
@@ -139,9 +146,10 @@
     (let [inner (create-inner paper sperm)]
     (let [mad (create-mad paper sperm)]
     (let [head (create-head paper sperm)]
+    (let [bcf (create-bcf-ring paper sperm)]
     (let [vcl (create-vcl paper sperm)]
     (let [vsl (create-vsl paper sperm)]
     (let [vap (create-vap paper sperm)]
     (let [arc-tail (create-arclength-tail paper sperm)]
     (let [arrow (create-orientation-arrow paper sperm)]
-  )))))))))))
+  ))))))))))))
