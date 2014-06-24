@@ -14403,7 +14403,7 @@ myospermglyph.server.draw = function(a) {
   return myospermglyph.server.create_orientation_arrow.call(null, b, a)
 };
 myospermglyph.server.update = function() {
-  return myospermglyph.server.draw.call(null, cljs.core.assoc.call(null, myospermglyph.server.currsperm, "\ufdd0:bcf", get_LT_D_r_GT_Slider("bcf").getValue()))
+  return myospermglyph.server.draw.call(null, cljs.core.assoc.call(null, myospermglyph.server.currsperm, "\ufdd0:bcf", getSlider("bcf").getValue()))
 };
 myospermglyph.server._init = function() {
   return cljs.core.List.EMPTY

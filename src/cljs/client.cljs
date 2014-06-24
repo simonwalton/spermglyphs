@@ -165,7 +165,7 @@
 
 (defn update []
   (draw (assoc currsperm
-       :bcf (.getValue (js/get<D-r>Slider "bcf"))
+       :bcf (.getValue (js/getSlider "bcf"))
        )))
 
 (defn ^:export _init [] ());def mainpaper (js/Raphael "spermdiv" 500 480)))
