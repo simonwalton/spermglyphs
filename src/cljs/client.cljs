@@ -163,8 +163,14 @@
     (-> (create-orientation-arrow paper sperm))
   ))
 
+(defn update []
+  (draw (assoc currsperm
+       :bcf (.getValue (js/get<D-r>Slider "bcf"))
+       )))
+
 (defn ^:export _init [] ());def mainpaper (js/Raphael "spermdiv" 500 480)))
-(defn ^:export _draw [] (draw currsperm ) )
+(defn ^:export _draw [] (draw currsperm))
+(defn ^:export _update [] (update))
 
 ; jq
 

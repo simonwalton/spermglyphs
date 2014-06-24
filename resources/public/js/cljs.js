@@ -14402,6 +14402,9 @@ myospermglyph.server.draw = function(a) {
   myospermglyph.server.create_arclength_tail.call(null, b, a);
   return myospermglyph.server.create_orientation_arrow.call(null, b, a)
 };
+myospermglyph.server.update = function() {
+  return myospermglyph.server.draw.call(null, cljs.core.assoc.call(null, myospermglyph.server.currsperm, "\ufdd0:bcf", get_LT_D_r_GT_Slider("bcf").getValue()))
+};
 myospermglyph.server._init = function() {
   return cljs.core.List.EMPTY
 };
@@ -14410,6 +14413,10 @@ myospermglyph.server._draw = function() {
   return myospermglyph.server.draw.call(null, myospermglyph.server.currsperm)
 };
 goog.exportSymbol("myospermglyph.server._draw", myospermglyph.server._draw);
+myospermglyph.server._update = function() {
+  return myospermglyph.server.update.call(null)
+};
+goog.exportSymbol("myospermglyph.server._update", myospermglyph.server._update);
 jayq.core.bind.call(null, jayq.core.$.call(null, "\ufdd0:#bcf"), "\ufdd0:mousemove", function() {
   var a = jayq.core.$.call(null, "\ufdd0:#bcf").prop("value");
   return myospermglyph.server.draw.call(null, cljs.core.assoc.call(null, myospermglyph.server.currsperm, "\ufdd0:bcf", a))
