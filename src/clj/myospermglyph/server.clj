@@ -29,6 +29,16 @@
         ]]
       ))
 
+(defn create-thumbnail[img, title]
+  (view-layout
+      [:div {:class "col-xs-6 col-md-3 zoo-thumbnail-container"}
+        [:div {:class "thumbnail"}
+          [:img {:src img :alt title}
+            [:div {:class "caption"}
+              [:button {:type "button" :class "btn btn-primary btn-sm btn-zoo"}
+                [:span {:class "glyphicon glyphicon-eye-open"}] (str " " title)
+              ]
+            ]]]])) 
 
 (defn view-content []
   (view-layout
@@ -54,7 +64,7 @@
           [:div {:class "col-md-6 right-controls"}
             [:ul {:class "nav nav-tabs"}
               [:li {:class "active"} [:a {:href "#manual" :data-toggle "tab"} "Manual"]]
-              [:li [:a {:href "#preset" :data-toggle "tab"} "Presets"]]]
+              [:li  [:a {:href "#preset" :data-toggle "tab"} "Sperm Zoo"]]]
             [:div {:class "tab-content"}
               ; manual
               [:div {:class "tab-pane active" :id "manual"} 
@@ -111,11 +121,27 @@
                     ]
                   ]
                 ]
-
-
-
               ]
-              [:div {:class "tab-pane" :id "preset"} "Presets"]
+             ; zoo
+              [:div {:class "tab-pane" :id "preset"}
+                [:div {:class "row"}
+                  (create-thumbnail "assets/img/species/rat.jpg" "Rat")
+                  (create-thumbnail "assets/img/species/mouse.jpg" "Mouse")
+                  (create-thumbnail "assets/img/species/rabbit.jpg" "Rabbit")
+                  (create-thumbnail "assets/img/species/hamster.jpg" "Marmoset")
+                ]
+               [:div {:class "row"}
+                  (create-thumbnail "assets/img/species/boar.jpg" "Boar")
+                  (create-thumbnail "assets/img/species/bull.jpg" "Bull")
+                  (create-thumbnail "assets/img/species/marmoset.jpg" "Marmoset")
+                  (create-thumbnail "assets/img/species/donkey.jpg" "Donkey")
+                ]
+              [:div {:class "row"}
+                  (create-thumbnail "assets/img/species/spermwhale.jpg" "Sperm Whale")
+                  (create-thumbnail "assets/img/species/cat.jpg" "Cat")
+                  (create-thumbnail "assets/img/species/gazelle.jpg" "Gazelle")
+                ]
+              ]
             ]
           ]
         ]

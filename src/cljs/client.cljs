@@ -3,7 +3,7 @@
     (:use [jayq.core :only [$]]
 )) 
 
-(def origin {:x 280 :y 300})
+(def origin {:x 280 :y 260})
 
 (def globals {:cscale 3.00
               :cbase 350.0
