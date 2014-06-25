@@ -358,6 +358,13 @@ goog.base = function(a, b, c) {
 goog.scope = function(a) {
   a.call(goog.global)
 };
+goog.debug = {};
+goog.debug.Error = function(a) {
+  Error.captureStackTrace ? Error.captureStackTrace(this, goog.debug.Error) : this.stack = Error().stack || "";
+  a && (this.message = String(a))
+};
+goog.inherits(goog.debug.Error, Error);
+goog.debug.Error.prototype.name = "CustomError";
 goog.string = {};
 goog.string.Unicode = {NBSP:"\u00a0"};
 goog.string.startsWith = function(a, b) {
@@ -687,13 +694,6 @@ goog.string.parseInt = function(a) {
   isFinite(a) && (a = String(a));
   return goog.isString(a) ? /^\s*-?0x/i.test(a) ? parseInt(a, 16) : parseInt(a, 10) : NaN
 };
-goog.debug = {};
-goog.debug.Error = function(a) {
-  Error.captureStackTrace ? Error.captureStackTrace(this, goog.debug.Error) : this.stack = Error().stack || "";
-  a && (this.message = String(a))
-};
-goog.inherits(goog.debug.Error, Error);
-goog.debug.Error.prototype.name = "CustomError";
 goog.asserts = {};
 goog.asserts.ENABLE_ASSERTS = goog.DEBUG;
 goog.asserts.AssertionError = function(a, b) {
@@ -12716,122 +12716,6 @@ cljs.core.special_symbol_QMARK_ = function(a) {
   new cljs.core.Symbol(null, ".", ".", -1640531481, null), new cljs.core.Symbol(null, "ns", "ns", -1640528002, null), new cljs.core.Symbol(null, "do", "do", -1640528316, null), new cljs.core.Symbol(null, "fn*", "fn*", -1640430053, null), new cljs.core.Symbol(null, "throw", "throw", -1530191713, null), new cljs.core.Symbol(null, "letfn*", "letfn*", 1548249632, null), new cljs.core.Symbol(null, "js*", "js*", -1640426054, null), new cljs.core.Symbol(null, "defrecord*", "defrecord*", 774272013, null), 
   new cljs.core.Symbol(null, "let*", "let*", -1637213400, null), new cljs.core.Symbol(null, "loop*", "loop*", -1537374273, null), new cljs.core.Symbol(null, "if", "if", -1640528170, null), new cljs.core.Symbol(null, "def", "def", -1640432194, null)]), a)
 };
-var clojure = {string:{}};
-clojure.string.seq_reverse = function(a) {
-  return cljs.core.reduce.call(null, cljs.core.conj, cljs.core.List.EMPTY, a)
-};
-clojure.string.reverse = function(a) {
-  return a.split("").reverse().join("")
-};
-clojure.string.replace = function(a, b, c) {
-  if(cljs.core.string_QMARK_.call(null, b)) {
-    return a.replace(RegExp(goog.string.regExpEscape(b), "g"), c)
-  }
-  if(cljs.core.truth_(b.hasOwnProperty("source"))) {
-    return a.replace(RegExp(b.source, "g"), c)
-  }
-  throw[cljs.core.str("Invalid match arg: "), cljs.core.str(b)].join("");
-};
-clojure.string.replace_first = function(a, b, c) {
-  return a.replace(b, c)
-};
-clojure.string.join = function() {
-  var a = null, b = function(a) {
-    return cljs.core.apply.call(null, cljs.core.str, a)
-  }, c = function(a, b) {
-    return cljs.core.apply.call(null, cljs.core.str, cljs.core.interpose.call(null, a, b))
-  }, a = function(a, e) {
-    switch(arguments.length) {
-      case 1:
-        return b.call(this, a);
-      case 2:
-        return c.call(this, a, e)
-    }
-    throw Error("Invalid arity: " + arguments.length);
-  };
-  a.cljs$core$IFn$_invoke$arity$1 = b;
-  a.cljs$core$IFn$_invoke$arity$2 = c;
-  return a
-}();
-clojure.string.upper_case = function(a) {
-  return a.toUpperCase()
-};
-clojure.string.lower_case = function(a) {
-  return a.toLowerCase()
-};
-clojure.string.capitalize = function(a) {
-  return 2 > cljs.core.count.call(null, a) ? clojure.string.upper_case.call(null, a) : [cljs.core.str(clojure.string.upper_case.call(null, cljs.core.subs.call(null, a, 0, 1))), cljs.core.str(clojure.string.lower_case.call(null, cljs.core.subs.call(null, a, 1)))].join("")
-};
-clojure.string.split = function() {
-  var a = null, b = function(a, b) {
-    return cljs.core.vec.call(null, ("" + cljs.core.str(a)).split(b))
-  }, c = function(a, b, c) {
-    if(1 > c) {
-      return cljs.core.vec.call(null, ("" + cljs.core.str(a)).split(b))
-    }
-    for(var g = cljs.core.PersistentVector.EMPTY;;) {
-      if(cljs.core._EQ_.call(null, c, 1)) {
-        return cljs.core.conj.call(null, g, a)
-      }
-      var h = cljs.core.re_find.call(null, b, a);
-      if(cljs.core.truth_(h)) {
-        var i = h, h = a.indexOf(i), i = a.substring(h + cljs.core.count.call(null, i)), c = c - 1, g = cljs.core.conj.call(null, g, a.substring(0, h)), a = i
-      }else {
-        return cljs.core.conj.call(null, g, a)
-      }
-    }
-  }, a = function(a, e, f) {
-    switch(arguments.length) {
-      case 2:
-        return b.call(this, a, e);
-      case 3:
-        return c.call(this, a, e, f)
-    }
-    throw Error("Invalid arity: " + arguments.length);
-  };
-  a.cljs$core$IFn$_invoke$arity$2 = b;
-  a.cljs$core$IFn$_invoke$arity$3 = c;
-  return a
-}();
-clojure.string.split_lines = function(a) {
-  return clojure.string.split.call(null, a, /\n|\r\n/)
-};
-clojure.string.trim = function(a) {
-  return goog.string.trim(a)
-};
-clojure.string.triml = function(a) {
-  return goog.string.trimLeft(a)
-};
-clojure.string.trimr = function(a) {
-  return goog.string.trimRight(a)
-};
-clojure.string.trim_newline = function(a) {
-  for(var b = a.length;;) {
-    if(0 === b) {
-      return""
-    }
-    var c = cljs.core.get.call(null, a, b - 1);
-    var d = cljs.core._EQ_.call(null, c, "\n"), c = d ? d : cljs.core._EQ_.call(null, c, "\r");
-    if(c) {
-      b -= 1
-    }else {
-      return a.substring(0, b)
-    }
-  }
-};
-clojure.string.blank_QMARK_ = function(a) {
-  return goog.string.isEmptySafe(a)
-};
-clojure.string.escape = function(a, b) {
-  for(var c = new goog.string.StringBuffer, d = a.length, e = 0;;) {
-    if(cljs.core._EQ_.call(null, d, e)) {
-      return c.toString()
-    }
-    var f = a.charAt(e), g = cljs.core.get.call(null, b, f);
-    cljs.core.truth_(g) ? c.append("" + cljs.core.str(g)) : c.append(f);
-    e += 1
-  }
-};
 cljs.reader = {};
 cljs.reader.PushbackReader = {};
 cljs.reader.read_char = function(a) {
@@ -13269,6 +13153,122 @@ cljs.reader.deregister_default_tag_parser_BANG_ = function() {
     return null
   });
   return a
+};
+var clojure = {string:{}};
+clojure.string.seq_reverse = function(a) {
+  return cljs.core.reduce.call(null, cljs.core.conj, cljs.core.List.EMPTY, a)
+};
+clojure.string.reverse = function(a) {
+  return a.split("").reverse().join("")
+};
+clojure.string.replace = function(a, b, c) {
+  if(cljs.core.string_QMARK_.call(null, b)) {
+    return a.replace(RegExp(goog.string.regExpEscape(b), "g"), c)
+  }
+  if(cljs.core.truth_(b.hasOwnProperty("source"))) {
+    return a.replace(RegExp(b.source, "g"), c)
+  }
+  throw[cljs.core.str("Invalid match arg: "), cljs.core.str(b)].join("");
+};
+clojure.string.replace_first = function(a, b, c) {
+  return a.replace(b, c)
+};
+clojure.string.join = function() {
+  var a = null, b = function(a) {
+    return cljs.core.apply.call(null, cljs.core.str, a)
+  }, c = function(a, b) {
+    return cljs.core.apply.call(null, cljs.core.str, cljs.core.interpose.call(null, a, b))
+  }, a = function(a, e) {
+    switch(arguments.length) {
+      case 1:
+        return b.call(this, a);
+      case 2:
+        return c.call(this, a, e)
+    }
+    throw Error("Invalid arity: " + arguments.length);
+  };
+  a.cljs$core$IFn$_invoke$arity$1 = b;
+  a.cljs$core$IFn$_invoke$arity$2 = c;
+  return a
+}();
+clojure.string.upper_case = function(a) {
+  return a.toUpperCase()
+};
+clojure.string.lower_case = function(a) {
+  return a.toLowerCase()
+};
+clojure.string.capitalize = function(a) {
+  return 2 > cljs.core.count.call(null, a) ? clojure.string.upper_case.call(null, a) : [cljs.core.str(clojure.string.upper_case.call(null, cljs.core.subs.call(null, a, 0, 1))), cljs.core.str(clojure.string.lower_case.call(null, cljs.core.subs.call(null, a, 1)))].join("")
+};
+clojure.string.split = function() {
+  var a = null, b = function(a, b) {
+    return cljs.core.vec.call(null, ("" + cljs.core.str(a)).split(b))
+  }, c = function(a, b, c) {
+    if(1 > c) {
+      return cljs.core.vec.call(null, ("" + cljs.core.str(a)).split(b))
+    }
+    for(var g = cljs.core.PersistentVector.EMPTY;;) {
+      if(cljs.core._EQ_.call(null, c, 1)) {
+        return cljs.core.conj.call(null, g, a)
+      }
+      var h = cljs.core.re_find.call(null, b, a);
+      if(cljs.core.truth_(h)) {
+        var i = h, h = a.indexOf(i), i = a.substring(h + cljs.core.count.call(null, i)), c = c - 1, g = cljs.core.conj.call(null, g, a.substring(0, h)), a = i
+      }else {
+        return cljs.core.conj.call(null, g, a)
+      }
+    }
+  }, a = function(a, e, f) {
+    switch(arguments.length) {
+      case 2:
+        return b.call(this, a, e);
+      case 3:
+        return c.call(this, a, e, f)
+    }
+    throw Error("Invalid arity: " + arguments.length);
+  };
+  a.cljs$core$IFn$_invoke$arity$2 = b;
+  a.cljs$core$IFn$_invoke$arity$3 = c;
+  return a
+}();
+clojure.string.split_lines = function(a) {
+  return clojure.string.split.call(null, a, /\n|\r\n/)
+};
+clojure.string.trim = function(a) {
+  return goog.string.trim(a)
+};
+clojure.string.triml = function(a) {
+  return goog.string.trimLeft(a)
+};
+clojure.string.trimr = function(a) {
+  return goog.string.trimRight(a)
+};
+clojure.string.trim_newline = function(a) {
+  for(var b = a.length;;) {
+    if(0 === b) {
+      return""
+    }
+    var c = cljs.core.get.call(null, a, b - 1);
+    var d = cljs.core._EQ_.call(null, c, "\n"), c = d ? d : cljs.core._EQ_.call(null, c, "\r");
+    if(c) {
+      b -= 1
+    }else {
+      return a.substring(0, b)
+    }
+  }
+};
+clojure.string.blank_QMARK_ = function(a) {
+  return goog.string.isEmptySafe(a)
+};
+clojure.string.escape = function(a, b) {
+  for(var c = new goog.string.StringBuffer, d = a.length, e = 0;;) {
+    if(cljs.core._EQ_.call(null, d, e)) {
+      return c.toString()
+    }
+    var f = a.charAt(e), g = cljs.core.get.call(null, b, f);
+    cljs.core.truth_(g) ? c.append("" + cljs.core.str(g)) : c.append(f);
+    e += 1
+  }
 };
 var jayq = {core:{}};
 jayq.core.crate_meta = function(a) {
@@ -14336,61 +14336,67 @@ myospermglyph.server.attr = function(a, b) {
   return a.attr(cljs.core.clj__GT_js.call(null, b))
 };
 myospermglyph.server.create_head = function(a, b) {
-  return myospermglyph.server.attr.call(null, a.ellipse((new cljs.core.Keyword("\ufdd0:x")).call(null, myospermglyph.server.origin), (new cljs.core.Keyword("\ufdd0:y")).call(null, myospermglyph.server.origin), (new cljs.core.Keyword("\ufdd0:headwidth")).call(null, b) * (new cljs.core.Keyword("\ufdd0:hscale")).call(null, myospermglyph.server.globals) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals), (new cljs.core.Keyword("\ufdd0:headlength")).call(null, b) * (new cljs.core.Keyword("\ufdd0:hscale")).call(null, 
-  myospermglyph.server.globals) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals)), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "black", "\ufdd0:fill", myospermglyph.server.raphaelcolour.call(null, (new cljs.core.Keyword("\ufdd0:nouncertainty")).call(null, myospermglyph.server.colours)), "\ufdd0:stroke-width", 1], !0))
+  return myospermglyph.server.attr.call(null, a.ellipse((new cljs.core.Keyword("\ufdd0:x")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), (new cljs.core.Keyword("\ufdd0:y")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), (new cljs.core.Keyword("\ufdd0:headwidth")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b)) * (new cljs.core.Keyword("\ufdd0:hscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, 
+  (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)), (new cljs.core.Keyword("\ufdd0:headlength")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b)) * (new cljs.core.Keyword("\ufdd0:hscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b))), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "black", "\ufdd0:fill", myospermglyph.server.raphaelcolour.call(null, 
+  (new cljs.core.Keyword("\ufdd0:nouncertainty")).call(null, myospermglyph.server.colours)), "\ufdd0:stroke-width", 1], !0))
 };
-myospermglyph.server.create_ring = function(a, b) {
-  var c = ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, myospermglyph.server.globals) + b) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals);
-  return myospermglyph.server.attr.call(null, a.path(cljs.core.format.call(null, "M%d,%d m%d,%d a%d,%d %d %d,%d %d,%d", (new cljs.core.Keyword("\ufdd0:x")).call(null, myospermglyph.server.origin), (new cljs.core.Keyword("\ufdd0:y")).call(null, myospermglyph.server.origin), 0, -c, c, c, 0, 1, 1, c, c)), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "black", "\ufdd0:fill", "none", "\ufdd0:stroke-width", 1], !0)).transform(cljs.core.format.call(null, "t%d,%dr-45", -c, c))
+myospermglyph.server.create_ring = function(a, b, c) {
+  c = ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) + c) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b));
+  return myospermglyph.server.attr.call(null, a.path(cljs.core.format.call(null, "M%d,%d m%d,%d a%d,%d %d %d,%d %d,%d", (new cljs.core.Keyword("\ufdd0:x")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), (new cljs.core.Keyword("\ufdd0:y")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), 0, -c, c, c, 0, 1, 1, c, c)), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "black", "\ufdd0:fill", "none", "\ufdd0:stroke-width", 1], !0)).transform(cljs.core.format.call(null, 
+  "t%d,%dr-45", -c, c))
 };
-myospermglyph.server.create_filled_ring = function(a, b, c, d) {
-  c = ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, myospermglyph.server.globals) + c) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals);
-  d = ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, myospermglyph.server.globals) + d) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals);
-  return myospermglyph.server.attr.call(null, a.path(cljs.core.format.call(null, "M%d,%d   m%d,%d          v%d         a%d,%d    %d     %d,%d    %d,%d   h%d   Z           ", (new cljs.core.Keyword("\ufdd0:x")).call(null, myospermglyph.server.origin), (new cljs.core.Keyword("\ufdd0:y")).call(null, myospermglyph.server.origin), 0, -c, -(d - c), d, d, 0, 1, 0, d, d, -(d - c))), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "none", "\ufdd0:fill", b, "\ufdd0:stroke-width", 1], !0)).transform("r135")
+myospermglyph.server.create_filled_ring = function(a, b, c, d, e) {
+  d = ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) + d) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b));
+  e = ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) + e) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b));
+  return myospermglyph.server.attr.call(null, a.path(cljs.core.format.call(null, "M%d,%d   m%d,%d          v%d         a%d,%d    %d     %d,%d    %d,%d   h%d   Z           ", (new cljs.core.Keyword("\ufdd0:x")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), (new cljs.core.Keyword("\ufdd0:y")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), 0, -d, -(e - d), e, e, 0, 1, 0, e, e, -(e - d))), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "none", "\ufdd0:fill", 
+  c, "\ufdd0:stroke-width", 1], !0)).transform("r135")
 };
 myospermglyph.server.create_filled_pie_slice = function(a, b, c, d, e, f, g) {
-  var h = myospermglyph.server.deg_to_rad.call(null, 90 - e), b = d - c, e = cljs.core.PersistentVector.fromArray([d * Math.cos(h), -(d * Math.sin(h))], !0), h = cljs.core.PersistentVector.fromArray([c * Math.cos(h), -(c * Math.sin(h))], !0), i = cljs.core.PersistentVector.fromArray([c * Math.cos(myospermglyph.server.deg_to_rad.call(null, 90)), -(c * Math.sin(myospermglyph.server.deg_to_rad.call(null, 90)))], !0);
-  return a.path(cljs.core.format.call(null, "M%d,%d   m0,%d        v%d     a%d,%d    %d     %d,%d                %d,%d                                          l%d,%d    a%d,%d %d %d,%d %d,%d  z", (new cljs.core.Keyword("\ufdd0:x")).call(null, myospermglyph.server.origin), (new cljs.core.Keyword("\ufdd0:y")).call(null, myospermglyph.server.origin), -c, -b, d, d, 0, 0, 1, cljs.core.get.call(null, e, 0), cljs.core.get.call(null, e, 1) + d, cljs.core.get.call(null, h, 0) - cljs.core.get.call(null, e, 
-  0), cljs.core.get.call(null, h, 1) - cljs.core.get.call(null, e, 1), c, c, 0, 0, 0, cljs.core.get.call(null, i, 0) - cljs.core.get.call(null, h, 0), cljs.core.get.call(null, i, 1) - cljs.core.get.call(null, h, 1))).transform(cljs.core.format.call(null, "R%d %d,%d T%d,%d", g, (new cljs.core.Keyword("\ufdd0:x")).call(null, myospermglyph.server.origin), (new cljs.core.Keyword("\ufdd0:y")).call(null, myospermglyph.server.origin), cljs.core.get.call(null, f, 0), cljs.core.get.call(null, f, 1)))
+  var h = myospermglyph.server.deg_to_rad.call(null, 90 - e), e = d - c, i = cljs.core.PersistentVector.fromArray([d * Math.cos(h), -(d * Math.sin(h))], !0), h = cljs.core.PersistentVector.fromArray([c * Math.cos(h), -(c * Math.sin(h))], !0), j = cljs.core.PersistentVector.fromArray([c * Math.cos(myospermglyph.server.deg_to_rad.call(null, 90)), -(c * Math.sin(myospermglyph.server.deg_to_rad.call(null, 90)))], !0);
+  return a.path(cljs.core.format.call(null, "M%d,%d   m0,%d        v%d     a%d,%d    %d     %d,%d                %d,%d                                          l%d,%d    a%d,%d %d %d,%d %d,%d  z", (new cljs.core.Keyword("\ufdd0:x")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), (new cljs.core.Keyword("\ufdd0:y")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), -c, -e, d, d, 0, 0, 1, cljs.core.get.call(null, i, 0), cljs.core.get.call(null, i, 1) + d, cljs.core.get.call(null, 
+  h, 0) - cljs.core.get.call(null, i, 0), cljs.core.get.call(null, h, 1) - cljs.core.get.call(null, i, 1), c, c, 0, 0, 0, cljs.core.get.call(null, j, 0) - cljs.core.get.call(null, h, 0), cljs.core.get.call(null, j, 1) - cljs.core.get.call(null, h, 1))).transform(cljs.core.format.call(null, "R%d %d,%d T%d,%d", g, (new cljs.core.Keyword("\ufdd0:x")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), (new cljs.core.Keyword("\ufdd0:y")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, 
+  b)), cljs.core.get.call(null, f, 0), cljs.core.get.call(null, f, 1)))
 };
 myospermglyph.server.create_interior_coloured_arc = function(a, b) {
-  return myospermglyph.server.create_filled_ring.call(null, a, myospermglyph.server.sample_colourmap.call(null, (new cljs.core.Keyword("\ufdd0:uncertainty")).call(null, myospermglyph.server.colourmaps), (new cljs.core.Keyword("\ufdd0:headuncertainty")).call(null, b)), 0, (new cljs.core.Keyword("\ufdd0:vsl")).call(null, b))
+  return myospermglyph.server.create_filled_ring.call(null, a, b, myospermglyph.server.sample_colourmap.call(null, (new cljs.core.Keyword("\ufdd0:uncertainty")).call(null, myospermglyph.server.colourmaps), (new cljs.core.Keyword("\ufdd0:headuncertainty")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b))), 0, (new cljs.core.Keyword("\ufdd0:vsl")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b)))
 };
 myospermglyph.server.create_vcl = function(a, b) {
-  return myospermglyph.server.create_ring.call(null, a, (new cljs.core.Keyword("\ufdd0:vcl")).call(null, b))
+  return myospermglyph.server.create_ring.call(null, a, b, (new cljs.core.Keyword("\ufdd0:vcl")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b)))
 };
 myospermglyph.server.create_vsl = function(a, b) {
-  return myospermglyph.server.create_ring.call(null, a, (new cljs.core.Keyword("\ufdd0:vsl")).call(null, b))
+  return myospermglyph.server.create_ring.call(null, a, b, (new cljs.core.Keyword("\ufdd0:vsl")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b)))
 };
 myospermglyph.server.create_vap = function(a, b) {
-  return myospermglyph.server.create_ring.call(null, a, (new cljs.core.Keyword("\ufdd0:vap")).call(null, b))
+  return myospermglyph.server.create_ring.call(null, a, b, (new cljs.core.Keyword("\ufdd0:vap")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b)))
 };
 myospermglyph.server.create_orientation_arrow = function(a, b) {
-  var c = ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, myospermglyph.server.globals) + (new cljs.core.Keyword("\ufdd0:vcl")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals);
-  return myospermglyph.server.attr.call(null, a.path(cljs.core.format.call(null, "M%d,%d m%d,%d l%d,%d l%d,%d z ", (new cljs.core.Keyword("\ufdd0:x")).call(null, myospermglyph.server.origin), (new cljs.core.Keyword("\ufdd0:y")).call(null, myospermglyph.server.origin), -10, -c, 10, -15, 10, 15)), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "none", "\ufdd0:fill", "black"], !0))
+  var c = ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) + (new cljs.core.Keyword("\ufdd0:vcl")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b))) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b));
+  return myospermglyph.server.attr.call(null, a.path(cljs.core.format.call(null, "M%d,%d m%d,%d l%d,%d l%d,%d z ", (new cljs.core.Keyword("\ufdd0:x")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), (new cljs.core.Keyword("\ufdd0:y")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), -10, -c, 10, -15, 10, 15)), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "none", "\ufdd0:fill", "black"], !0))
 };
 myospermglyph.server.create_mad = function(a, b) {
-  return myospermglyph.server.attr.call(null, myospermglyph.server.create_filled_pie_slice.call(null, a, b, 0, (new cljs.core.Keyword("\ufdd0:cbase")).call(null, myospermglyph.server.globals) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals), (new cljs.core.Keyword("\ufdd0:mad")).call(null, b), cljs.core.PersistentVector.fromArray([0, 0], !0), -(0.5 * (new cljs.core.Keyword("\ufdd0:mad")).call(null, b))), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "#666", 
-  "\ufdd0:fill", "white"], !0))
+  return myospermglyph.server.attr.call(null, myospermglyph.server.create_filled_pie_slice.call(null, a, b, 0, (new cljs.core.Keyword("\ufdd0:cbase")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)), (new cljs.core.Keyword("\ufdd0:mad")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b)), cljs.core.PersistentVector.fromArray([0, 0], !0), -(0.5 * (new cljs.core.Keyword("\ufdd0:mad")).call(null, 
+  (new cljs.core.Keyword("\ufdd0:params")).call(null, b)))), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "#666", "\ufdd0:fill", "white"], !0))
 };
 myospermglyph.server.create_arclength_tail = function(a, b) {
-  var c = (new cljs.core.Keyword("\ufdd0:cbase")).call(null, myospermglyph.server.globals) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals);
-  (new cljs.core.Keyword("\ufdd0:ftc")).call(null, b);
-  var d = (new cljs.core.Keyword("\ufdd0:fta")).call(null, b) * (new cljs.core.Keyword("\ufdd0:tscale")).call(null, myospermglyph.server.globals) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals);
-  return myospermglyph.server.attr.call(null, myospermglyph.server.create_filled_pie_slice.call(null, a, b, 0, (new cljs.core.Keyword("\ufdd0:fta")).call(null, b), d, cljs.core.PersistentVector.fromArray([0, c], !0), -(180 + 0.5 * d)), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "#666", "\ufdd0:fill", "#ccc"], !0))
+  var c = (new cljs.core.Keyword("\ufdd0:cbase")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b));
+  (new cljs.core.Keyword("\ufdd0:ftc")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b));
+  var d = (new cljs.core.Keyword("\ufdd0:fta")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b)) * (new cljs.core.Keyword("\ufdd0:tscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b));
+  return myospermglyph.server.attr.call(null, myospermglyph.server.create_filled_pie_slice.call(null, a, b, 0, (new cljs.core.Keyword("\ufdd0:fta")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b)), d, cljs.core.PersistentVector.fromArray([0, c], !0), -(180 + 0.5 * d)), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "#666", "\ufdd0:fill", "#ccc"], !0))
 };
 myospermglyph.server.create_bcf_ring = function(a, b) {
-  var c = ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, myospermglyph.server.globals) + (new cljs.core.Keyword("\ufdd0:vcl")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals), d = (new cljs.core.Keyword("\ufdd0:bcf")).call(null, b);
+  var c = ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) + (new cljs.core.Keyword("\ufdd0:vcl")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b))) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)), d = (new cljs.core.Keyword("\ufdd0:bcf")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b));
   return myospermglyph.server.attr.call(null, myospermglyph.server.create_filled_pie_slice.call(null, a, b, c, 20 + c, d, cljs.core.PersistentVector.fromArray([0, 0], !0), 270), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "none", "\ufdd0:fill", "#ccc"], !0))
 };
-myospermglyph.server.create_inner = function(a) {
-  var b = (new cljs.core.Keyword("\ufdd0:cbase")).call(null, myospermglyph.server.globals) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, myospermglyph.server.globals);
-  return myospermglyph.server.attr.call(null, a.circle((new cljs.core.Keyword("\ufdd0:x")).call(null, myospermglyph.server.origin), (new cljs.core.Keyword("\ufdd0:y")).call(null, myospermglyph.server.origin), b, b), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "#666", "\ufdd0:stroke-width", 1, "\ufdd0:fill", "#ccc"], !0))
+myospermglyph.server.create_inner = function(a, b) {
+  var c = (new cljs.core.Keyword("\ufdd0:cbase")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b));
+  return myospermglyph.server.attr.call(null, a.circle((new cljs.core.Keyword("\ufdd0:x")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), (new cljs.core.Keyword("\ufdd0:y")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), c, c), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "#666", "\ufdd0:stroke-width", 1, "\ufdd0:fill", "#ccc"], !0))
 };
-myospermglyph.server.mainpaper = Raphael("spermdiv", 600, 800);
 myospermglyph.server.draw = function(a) {
-  myospermglyph.server.mainpaper.clear();
-  var b = myospermglyph.server.mainpaper;
+  var b = (new cljs.core.Keyword("\ufdd0:div")).call(null, a).attr("id"), c = cljs.core.first.call(null, (new cljs.core.Keyword("\ufdd0:size")).call(null, a)), d = cljs.core.second.call(null, (new cljs.core.Keyword("\ufdd0:size")).call(null, a)), b = Raphael(b, c, d), a = cljs.core.assoc.call(null, a, "\ufdd0:origin", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:x", 0.5 * c, "\ufdd0:y", 0.5 * d], !0), "\ufdd0:scales", cljs.core.assoc.call(null, myospermglyph.server.globals, "\ufdd0:cscale", 200 * 
+  (10 / c)));
+  b.clear();
+  b.setSize(c, d);
+  console.log([cljs.core.str(c), cljs.core.str(","), cljs.core.str(d)].join(""));
   myospermglyph.server.create_interior_coloured_arc.call(null, b, a);
   myospermglyph.server.create_inner.call(null, b, a);
   myospermglyph.server.create_mad.call(null, b, a);
@@ -14405,12 +14411,9 @@ myospermglyph.server.draw = function(a) {
 myospermglyph.server.update = function() {
   return myospermglyph.server.draw.call(null, cljs.core.assoc.call(null, myospermglyph.server.currsperm, "\ufdd0:vcl", getSlider("vcl").getValue(), "\ufdd0:vap", getSlider("vap").getValue(), "\ufdd0:vsl", getSlider("vsl").getValue(), "\ufdd0:bcf", getSlider("bcf").getValue()))
 };
-myospermglyph.server._init = function() {
-  return cljs.core.List.EMPTY
-};
-goog.exportSymbol("myospermglyph.server._init", myospermglyph.server._init);
-myospermglyph.server._draw = function() {
-  return myospermglyph.server.draw.call(null, myospermglyph.server.currsperm)
+myospermglyph.server._draw = function(a, b) {
+  var c = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:div", a, "\ufdd0:size", b, "\ufdd0:origin", myospermglyph.server.origin, "\ufdd0:scales", myospermglyph.server.globals, "\ufdd0:params", myospermglyph.server.currsperm], !0);
+  return myospermglyph.server.draw.call(null, c)
 };
 goog.exportSymbol("myospermglyph.server._draw", myospermglyph.server._draw);
 myospermglyph.server._update = function() {

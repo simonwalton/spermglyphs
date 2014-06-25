@@ -14,6 +14,14 @@ h1, .h1, .titleb {
 	margin-left:20px;
 }
 
+.thumbnail {
+	cursor:pointer;
+}
+
+.thumbnail > .caption {
+	background:#fff;
+}
+
 .btn-zoo {
 	width:100%;
 }
@@ -92,8 +100,58 @@ h2, .h2 {
 	color: #162856;
 }
 
-
+#spermdiv {
+	width:100%;
+	height:100%;
+}
 
 .container {
 	margin-top:30px;
 }
+
+.spermgrid
+{
+	width:100%;
+	height:100%;
+}
+
+.gridster ul {
+    background-color: #EFEFEF;
+	list-style: none;
+}
+
+.gridster li {
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    line-height: 100%;
+}
+
+
+.gridster {
+    margin: 0 auto;
+
+    opacity: .8;
+
+    -webkit-transition: opacity .6s;
+    -moz-transition: opacity .6s;
+    -o-transition: opacity .6s;
+    -ms-transition: opacity .6s;
+    transition: opacity .6s;
+}
+
+.gridster .gs-w {
+    background: #DDD;
+    cursor: pointer;
+}
+
+.gridster .player {
+    background: #BBB;
+}
+
+
+.gridster .preview-holder {
+    border: none!important;
+    background: red!important;
+}
+

@@ -24,8 +24,9 @@
           :ftc 23.0
           :ftt 0.87
           :fas -0.1
-          }
-)
+          })
+
+
  
 ; raphael utilities
 
@@ -60,24 +61,24 @@
   (.attr object (clj->js attributes)))
 
 (defn create-head [paper sperm]
-  (-> (.ellipse paper (:x origin) (:y origin)
-              (/ (* (:headwidth sperm) (:hscale globals)) (:cscale globals))
-              (/ (* (:headlength sperm) (:hscale globals)) (:cscale globals)))
+  (-> (.ellipse paper (:x (:origin sperm)) (:y (:origin sperm))
+              (/ (* (:headwidth (:params sperm)) (:hscale (:scales sperm))) (:cscale (:scales sperm)))
+              (/ (* (:headlength (:params sperm)) (:hscale (:scales sperm))) (:cscale (:scales sperm))))
       (attr {:stroke "black", :fill (raphaelcolour (:nouncertainty colours)), :stroke-width 1}))
   )
 
-(defn create-ring [paper value]
-  (let [radius (/ (+ (:cbase globals) value) (:cscale globals))]
-    (-> (.path paper (format "M%d,%d m%d,%d a%d,%d %d %d,%d %d,%d" (:x origin) (:y origin) 0 (- radius) radius radius 0 1 1 radius radius ))
+(defn create-ring [paper sperm value]
+  (let [radius (/ (+ (:cbase (:scales sperm)) value) (:cscale (:scales sperm)))]
+    (-> (.path paper (format "M%d,%d m%d,%d a%d,%d %d %d,%d %d,%d" (:x (:origin sperm)) (:y (:origin sperm)) 0 (- radius) radius radius 0 1 1 radius radius ))
         (attr {:stroke "black", :fill "none", :stroke-width 1})
         (.transform (format "t%d,%dr-45" (- radius) radius))
   )))
 
-(defn create-filled-ring [paper colour from to]
-  (let  [ra (/ (+ (:cbase globals) from) (:cscale globals))
-        rb (/ (+ (:cbase globals) to) (:cscale globals))]
+(defn create-filled-ring [paper sperm colour from to]
+  (let  [ra (/ (+ (:cbase (:scales sperm)) from) (:cscale (:scales sperm)))
+        rb (/ (+ (:cbase (:scales sperm)) to) (:cscale (:scales sperm)))]
     (-> (.path paper (format "M%d,%d   m%d,%d          v%d         a%d,%d    %d     %d,%d    %d,%d   h%d   Z           "                            
-                             (:x origin) (:y origin)   0 (- ra)   (- (- rb ra))    rb rb      0      1 0     rb rb   (- (- rb ra) )))
+                             (:x (:origin sperm)) (:y (:origin sperm))   0 (- ra)   (- (- rb ra))    rb rb      0      1 0     rb rb   (- (- rb ra) )))
         (attr {:stroke "none", :fill colour, :stroke-width 1})
         (.transform "r135")
   )))
@@ -93,64 +94,71 @@
          thirdsnap [ (* ra (js/Math.cos (deg-to-rad (+ 90)))) (- (* ra (js/Math.sin (deg-to-rad (+ 90))))) ]
          ]
     (-> (.path paper (format "M%d,%d   m0,%d        v%d     a%d,%d    %d     %d,%d                %d,%d                                          l%d,%d    a%d,%d %d %d,%d %d,%d  z"                       
-                             (:x origin) (:y origin)   (- ra)   (- rbra)    rb rb      0      0 1  (get firstsnap 0) (+ (get firstsnap 1) rb) 
+                             (:x (:origin sperm)) (:y (:origin sperm))   (- ra)   (- rbra)    rb rb      0      0 1  (get firstsnap 0) (+ (get firstsnap 1) rb) 
                              (- (get secondsnap 0) (get firstsnap 0))  (- (get secondsnap 1) (get firstsnap 1)  )
                              ra ra 0 0 0 (- (get thirdsnap 0) (get secondsnap 0))  (- (get thirdsnap 1) (get secondsnap 1) ))) ; second arc
                              
-        (.transform (format "R%d %d,%d T%d,%d" rotation (:x origin) (:y origin) (get offset 0) (get offset 1) ) )
+        (.transform (format "R%d %d,%d T%d,%d" rotation (:x (:origin sperm)) (:y (:origin sperm)) (get offset 0) (get offset 1) ) )
         )))
 
 ; semen-specific
 (defn create-interior-coloured-arc [paper sperm]
-  (-> (create-filled-ring paper (sample-colourmap (:uncertainty colourmaps) (:headuncertainty sperm)) 0 (:vsl sperm))))
+  (-> (create-filled-ring paper sperm (sample-colourmap (:uncertainty colourmaps) (:headuncertainty (:params sperm))) 0 (:vsl (:params sperm)))))
 
 (defn create-vcl [paper sperm]
-  (-> (create-ring paper (:vcl sperm))))
+  (-> (create-ring paper sperm (:vcl (:params sperm)))))
 
 (defn create-vsl [paper sperm]
-  (-> (create-ring paper (:vsl sperm))))
+  (-> (create-ring paper sperm (:vsl (:params sperm)))))
 
 (defn create-vap [paper sperm]
-  (-> (create-ring paper (:vap sperm))))
+  (-> (create-ring paper sperm (:vap (:params sperm)))))
 
 (defn create-orientation-arrow [paper sperm]
-  (let [radius (/ (+ (:cbase globals) (:vcl sperm)) (:cscale globals))]
-    (-> (.path paper (format "M%d,%d m%d,%d l%d,%d l%d,%d z " (:x origin) (:y origin) (- 10) (- radius) 10 (- 15) 10 15))
+  (let [radius (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))]
+    (-> (.path paper (format "M%d,%d m%d,%d l%d,%d l%d,%d z " (:x (:origin sperm)) (:y (:origin sperm)) (- 10) (- radius) 10 (- 15) 10 15))
         (attr {:stroke "none", :fill "black" })
         )))
  
 (defn create-mad [paper sperm]
-  (-> (create-filled-pie-slice paper sperm 0 (/ (:cbase globals) (:cscale globals)) (:mad sperm) [0 0] (- (* 0.5 (:mad sperm))))
+  (-> (create-filled-pie-slice paper sperm 0 (/ (:cbase (:scales sperm)) (:cscale (:scales sperm))) (:mad (:params sperm)) [0 0] (- (* 0.5 (:mad (:params sperm)))))
         (attr {:stroke "#666", :fill "white"})))
       
 (defn create-arclength-tail [paper sperm]
-  (let [zeroring (/ (:cbase globals) (:cscale globals))
-        changeinangle (* (:ftc sperm) 16.0)
-        flaglength (/ (* (:fta sperm) (:tscale globals)) (:cscale globals))
+  (let [zeroring (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))
+        changeinangle (* (:ftc (:params sperm)) 16.0)
+        flaglength (/ (* (:fta (:params sperm)) (:tscale (:scales sperm))) (:cscale (:scales sperm)))
         ]
-    (-> (create-filled-pie-slice paper sperm 0 (:fta sperm) flaglength [0 zeroring] (- (+ 180 (* 0.5 flaglength))))
+    (-> (create-filled-pie-slice paper sperm 0 (:fta (:params sperm)) flaglength [0 zeroring] (- (+ 180 (* 0.5 flaglength))))
       (attr {:stroke "#666", :fill "#ccc"}))))
 
 (defn create-bcf-ring [paper sperm] 
-  (let [r (/ (+ (:cbase globals) (:vcl sperm)) (:cscale globals))
-        ang (:bcf sperm)
+  (let [r (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))
+        ang (:bcf (:params sperm))
         ]
     (-> (create-filled-pie-slice paper sperm r (+ 20 r) ang [0 0] 270)
       (attr {:stroke "none", :fill "#ccc"}))))
 
 (defn create-inner [paper sperm]
-  (let [radius (/ (:cbase globals) (:cscale globals))]
-    (-> (.circle paper (:x origin) (:y origin) radius radius)
+  (let [radius (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))]
+    (-> (.circle paper (:x (:origin sperm)) (:y (:origin sperm)) radius radius)
         (attr {:stroke "#666", :stroke-width 1, :fill "#ccc"})
         )))
 
 ; entry
 
-(def mainpaper (js/Raphael "spermdiv" 600 800))
-
 (defn draw [sperm]
-    (.clear mainpaper)
-    (let [paper mainpaper]
+  (let [id (.attr (:div sperm) "id")
+        w (first (:size sperm))
+        h (second (:size sperm))
+        paper (js/Raphael id w h)
+        sperm (assoc sperm 
+            :origin {:x (* 0.5 w) :y (* 0.5 h)}
+            :scales (assoc globals :cscale (* 200.0 (/ 10.0 w)))
+        )]
+    (-> (.clear paper))
+    (-> (.setSize paper w h))
+    (-> (js/console.log (str w "," h)))
     (-> (create-interior-coloured-arc paper sperm))
     (-> (create-inner paper sperm))
     (-> (create-mad paper sperm))
@@ -171,8 +179,10 @@
        :bcf (.getValue (js/getSlider "bcf"))
        )))
 
-(defn ^:export _init [] ());def mainpaper (js/Raphael "spermdiv" 500 480)))
-(defn ^:export _draw [] (draw currsperm))
+(defn ^:export _draw [div, size]
+  (let [sperm {:div div :size size :origin origin :scales globals :params currsperm}]
+    (draw sperm)))
+
 (defn ^:export _update [] (update))
 
 ; jq
