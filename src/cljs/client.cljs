@@ -30,6 +30,9 @@
  
 ; raphael utilities
 
+(def paper-stack (atom {}))
+(defn add-to-paper-stack [id paper] (swap! paper-stack assoc (keyword id) paper))
+
 (def colours {:nouncertainty {:red 0.32941176, :green 0.32941176, :blue 0.84705882 }})
 (def colourmaps {:uncertainty {:red [0.804 1.0 0.549] :green [1.0 0.59 0.0] :blue [0.8 0.18 0.0]}})
 
@@ -151,14 +154,18 @@
   (let [id (.attr (:div sperm) "id")
         w (first (:size sperm))
         h (second (:size sperm))
-        paper (js/Raphael id w h)
+        paper (if (contains? @paper-stack (keyword id))
+                ((keyword id) @paper-stack)
+                (js/Raphael id w h))
         sperm (assoc sperm 
             :origin {:x (* 0.5 w) :y (* 0.5 h)}
             :scales (assoc globals :cscale (* 200.0 (/ 10.0 w)))
         )]
+    (-> (add-to-paper-stack id paper))
+    (-> (js/console.log (contains? @paper-stack (keyword id))))
+    (-> (js/console.log (str "In clojure" w "," h)))
     (-> (.clear paper))
     (-> (.setSize paper w h))
-    (-> (js/console.log (str w "," h)))
     (-> (create-interior-coloured-arc paper sperm))
     (-> (create-inner paper sperm))
     (-> (create-mad paper sperm))
@@ -180,6 +187,7 @@
        )))
 
 (defn ^:export _draw [div, size]
+  (js/console.log (str "Here's the size" size))
   (let [sperm {:div div :size size :origin origin :scales globals :params currsperm}]
     (draw sperm)))
 

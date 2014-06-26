@@ -133,10 +133,17 @@
           gridster = $('.gridster ul').gridster({
             widget_base_dimensions: cellsize,
             widget_margins: [5, 5],
-            helper: 'clone',
             resize: {
-              enabled: true
+              enabled: true, 
+              resize: function(e, ui, $widget) {
+                var me = $widget.children().first();
+                myospermglyph.server._draw(me, [this.resize_coords.data.width, this.resize_coords.data.height]);
+              },
+
+            stop: function(e, ui, $widget) {
+              console.log('END for ', $(e.target).get(0).tagName, [this.resize_coords.data.width, this.resize_coords.data.height]);
             }
+                          }
           }).data('gridster');
 
           $('.js-resize-random').on('click', function() {
