@@ -12716,6 +12716,12 @@ cljs.core.special_symbol_QMARK_ = function(a) {
   new cljs.core.Symbol(null, ".", ".", -1640531481, null), new cljs.core.Symbol(null, "ns", "ns", -1640528002, null), new cljs.core.Symbol(null, "do", "do", -1640528316, null), new cljs.core.Symbol(null, "fn*", "fn*", -1640430053, null), new cljs.core.Symbol(null, "throw", "throw", -1530191713, null), new cljs.core.Symbol(null, "letfn*", "letfn*", 1548249632, null), new cljs.core.Symbol(null, "js*", "js*", -1640426054, null), new cljs.core.Symbol(null, "defrecord*", "defrecord*", 774272013, null), 
   new cljs.core.Symbol(null, "let*", "let*", -1637213400, null), new cljs.core.Symbol(null, "loop*", "loop*", -1537374273, null), new cljs.core.Symbol(null, "if", "if", -1640528170, null), new cljs.core.Symbol(null, "def", "def", -1640432194, null)]), a)
 };
+var myospermglyph = {presets:{}};
+myospermglyph.presets.currsperm = cljs.core.PersistentArrayMap.fromArray("\ufdd0:name Human \ufdd0:vsl \ufdd0:headlength \ufdd0:headwidth \ufdd0:fta".split(" "), !0);
+myospermglyph.presets.currsperm = cljs.core.PersistentArrayMap.fromArray("\ufdd0:name Human \ufdd0:vsl \ufdd0:headlength \ufdd0:headwidth \ufdd0:fta".split(" "), !0);
+myospermglyph.presets.currsperm = cljs.core.PersistentArrayMap.fromArray("\ufdd0:name Human \ufdd0:vsl \ufdd0:headlength \ufdd0:headwidth \ufdd0:fta".split(" "), !0);
+myospermglyph.presets.currsperm = cljs.core.PersistentArrayMap.fromArray("\ufdd0:name Human \ufdd0:vsl \ufdd0:headlength \ufdd0:headwidth \ufdd0:fta".split(" "), !0);
+myospermglyph.presets.currsperm = cljs.core.PersistentHashMap.fromArrays("\ufdd0:vap \ufdd0:fas \ufdd0:headlength \ufdd0:bcf \ufdd0:vcl \ufdd0:name \ufdd0:ftt \ufdd0:headwidth \ufdd0:ftc \ufdd0:mad \ufdd0:alh \ufdd0:fta \ufdd0:headuncertainty \ufdd0:vsl".split(" "), [128.54, -0.1, 8.27, 30.96, 205.26, "Human", 0.87, 3.65, 23, 45, 47.12, 50, 0.4, 77.4]);
 cljs.reader = {};
 cljs.reader.PushbackReader = {};
 cljs.reader.read_char = function(a) {
@@ -14312,7 +14318,7 @@ jayq.core.deferred_m = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:return", 
 jayq.core.ajax_m = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:return", cljs.core.identity, "\ufdd0:bind", function(a, b) {
   return jayq.core.done.call(null, jayq.core.ajax.call(null, a), b)
 }, "\ufdd0:zero", cljs.core.identity], !0);
-var myospermglyph = {server:{}};
+myospermglyph.server = {};
 myospermglyph.server.origin = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:x", 280, "\ufdd0:y", 260], !0);
 myospermglyph.server.globals = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:cscale", 3, "\ufdd0:cbase", 350, "\ufdd0:hscale", 4, "\ufdd0:tscale", 1.5], !0);
 myospermglyph.server.currsperm = cljs.core.PersistentHashMap.fromArrays("\ufdd0:vap \ufdd0:fas \ufdd0:headlength \ufdd0:bcf \ufdd0:vcl \ufdd0:name \ufdd0:ftt \ufdd0:headwidth \ufdd0:ftc \ufdd0:mad \ufdd0:alh \ufdd0:fta \ufdd0:headuncertainty \ufdd0:vsl".split(" "), [128.54, -0.1, 8.27, 30.96, 205.26, "Human", 0.87, 3.65, 23, 45, 47.12, 50, 0.4, 77.4]);

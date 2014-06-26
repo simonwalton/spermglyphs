@@ -44,7 +44,7 @@
   (view-layout
       [:div {:class "col-xs-6 col-md-3 zoo-thumbnail-container"}
         [:div {:class "thumbnail"}
-          [:img {:src (str "assets/img/species/" img) :alt title}]
+          [:a {:href (str "javascript:selectZooPreset('" img "');")} [:img {:src (str "assets/img/species/" img) :alt title}]]
           [:div {:class "caption"} title]
 ;              [:button {:type "button" :class "btn btn-primary btn-sm btn-zoo"}
  ;               [:span {:class "glyphicon glyphicon-eye-open"}] (str " " title)
@@ -132,6 +132,10 @@
           selectedPaper = paper;
           $('.spermdiv').attr('class','spermdiv');
           div.addClass('spermdiv-selected');
+        };
+
+        function selectZooPreset(str) {
+          console.log(str);
         };
 
         $(document).ready(function(){
