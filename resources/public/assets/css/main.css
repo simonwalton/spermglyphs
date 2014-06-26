@@ -127,6 +127,11 @@ h2, .h2 {
     line-height: 100%;
 }
 
+.spermdiv-selected {
+   -moz-box-shadow:    inset 0 0 20px #222;
+   -webkit-box-shadow: inset 0 0 20px #222;
+   box-shadow:         inset 0 0 20px #222;
+}
 
 .gridster {
     margin: 0 auto;

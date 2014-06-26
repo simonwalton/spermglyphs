@@ -72,12 +72,12 @@
           [:div {:class "col-md-6"}
             [:div {:class "gridster spermgrid"}
               [:ul
-                [:li {:data-row 1 :data-col 1 :data-sizex 2 :data-sizey 2} [:div {:id "spermbig"}]]
-                [:li {:data-row 1 :data-col 3 :data-sizex 1 :data-sizey 1} [:div {:id "spermsmall0"}]]
-                [:li {:data-row 2 :data-col 3 :data-sizex 1 :data-sizey 1} [:div {:id "spermsmall1"}]]
-                [:li {:data-row 3 :data-col 1 :data-sizex 1 :data-sizey 1} [:div {:id "spermsmall2"}]]
-                [:li {:data-row 3 :data-col 2 :data-sizex 1 :data-sizey 1} [:div {:id "spermsmall3"}]]
-                [:li {:data-row 3 :data-col 3 :data-sizex 1 :data-sizey 1} [:div {:id "spermsmall4"}]]
+                [:li {:data-row 1 :data-col 1 :data-sizex 2 :data-sizey 2} [:div {:class "spermdiv spermdiv-selected" :id "spermbig"}]]
+                [:li {:data-row 1 :data-col 3 :data-sizex 1 :data-sizey 1} [:div {:class "spermdiv" :id "spermsmall0"}]]
+                [:li {:data-row 2 :data-col 3 :data-sizex 1 :data-sizey 1} [:div {:class "spermdiv" :id "spermsmall1"}]]
+                [:li {:data-row 3 :data-col 1 :data-sizex 1 :data-sizey 1} [:div {:class "spermdiv" :id "spermsmall2"}]]
+                [:li {:data-row 3 :data-col 2 :data-sizex 1 :data-sizey 1} [:div {:class "spermdiv" :id "spermsmall3"}]]
+                [:li {:data-row 3 :data-col 3 :data-sizex 1 :data-sizey 1} [:div {:class "spermdiv" :id "spermsmall4"}]]
               ]
               
             ]
@@ -123,10 +123,16 @@
                   (create-thumb "spermwhale.jpg" "Sperm Whale") (create-thumb "cat.jpg" "Cat") (create-thumb "gazelle.jpg" "Gazelle")]
               ]
             ]]]]]
-    [:script " var sliders = {}; var gridster; "]
+    [:script " var sliders = {}; var gridster; var papers = []; var selectedPaper = null;"]
     [:script {:src "/js/cljs.js"}]
     [:script "
         function getSlider(id) { return sliders[id]; }
+
+        function setSelectedPaper(div, paper) {
+          selectedPaper = paper;
+          $('.spermdiv').attr('class','spermdiv');
+          div.addClass('spermdiv-selected');
+        };
 
         $(document).ready(function(){
           var cellsize = [170,170];
@@ -139,18 +145,9 @@
                 var me = $widget.children().first();
                 myospermglyph.server._draw(me, [this.resize_coords.data.width, this.resize_coords.data.height]);
               },
-
-            stop: function(e, ui, $widget) {
-              console.log('END for ', $(e.target).get(0).tagName, [this.resize_coords.data.width, this.resize_coords.data.height]);
             }
-                          }
           }).data('gridster');
 
-          $('.js-resize-random').on('click', function() {
-              gridster.resize_widget(gridster.$widgets.eq(getRandomInt(0, 9)),
-                  getRandomInt(1, 4), getRandomInt(1, 4))
-          });
-          
           $('.create-slider').each(function(i) {
             var sl = $(this).slider().on('slide', function(ev) {
               myospermglyph.server._update();
@@ -158,9 +155,15 @@
             sliders[$(this).prop('id')] = sl;
           });
 
-          myospermglyph.server._draw($('#spermbig'), [cellsize[0]*2,cellsize[1]*2]);
+          papers = [];
+          papers = _.union(papers, [myospermglyph.server._draw($('#spermbig'), [cellsize[0]*2,cellsize[1]*2])]);
           for(i in [0,1,2,3,4])
-            myospermglyph.server._draw($('#spermsmall'+i.toString()), cellsize);
+            papers = _.union(papers, [myospermglyph.server._draw($('#spermsmall'+i.toString()), cellsize)]);
+
+          _.each(papers, function(p) {
+             $(p.canvas).css({'pointer-events': 'none'});
+             $(p.canvas).parent().click(function(div) {  setSelectedPaper($(div.currentTarget),p); });
+          });
       });
       "]
   ))
