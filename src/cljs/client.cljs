@@ -167,16 +167,16 @@
     (-> (jq/bind ($ paper) :click (fn [evn] (js/alert "click"))))
     (-> (.clear paper))
     (-> (.setSize paper w h))
-;    (-> (create-interior-coloured-arc paper sperm))
-;    (-> (create-inner paper sperm))
-;    (-> (create-mad paper sperm))
-;    (-> (create-head paper sperm))
-;    (-> (create-bcf-ring paper sperm))
+    (-> (create-interior-coloured-arc paper sperm))
+    (-> (create-inner paper sperm))
+    (-> (create-mad paper sperm))
+    (-> (create-head paper sperm))
+    (-> (create-bcf-ring paper sperm))
     (-> (create-vcl paper sperm))
     (-> (create-vsl paper sperm))
     (-> (create-vap paper sperm))
-;    (-> (create-arclength-tail paper sperm))
-;    (-> (create-orientation-arrow paper sperm))
+    (-> (create-arclength-tail paper sperm))
+    (-> (create-orientation-arrow paper sperm))
     (-> (clj->js (id @paper-stack)))
   ))
 
@@ -205,7 +205,7 @@
 (defn init [resourceurl]
   (get-and-store-presets resourceurl))
 
-(defn update []
+(defn updateManual [props]
   (draw (assoc currsperm
        :vcl (.getValue (js/getSlider "vcl"))
        :vap (.getValue (js/getSlider "vap"))
@@ -215,6 +215,11 @@
 
 (defn ^:export _draw [div, size]
   (let [sperm {:div div :size size :origin origin :scales globals :params currsperm}]
+    (js/console.log (clj->js sperm))
+    (draw sperm)))
+
+(defn ^:export _drawManual [div size props]
+  (let [sperm {:div div :size size :origin origin :scales globals :params (walk/keywordize-keys (js->clj props :keywordize-keys true))}]
     (js/console.log (clj->js sperm))
     (draw sperm)))
 
@@ -231,7 +236,6 @@
   ;   (-> (js/console.log (clj->js sperm)))
   ;   (-> (draw sperm))))
 
-(defn ^:export _update [] (update))
 (defn ^:export _init [resourceurl] (init resourceurl))
 
 ; jq

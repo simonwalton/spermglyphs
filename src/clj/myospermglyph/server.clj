@@ -15,21 +15,20 @@
            [:title "Ovii | Make your own Sperm Glyph"]
            [:link {:href "/assets/bootstrap/css/bootstrap.min.css" :rel "stylesheet"}]
            [:link {:href "/assets/bootstrap/css/bootstrap-theme.min.css" :rel "stylesheet"}]
-           [:link {:href "/assets/css/main.css" :rel "stylesheet"}]
            [:link {:href "/assets/css/slider.css" :rel "stylesheet"}]
+           [:link {:href "/assets/css/main.css" :rel "stylesheet"}]
            [:link {:href "/assets/css/jquery.gridster.min.css" :rel "stylesheet"}]
            [:link {:href "//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" :rel "stylesheet"}]]
       [:body content]))
 
 
-(defn create-slider[property minval maxval]
+(defn create-slider[s]
+  (let [step (get s :step 1.0)]
   (view-layout 
       [:div {:class "form-group"}
-        [:label {:for property :class "col-sm-2 control-label"} property]
-        [:div {:class "col-sm-10"}
-          [:input {:type "text" :data-slider-min (str "\"" minval "\"") :data-slider-max (str "\"" maxval "\"") :id property :class "create-slider"}]
-        ]]
-      ))
+        [:label {:for (:id s) :class "control-label"} (:name s)] [:span {:class "control-desc"} (str " " (:desc s))]
+        [:div {:style "width:100%"} [:input {:type "text" :data-slider-min (str (:min s)) :data-slider-step (str step) :data-slider-max (str (:max s)) :id (:id s) :class "create-slider"}]]]
+      )))
 
 (defn create-slider-group[id nicename desc sliders]
   (view-layout
@@ -38,7 +37,7 @@
         [:h4 nicename]
         [:p desc]
           [:div {:class "form-horizontal"}
-            (map (fn [x] (create-slider (:id x) (:min x) (:max x))) sliders)
+            (map (fn [x] (create-slider x)) sliders)
         ]]]))
 
 (defn create-thumb[img, title]
@@ -120,16 +119,27 @@
             ; manual
               [:div {:class "tab-pane active" :id "manual"} 
                 [:div {:class "row"}
-                  (create-slider-group "kinematics" "Kinematics" "Movement characteristics of the head"
-                    [{:id "vcl" :min 80 :max 300} {:id "vcl" :min 80 :max 300}])
+                  (create-slider-group "kinematics" "Kinematics" "Movement of the head"
+                    [{:id "vcl" :name "VCL" :desc "Curvilinear Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
+                     {:id "vsl" :name "VSL" :desc "Straight-line Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
+                     {:id "vap" :name "VAP" :desc "Average Path Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
+                     {:id "bcf" :name "BCF" :desc "Beat Cross Frequency <i>Hz</i>" :min 0 :max 50}
+                     {:id "alh" :name "ALH" :desc "Amp. of Lateral Head Disp. &micro;<i>m</i>" :min 0 :max 50}
+                     {:id "mad" :name "MAD" :desc "Mean Anglular Displacement, &deg;" :min 0 :max 60}])
                   (create-slider-group "mechanics" "Mechanics" "Mechanics of the flagella"
-                    [{:id "fta" :min 80 :max 300} {:id "ftc" :min 80 :max 300} {:id "ftt" :min 80 :max 300} {:id "fas" :min 80 :max 300}])
+                    [{:id "fta" :name "FTA" :desc "Total Projected Arclength, &micro;<i>m</i>" :min 20 :max 400}
+                     {:id "ftc" :name "FTC" :desc "Change in Angle, &deg;" :min 0 :max 100}
+                     {:id "ftt" :name "FTT" :desc "Total Torque, <i>N</i>&micro;" :min 80 :max 300}
+                     {:id "fas" :name "FAS" :desc "Asymmetry" :min -1 :max 1 :step 0.1}])
                 ]
                 [:div {:class "row"}
                   (create-slider-group "morphological" "Kinematics" "Head characteristics"
-                    [{:id "hl" :min 80 :max 300} {:id "hw" :min 30 :max 70} {:id "hr" :min 10 :max 30}])
+                    [{:id "headlength" :name "Length" :desc "The length of the head" :min 80 :max 300} 
+                     {:id "headwidth" :name "Width" :desc "The width of the head" :min 30 :max 70}
+                     {:id "headrotation" :name "Rotation" :desc "The head's rotation, &deg" :min -50 :max 50}])
                   (create-slider-group "uncertainty" "Uncertainty" "Machine vision uncertainty"
-                    [{:id "uc" :min 80 :max 300} {:id "uf" :min 30 :max 70}])
+                    [{:id "headuncertainty" :name "Head" :desc "In capturing the head" :min 80 :max 300}
+                     {:id "uf" :name "Flagella" :desc "In capturing the flagella" :min 30 :max 70}])
                 ]
               ]
             ; zoo
@@ -172,6 +182,15 @@
           myospermglyph.server._drawHumanPreset(selectedDiv, str, [selectedDiv.width(), selectedDiv.height()]);
         };
 
+        function manualProps() {
+          var obj = {};
+          for(key in sliders) {
+            var sl = sliders[key];
+            obj[key] = parseFloat(sl.getValue());
+          }
+          return obj;
+        };
+
         $(document).ready(function(){
           myospermglyph.server._init('/assets/data/'); 
 
@@ -191,7 +210,7 @@
 
           $('.create-slider').each(function(i) {
             var sl = $(this).slider().on('slide', function(ev) {
-              myospermglyph.server._update();
+              myospermglyph.server._drawManual(selectedDiv, [selectedDiv.width(), selectedDiv.height()], manualProps());
             }).data('slider');
             sliders[$(this).prop('id')] = sl;
           });

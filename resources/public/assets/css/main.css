@@ -46,7 +46,21 @@ h2, .h2 {
 }
 
 .slider-horizontal {
-	margin-top:7px;
+	width:100% !important;
+	margin-bottom:-13px;
+	padding-right:20px !important;
+}
+
+.slider-track {
+}
+
+.control-label {
+	font-weight:bold;
+	font-size:8pt;
+}
+
+.control-desc {
+	font-size:8pt;
 }
 
 .bs-callout {
@@ -63,7 +77,7 @@ h2, .h2 {
 .bs-callout-kinematics {
 	background-color: #ffc2aa;
 	border-color: #803315;
-	height:300px;
+	height:400px;
 }
 
 .bs-callout-kinematics {
