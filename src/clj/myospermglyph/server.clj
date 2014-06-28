@@ -17,7 +17,8 @@
            [:link {:href "/assets/bootstrap/css/bootstrap-theme.min.css" :rel "stylesheet"}]
            [:link {:href "/assets/css/main.css" :rel "stylesheet"}]
            [:link {:href "/assets/css/slider.css" :rel "stylesheet"}]
-           [:link {:href "/assets/css/jquery.gridster.min.css" :rel "stylesheet"}]]
+           [:link {:href "/assets/css/jquery.gridster.min.css" :rel "stylesheet"}]
+           [:link {:href "//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" :rel "stylesheet"}]]
       [:body content]))
 
 
@@ -51,6 +52,14 @@
   ;            ]
             ]])) 
 
+(defn create-human-preset[id, img, title, desc, note]
+  (view-layout
+    [:div {:class "media sperm-preset-media-box" :id id}
+      [:a {:class "pull-left human-preset-link" :href "#"}[:img {:class "media-object" :src (str "assets/img/human/" img) :alt title}]]
+      [:div {:class "media-body"}
+        [:a {:class "human-preset-link" :href (str "javascript:selectHumanPreset('" id "');")} [:h4 {:class "media-heading"} title]] [:p desc [:p {:class "sperm-note"}] [:i {:class "fa fa-info-circle"}] (str " " note)]
+       ]]))
+
 (defn view-content []
   (view-layout
     [:script {:src "/assets/js/raphael-min.js"}]
@@ -61,23 +70,18 @@
     [:script {:src "/assets/js/jquery.gridster.min.js"}]
     [:div {:class "container"}
       [:div {:class "container"}
-        [:div {:class "row"}
-          [:div {:class "pull-left"} [:img {:src "assets/img/logo.png" :class "logo" :width "120" :height "120"}]]
-          [:div {:class "pull-left"} 
-            [:H1 {:class "titlea" } "Make Your Own"]
-            [:H1 {:class "titleb" } "Sperm Glyph"]
-          ]]
+        [:div [:img {:src "assets/img/logo_logo.png" :class "logo" }]]
         [:div {:class "row"}
          ; left-hand col
           [:div {:class "col-md-6"}
             [:div {:class "gridster spermgrid"}
               [:ul
-                [:li {:data-row 1 :data-col 1 :data-sizex 2 :data-sizey 2} [:div {:class "spermdiv spermdiv-selected" :id "spermbig"}]]
-                [:li {:data-row 1 :data-col 3 :data-sizex 1 :data-sizey 1} [:div {:class "spermdiv" :id "spermsmall0"}]]
-                [:li {:data-row 2 :data-col 3 :data-sizex 1 :data-sizey 1} [:div {:class "spermdiv" :id "spermsmall1"}]]
-                [:li {:data-row 3 :data-col 1 :data-sizex 1 :data-sizey 1} [:div {:class "spermdiv" :id "spermsmall2"}]]
-                [:li {:data-row 3 :data-col 2 :data-sizex 1 :data-sizey 1} [:div {:class "spermdiv" :id "spermsmall3"}]]
-                [:li {:data-row 3 :data-col 3 :data-sizex 1 :data-sizey 1} [:div {:class "spermdiv" :id "spermsmall4"}]]
+                [:li {:data-row 1 :data-col 1 :data-sizex 2 :data-sizey 2}[:div {:class "spermdiv spermdiv-selected" :id "spermbig"}]]
+                [:li {:data-row 1 :data-col 3 :data-sizex 1 :data-sizey 1}[:div {:class "spermdiv" :id "spermsmall0"}]]
+                [:li {:data-row 2 :data-col 3 :data-sizex 1 :data-sizey 1}[:div {:class "spermdiv" :id "spermsmall1"}]]
+                [:li {:data-row 3 :data-col 1 :data-sizex 1 :data-sizey 1}[:div {:class "spermdiv" :id "spermsmall2"}]]
+                [:li {:data-row 3 :data-col 2 :data-sizex 1 :data-sizey 1}[:div {:class "spermdiv" :id "spermsmall3"}]]
+                [:li {:data-row 3 :data-col 3 :data-sizex 1 :data-sizey 1}[:div {:class "spermdiv" :id "spermsmall4"}]]
               ]
               
             ]
@@ -115,13 +119,13 @@
               ]
             ; human presets
               [:div {:class "tab-pane" :id "human"}
-                [:div {:class "row"}
-                  (create-thumb "rat.jpg" "Rat") (create-thumb "mouse.jpg" "Mouse") (create-thumb "rabbit.jpg" "Rabbit") (create-thumb "hamster.jpg" "Marmoset")]
-                [:div {:class "row"}
-                  (create-thumb "boar.jpg" "Boar") (create-thumb "bull.jpg" "Bull") (create-thumb "marmoset.jpg" "Marmoset") (create-thumb "donkey.jpg" "Donkey")]
-                [:div {:class "row"}
-                  (create-thumb "spermwhale.jpg" "Sperm Whale") (create-thumb "cat.jpg" "Cat") (create-thumb "gazelle.jpg" "Gazelle")]
-              ]
+                [:div {:class "media"}
+                  (create-human-preset "grade-a" "logo_grade-a.png" "Grade A" "Sperm with progressive motility. These cells are the strongest and swim fast in a straight line." "Note the relative agreement of the VCL, VAP and VSL measures.")
+                  (create-human-preset "grade-b" "logo_grade-b.png" "Grade B" "These also move forward but tend to travel in a curved or crooked motion." "Note the VCL increasing noticably compared to the VAP as the cell meanders.")
+                  (create-human-preset "grade-c" "logo_grade-c.png" "Grade C" "These have non-progressive motility because they do not move forward despite the fact that they move their tails." "Note that no VCL, VAP or VSL values are available in the data.")
+                  (create-human-preset "grade-d" "logo_grade-d.png" "Grade D" "These are immotile and fail to move at all." "Note that no VCL, VAP or VSL values are available in the data.")
+                ]
+               ]
             ]]]]]
     [:script " var sliders = {}; var gridster; var papers = []; var selectedPaper = null;"]
     [:script {:src "/js/cljs.js"}]
@@ -138,11 +142,16 @@
           console.log(str);
         };
 
+        function selectHumanPreset(str) {
+          console.log(str);
+        };
+
         $(document).ready(function(){
           var cellsize = [170,170];
+          var margins = [5,5];
           gridster = $('.gridster ul').gridster({
             widget_base_dimensions: cellsize,
-            widget_margins: [5, 5],
+            widget_margins: margins, 
             resize: {
               enabled: true, 
               resize: function(e, ui, $widget) {
@@ -160,7 +169,7 @@
           });
 
           papers = [];
-          papers = _.union(papers, [myospermglyph.server._draw($('#spermbig'), [cellsize[0]*2,cellsize[1]*2])]);
+          papers = _.union(papers, [myospermglyph.server._draw($('#spermbig'), [(cellsize[0]+margins[0])*2,(cellsize[1]+margins[1])*2])]);
           for(i in [0,1,2,3,4])
             papers = _.union(papers, [myospermglyph.server._draw($('#spermsmall'+i.toString()), cellsize)]);
 

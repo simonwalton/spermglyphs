@@ -100,9 +100,25 @@ h2, .h2 {
 	color: #162856;
 }
 
-#spermdiv {
-	width:100%;
-	height:100%;
+.human-preset-box {
+	cursor:pointer;
+}
+
+.sperm-note {
+	font-size:10pt;
+	font-style:italic;
+	color:#048587;
+	margin-top:-4px;
+}
+
+.spermdiv {
+    background-color: #DDD;
+}
+
+.spermdiv-selected {
+	border: 3px dotted #EA553C;
+	border-radius: 12px;
+	background:none;
 }
 
 .container {
@@ -125,13 +141,9 @@ h2, .h2 {
     font-weight: bold;
     text-align: center;
     line-height: 100%;
+	background:none;
 }
 
-.spermdiv-selected {
-   -moz-box-shadow:    inset 0 0 20px #222;
-   -webkit-box-shadow: inset 0 0 20px #222;
-   box-shadow:         inset 0 0 20px #222;
-}
 
 .gridster {
     margin: 0 auto;
@@ -146,7 +158,6 @@ h2, .h2 {
 }
 
 .gridster .gs-w {
-    background: #DDD;
     cursor: pointer;
 }
 
