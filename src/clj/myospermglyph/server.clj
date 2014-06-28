@@ -151,13 +151,15 @@
                 ]
                ]
             ]]]]]
-    [:script " var sliders = {}; var gridster; var papers = []; var selectedPaper = null;"]
+    [:script " var sliders = {}; var gridster; var papers = []; var selectedDiv = null; var selectedPaper = null;"]
     [:script {:src "/js/cljs.js"}]
     [:script "
         function getSlider(id) { return sliders[id]; }
 
-        function setSelectedPaper(div, paper) {
+        function setSelected(div, paper) {
           selectedPaper = paper;
+          selectedDiv = div;
+          console.log(div);
           $('.spermdiv').attr('class','spermdiv');
           div.addClass('spermdiv-selected');
         };
@@ -167,7 +169,7 @@
         };
 
         function selectHumanPreset(str) {
-          console.log(str);
+          myospermglyph.server._drawHumanPreset(selectedDiv, str, [selectedDiv.width(), selectedDiv.height()]);
         };
 
         $(document).ready(function(){
@@ -196,13 +198,16 @@
 
           papers = [];
           papers = _.union(papers, [myospermglyph.server._draw($('#spermbig'), [(cellsize[0]+margins[0])*2,(cellsize[1]+margins[1])*2])]);
+          setSelected($('#spermbig'),papers[0]);
+          
           for(i in [0,1,2,3,4])
             papers = _.union(papers, [myospermglyph.server._draw($('#spermsmall'+i.toString()), cellsize)]);
 
           _.each(papers, function(p) {
              $(p.canvas).css({'pointer-events': 'none'});
-             $(p.canvas).parent().click(function(div) {  setSelectedPaper($(div.currentTarget),p); });
+             $(p.canvas).parent().click(function(div) {  setSelected($(div.currentTarget),p); });
           });
+
       });
       "]
   ))

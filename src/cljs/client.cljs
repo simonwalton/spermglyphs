@@ -1,7 +1,7 @@
 (ns myospermglyph.server
-    (:require [jayq.core :as jq])
-    (:use [jayq.core :only [$]]
-)) 
+    (:require [jayq.core :as jq] [clojure.walk :as walk])
+    (:use [jayq.core :only [$]])
+)
 
 (def origin {:x 280 :y 260})
 
@@ -30,7 +30,7 @@
  
 ; raphael utilities
 
-(def presets (atom{}))
+(def presets (atom {}))
 
 (def paper-stack (atom {}))
 (defn add-to-paper-stack [id paper] (swap! paper-stack assoc id paper))
@@ -167,34 +167,40 @@
     (-> (jq/bind ($ paper) :click (fn [evn] (js/alert "click"))))
     (-> (.clear paper))
     (-> (.setSize paper w h))
-    (-> (create-interior-coloured-arc paper sperm))
-    (-> (create-inner paper sperm))
-    (-> (create-mad paper sperm))
-    (-> (create-head paper sperm))
-    (-> (create-bcf-ring paper sperm))
+;    (-> (create-interior-coloured-arc paper sperm))
+;    (-> (create-inner paper sperm))
+;    (-> (create-mad paper sperm))
+;    (-> (create-head paper sperm))
+;    (-> (create-bcf-ring paper sperm))
     (-> (create-vcl paper sperm))
     (-> (create-vsl paper sperm))
     (-> (create-vap paper sperm))
-    (-> (create-arclength-tail paper sperm))
-    (-> (create-orientation-arrow paper sperm))
+;    (-> (create-arclength-tail paper sperm))
+;    (-> (create-orientation-arrow paper sperm))
     (-> (clj->js (id @paper-stack)))
   ))
 
 (defn get-and-store-preset [url id]
-  (jq/ajax {
-      :url (str url id ".json")
+  (let [keyid (keyword id)
+    url (str url id ".json")]
+  (->(jq/ajax {
+      :url url
       :type :get 
       :success (fn [data text status] (
-          (swap! presets assoc id (js->clj data))
-          (-> (js/console.log data  ))))
+              (swap! presets assoc keyid (walk/keywordize-keys (js->clj data :keywordize-keys true)))
+              (js/console.log (clj->js (js->clj data))) 
+              (js/console.log (clj->js (js->clj data :keywordize-keys true))) 
+              ))
       :error (fn [data text status] (js/console.log (str "There was a problem getting " id ".json: "  text)))
       :processData false
       :contentType "application/json"
-      }))
+      }))))
+
+(defn get-preset [preset-type preset-name]
+  (preset-name (preset-type @presets)))
 
 (defn get-and-store-presets [resourceurl]
-  (-> (get-and-store-preset resourceurl "human"))
-  (-> (get-and-store-preset resourceurl "animal")))
+  (-> (get-and-store-preset resourceurl "human")))
 
 (defn init [resourceurl]
   (get-and-store-presets resourceurl))
@@ -209,8 +215,21 @@
 
 (defn ^:export _draw [div, size]
   (let [sperm {:div div :size size :origin origin :scales globals :params currsperm}]
-    (draw sperm))
-  )
+    (js/console.log (clj->js sperm))
+    (draw sperm)))
+
+(defn ^:export _drawHumanPreset [div id size]
+  (let [params (get-preset (keyword "human") (keyword id))
+      sperm {:div div :size size :origin origin :scales globals :params params}]
+    (js/console.log (clj->js (:vap params)))
+    (draw sperm)))
+
+  ; (let [sperm currsperm
+  ;   sperm (merge (get-preset "human" id) sperm)
+  ;   sperm (assoc sperm :div div :size size :origin origin :scales globals)]
+  ;   (-> (js/console.log "plok"))
+  ;   (-> (js/console.log (clj->js sperm)))
+  ;   (-> (draw sperm))))
 
 (defn ^:export _update [] (update))
 (defn ^:export _init [resourceurl] (init resourceurl))

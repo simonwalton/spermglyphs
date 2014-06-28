@@ -12716,6 +12716,44 @@ cljs.core.special_symbol_QMARK_ = function(a) {
   new cljs.core.Symbol(null, ".", ".", -1640531481, null), new cljs.core.Symbol(null, "ns", "ns", -1640528002, null), new cljs.core.Symbol(null, "do", "do", -1640528316, null), new cljs.core.Symbol(null, "fn*", "fn*", -1640430053, null), new cljs.core.Symbol(null, "throw", "throw", -1530191713, null), new cljs.core.Symbol(null, "letfn*", "letfn*", 1548249632, null), new cljs.core.Symbol(null, "js*", "js*", -1640426054, null), new cljs.core.Symbol(null, "defrecord*", "defrecord*", 774272013, null), 
   new cljs.core.Symbol(null, "let*", "let*", -1637213400, null), new cljs.core.Symbol(null, "loop*", "loop*", -1537374273, null), new cljs.core.Symbol(null, "if", "if", -1640528170, null), new cljs.core.Symbol(null, "def", "def", -1640432194, null)]), a)
 };
+var clojure = {walk:{}};
+clojure.walk.walk = function(a, b, c) {
+  return cljs.core.seq_QMARK_.call(null, c) ? b.call(null, cljs.core.doall.call(null, cljs.core.map.call(null, a, c))) : cljs.core.coll_QMARK_.call(null, c) ? b.call(null, cljs.core.into.call(null, cljs.core.empty.call(null, c), cljs.core.map.call(null, a, c))) : b.call(null, c)
+};
+clojure.walk.postwalk = function postwalk(b, c) {
+  return clojure.walk.walk.call(null, cljs.core.partial.call(null, postwalk, b), b, c)
+};
+clojure.walk.prewalk = function prewalk(b, c) {
+  return clojure.walk.walk.call(null, cljs.core.partial.call(null, prewalk, b), cljs.core.identity, b.call(null, c))
+};
+clojure.walk.keywordize_keys = function(a) {
+  var b = function(a) {
+    var b = cljs.core.nth.call(null, a, 0, null), a = cljs.core.nth.call(null, a, 1, null);
+    return cljs.core.string_QMARK_.call(null, b) ? cljs.core.PersistentVector.fromArray([cljs.core.keyword.call(null, b), a], !0) : cljs.core.PersistentVector.fromArray([b, a], !0)
+  };
+  return clojure.walk.postwalk.call(null, function(a) {
+    return cljs.core.map_QMARK_.call(null, a) ? cljs.core.into.call(null, cljs.core.ObjMap.EMPTY, cljs.core.map.call(null, b, a)) : a
+  }, a)
+};
+clojure.walk.stringify_keys = function(a) {
+  var b = function(a) {
+    var b = cljs.core.nth.call(null, a, 0, null), a = cljs.core.nth.call(null, a, 1, null);
+    return cljs.core.keyword_QMARK_.call(null, b) ? cljs.core.PersistentVector.fromArray([cljs.core.name.call(null, b), a], !0) : cljs.core.PersistentVector.fromArray([b, a], !0)
+  };
+  return clojure.walk.postwalk.call(null, function(a) {
+    return cljs.core.map_QMARK_.call(null, a) ? cljs.core.into.call(null, cljs.core.ObjMap.EMPTY, cljs.core.map.call(null, b, a)) : a
+  }, a)
+};
+clojure.walk.prewalk_replace = function(a, b) {
+  return clojure.walk.prewalk.call(null, function(b) {
+    return cljs.core.contains_QMARK_.call(null, a, b) ? a.call(null, b) : b
+  }, b)
+};
+clojure.walk.postwalk_replace = function(a, b) {
+  return clojure.walk.postwalk.call(null, function(b) {
+    return cljs.core.contains_QMARK_.call(null, a, b) ? a.call(null, b) : b
+  }, b)
+};
 cljs.reader = {};
 cljs.reader.PushbackReader = {};
 cljs.reader.read_char = function(a) {
@@ -13154,7 +13192,7 @@ cljs.reader.deregister_default_tag_parser_BANG_ = function() {
   });
   return a
 };
-var clojure = {string:{}};
+clojure.string = {};
 clojure.string.seq_reverse = function(a) {
   return cljs.core.reduce.call(null, cljs.core.conj, cljs.core.List.EMPTY, a)
 };
@@ -14405,28 +14443,24 @@ myospermglyph.server.draw = function(a) {
   });
   e.clear();
   e.setSize(c, d);
-  myospermglyph.server.create_interior_coloured_arc.call(null, e, a);
-  myospermglyph.server.create_inner.call(null, e, a);
-  myospermglyph.server.create_mad.call(null, e, a);
-  myospermglyph.server.create_head.call(null, e, a);
-  myospermglyph.server.create_bcf_ring.call(null, e, a);
   myospermglyph.server.create_vcl.call(null, e, a);
   myospermglyph.server.create_vsl.call(null, e, a);
   myospermglyph.server.create_vap.call(null, e, a);
-  myospermglyph.server.create_arclength_tail.call(null, e, a);
-  myospermglyph.server.create_orientation_arrow.call(null, e, a);
   return cljs.core.clj__GT_js.call(null, b.call(null, cljs.core.deref.call(null, myospermglyph.server.paper_stack)))
 };
 myospermglyph.server.get_and_store_preset = function(a, b) {
-  return jayq.core.ajax.call(null, cljs.core.PersistentArrayMap.fromArray(["\ufdd0:url", [cljs.core.str(a), cljs.core.str(b), cljs.core.str(".json")].join(""), "\ufdd0:type", "\ufdd0:get", "\ufdd0:success", function(a) {
-    return cljs.core.swap_BANG_.call(null, myospermglyph.server.presets, cljs.core.assoc, b, cljs.core.js__GT_clj.call(null, a)).call(null, console.log(a))
-  }, "\ufdd0:error", function(a, d) {
-    return console.log([cljs.core.str("There was a problem getting "), cljs.core.str(b), cljs.core.str(".json: "), cljs.core.str(d)].join(""))
+  var c = cljs.core.keyword.call(null, b), d = [cljs.core.str(a), cljs.core.str(b), cljs.core.str(".json")].join("");
+  return jayq.core.ajax.call(null, cljs.core.PersistentArrayMap.fromArray(["\ufdd0:url", d, "\ufdd0:type", "\ufdd0:get", "\ufdd0:success", function(a) {
+    return cljs.core.swap_BANG_.call(null, myospermglyph.server.presets, cljs.core.assoc, c, clojure.walk.keywordize_keys.call(null, cljs.core.js__GT_clj.call(null, a, "\ufdd0:keywordize-keys", !0))).call(null, console.log(cljs.core.clj__GT_js.call(null, cljs.core.js__GT_clj.call(null, a))), console.log(cljs.core.clj__GT_js.call(null, cljs.core.js__GT_clj.call(null, a, "\ufdd0:keywordize-keys", !0))))
+  }, "\ufdd0:error", function(a, c) {
+    return console.log([cljs.core.str("There was a problem getting "), cljs.core.str(b), cljs.core.str(".json: "), cljs.core.str(c)].join(""))
   }, "\ufdd0:processData", !1, "\ufdd0:contentType", "application/json"], !0))
 };
+myospermglyph.server.get_preset = function(a, b) {
+  return b.call(null, a.call(null, cljs.core.deref.call(null, myospermglyph.server.presets)))
+};
 myospermglyph.server.get_and_store_presets = function(a) {
-  myospermglyph.server.get_and_store_preset.call(null, a, "human");
-  return myospermglyph.server.get_and_store_preset.call(null, a, "animal")
+  return myospermglyph.server.get_and_store_preset.call(null, a, "human")
 };
 myospermglyph.server.init = function(a) {
   return myospermglyph.server.get_and_store_presets.call(null, a)
@@ -14436,9 +14470,17 @@ myospermglyph.server.update = function() {
 };
 myospermglyph.server._draw = function(a, b) {
   var c = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:div", a, "\ufdd0:size", b, "\ufdd0:origin", myospermglyph.server.origin, "\ufdd0:scales", myospermglyph.server.globals, "\ufdd0:params", myospermglyph.server.currsperm], !0);
+  console.log(cljs.core.clj__GT_js.call(null, c));
   return myospermglyph.server.draw.call(null, c)
 };
 goog.exportSymbol("myospermglyph.server._draw", myospermglyph.server._draw);
+myospermglyph.server._drawHumanPreset = function(a, b, c) {
+  b = myospermglyph.server.get_preset.call(null, cljs.core.keyword.call(null, "human"), cljs.core.keyword.call(null, b));
+  a = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:div", a, "\ufdd0:size", c, "\ufdd0:origin", myospermglyph.server.origin, "\ufdd0:scales", myospermglyph.server.globals, "\ufdd0:params", b], !0);
+  console.log(cljs.core.clj__GT_js.call(null, (new cljs.core.Keyword("\ufdd0:vap")).call(null, b)));
+  return myospermglyph.server.draw.call(null, a)
+};
+goog.exportSymbol("myospermglyph.server._drawHumanPreset", myospermglyph.server._drawHumanPreset);
 myospermglyph.server._update = function() {
   return myospermglyph.server.update.call(null)
 };
