@@ -14414,7 +14414,8 @@ myospermglyph.server.draw = function(a) {
   myospermglyph.server.create_vsl.call(null, e, a);
   myospermglyph.server.create_vap.call(null, e, a);
   myospermglyph.server.create_arclength_tail.call(null, e, a);
-  return myospermglyph.server.create_orientation_arrow.call(null, e, a)
+  myospermglyph.server.create_orientation_arrow.call(null, e, a);
+  return cljs.core.clj__GT_js.call(null, b.call(null, cljs.core.deref.call(null, myospermglyph.server.paper_stack)))
 };
 myospermglyph.server.get_and_store_preset = function(a, b) {
   return jayq.core.ajax.call(null, cljs.core.PersistentArrayMap.fromArray(["\ufdd0:url", [cljs.core.str(a), cljs.core.str(b), cljs.core.str(".json")].join(""), "\ufdd0:type", "\ufdd0:get", "\ufdd0:success", function(a) {
@@ -14435,8 +14436,7 @@ myospermglyph.server.update = function() {
 };
 myospermglyph.server._draw = function(a, b) {
   var c = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:div", a, "\ufdd0:size", b, "\ufdd0:origin", myospermglyph.server.origin, "\ufdd0:scales", myospermglyph.server.globals, "\ufdd0:params", myospermglyph.server.currsperm], !0);
-  myospermglyph.server.draw.call(null, c);
-  return cljs.core.clj__GT_js.call(null, a.attr("id").call(null, cljs.core.deref.call(null, myospermglyph.server.paper_stack)))
+  return myospermglyph.server.draw.call(null, c)
 };
 goog.exportSymbol("myospermglyph.server._draw", myospermglyph.server._draw);
 myospermglyph.server._update = function() {

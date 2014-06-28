@@ -60,6 +60,27 @@
         [:a {:class "human-preset-link" :href (str "javascript:selectHumanPreset('" id "');")} [:h4 {:class "media-heading"} title]] [:p desc [:p {:class "sperm-note"}] [:i {:class "fa fa-info-circle"}] (str " " note)]
        ]]))
 
+(defn create-navbar []
+  (view-layout
+    [:div {:class "navbar navbar-inverse navbar-fixed-top" :role "navigation"}
+      [:div {:class "container"}
+        [:div {:class "navbar-header"}
+          [:button {:type "button" :class "navbar-toggle" :data-toggle "collapse" :data-target ".navbar-collapse"}
+            [:span {:class "sr-only"} "Toggle navigation"]
+          ]
+          [:a {:class "navbar-brand" :href "#"}"Ovii"]
+        ]
+        [:div {:class "collapse navbar-collapse"}
+          [:ul {:class "nav navbar-nav"}
+            [:li {:class "active"}[:a {:href "#"} [:i {:class "fa fa-home"}]  " Home"]]
+            [:li [:a {:href "#about"} [:i {:class "fa fa-question-circle"}] " About"]]
+            [:li [:a {:href "#contact"} [:i {:class "fa fa-file-pdf-o fa-inverse"}] " Paper"]]
+          ]
+          [:ul {:class "nav navbar-right"}
+            [:a {:href "http://github.com" :alt "View our code on Github!"}[:i {:class "fa fa-github-square"}]]
+          ]
+         ]]]))
+
 (defn view-content []
   (view-layout
     [:script {:src "/assets/js/raphael-min.js"}]
@@ -68,7 +89,10 @@
     [:script {:src "/assets/js/bootstrap-slider.js"}]
     [:script {:src "/assets/js/underscore-min.js"}]
     [:script {:src "/assets/js/jquery.gridster.min.js"}]
-    [:div {:class "container"}
+    
+    (create-navbar)
+
+    [:div {:class "container-main container"}
       [:div {:class "container"}
         [:div [:img {:src "assets/img/logo_logo.png" :class "logo" }]]
         [:div {:class "row"}

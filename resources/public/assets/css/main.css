@@ -104,6 +104,22 @@ h2, .h2 {
 	cursor:pointer;
 }
 
+.nav .icon-dark {
+	color: #333;
+	font-size:10pt;
+}
+
+.navbar-new a > .fa {
+	color:#ccc;
+	font-size:12pt;
+}
+
+.navbar-right .fa {
+	margin-top:10px;
+	color:#ccc;
+	font-size:24pt;
+}
+
 .sperm-note {
 	font-size:10pt;
 	font-style:italic;
@@ -121,8 +137,8 @@ h2, .h2 {
 	background:none;
 }
 
-.container {
-	margin-top:30px;
+.container-main {
+	margin-top:70px;
 }
 
 .spermgrid

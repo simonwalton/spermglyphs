@@ -177,6 +177,7 @@
     (-> (create-vap paper sperm))
     (-> (create-arclength-tail paper sperm))
     (-> (create-orientation-arrow paper sperm))
+    (-> (clj->js (id @paper-stack)))
   ))
 
 (defn get-and-store-preset [url id]
@@ -209,7 +210,6 @@
 (defn ^:export _draw [div, size]
   (let [sperm {:div div :size size :origin origin :scales globals :params currsperm}]
     (draw sperm))
-  (clj->js ((.attr div "id") @paper-stack))
   )
 
 (defn ^:export _update [] (update))
