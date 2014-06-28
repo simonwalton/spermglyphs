@@ -30,6 +30,8 @@
  
 ; raphael utilities
 
+(def presets (atom{}))
+
 (def paper-stack (atom {}))
 (defn add-to-paper-stack [id paper] (swap! paper-stack assoc id paper))
 
@@ -163,8 +165,6 @@
         )]
     (-> (add-to-paper-stack id paper))
     (-> (jq/bind ($ paper) :click (fn [evn] (js/alert "click"))))
-    (-> (js/console.log (contains? @paper-stack id)))
-    (-> (js/console.log (str "In clojure" w "," h)))
     (-> (.clear paper))
     (-> (.setSize paper w h))
     (-> (create-interior-coloured-arc paper sperm))
@@ -179,6 +179,25 @@
     (-> (create-orientation-arrow paper sperm))
   ))
 
+(defn get-and-store-preset [url id]
+  (jq/ajax {
+      :url (str url id ".json")
+      :type :get 
+      :success (fn [data text status] (
+          (swap! presets assoc id (js->clj data))
+          (-> (js/console.log data  ))))
+      :error (fn [data text status] (js/console.log (str "There was a problem getting " id ".json: "  text)))
+      :processData false
+      :contentType "application/json"
+      }))
+
+(defn get-and-store-presets [resourceurl]
+  (-> (get-and-store-preset resourceurl "human"))
+  (-> (get-and-store-preset resourceurl "animal")))
+
+(defn init [resourceurl]
+  (get-and-store-presets resourceurl))
+
 (defn update []
   (draw (assoc currsperm
        :vcl (.getValue (js/getSlider "vcl"))
@@ -188,13 +207,13 @@
        )))
 
 (defn ^:export _draw [div, size]
-  (js/console.log (str "Here's the size" size))
   (let [sperm {:div div :size size :origin origin :scales globals :params currsperm}]
     (draw sperm))
   (clj->js ((.attr div "id") @paper-stack))
   )
 
 (defn ^:export _update [] (update))
+(defn ^:export _init [resourceurl] (init resourceurl))
 
 ; jq
 

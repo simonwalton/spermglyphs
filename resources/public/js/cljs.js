@@ -12716,12 +12716,6 @@ cljs.core.special_symbol_QMARK_ = function(a) {
   new cljs.core.Symbol(null, ".", ".", -1640531481, null), new cljs.core.Symbol(null, "ns", "ns", -1640528002, null), new cljs.core.Symbol(null, "do", "do", -1640528316, null), new cljs.core.Symbol(null, "fn*", "fn*", -1640430053, null), new cljs.core.Symbol(null, "throw", "throw", -1530191713, null), new cljs.core.Symbol(null, "letfn*", "letfn*", 1548249632, null), new cljs.core.Symbol(null, "js*", "js*", -1640426054, null), new cljs.core.Symbol(null, "defrecord*", "defrecord*", 774272013, null), 
   new cljs.core.Symbol(null, "let*", "let*", -1637213400, null), new cljs.core.Symbol(null, "loop*", "loop*", -1537374273, null), new cljs.core.Symbol(null, "if", "if", -1640528170, null), new cljs.core.Symbol(null, "def", "def", -1640432194, null)]), a)
 };
-var myospermglyph = {presets:{}};
-myospermglyph.presets.currsperm = cljs.core.PersistentArrayMap.fromArray("\ufdd0:name Human \ufdd0:vsl \ufdd0:headlength \ufdd0:headwidth \ufdd0:fta".split(" "), !0);
-myospermglyph.presets.currsperm = cljs.core.PersistentArrayMap.fromArray("\ufdd0:name Human \ufdd0:vsl \ufdd0:headlength \ufdd0:headwidth \ufdd0:fta".split(" "), !0);
-myospermglyph.presets.currsperm = cljs.core.PersistentArrayMap.fromArray("\ufdd0:name Human \ufdd0:vsl \ufdd0:headlength \ufdd0:headwidth \ufdd0:fta".split(" "), !0);
-myospermglyph.presets.currsperm = cljs.core.PersistentArrayMap.fromArray("\ufdd0:name Human \ufdd0:vsl \ufdd0:headlength \ufdd0:headwidth \ufdd0:fta".split(" "), !0);
-myospermglyph.presets.currsperm = cljs.core.PersistentHashMap.fromArrays("\ufdd0:vap \ufdd0:fas \ufdd0:headlength \ufdd0:bcf \ufdd0:vcl \ufdd0:name \ufdd0:ftt \ufdd0:headwidth \ufdd0:ftc \ufdd0:mad \ufdd0:alh \ufdd0:fta \ufdd0:headuncertainty \ufdd0:vsl".split(" "), [128.54, -0.1, 8.27, 30.96, 205.26, "Human", 0.87, 3.65, 23, 45, 47.12, 50, 0.4, 77.4]);
 cljs.reader = {};
 cljs.reader.PushbackReader = {};
 cljs.reader.read_char = function(a) {
@@ -14318,10 +14312,11 @@ jayq.core.deferred_m = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:return", 
 jayq.core.ajax_m = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:return", cljs.core.identity, "\ufdd0:bind", function(a, b) {
   return jayq.core.done.call(null, jayq.core.ajax.call(null, a), b)
 }, "\ufdd0:zero", cljs.core.identity], !0);
-myospermglyph.server = {};
+var myospermglyph = {server:{}};
 myospermglyph.server.origin = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:x", 280, "\ufdd0:y", 260], !0);
 myospermglyph.server.globals = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:cscale", 3, "\ufdd0:cbase", 350, "\ufdd0:hscale", 4, "\ufdd0:tscale", 1.5], !0);
 myospermglyph.server.currsperm = cljs.core.PersistentHashMap.fromArrays("\ufdd0:vap \ufdd0:fas \ufdd0:headlength \ufdd0:bcf \ufdd0:vcl \ufdd0:name \ufdd0:ftt \ufdd0:headwidth \ufdd0:ftc \ufdd0:mad \ufdd0:alh \ufdd0:fta \ufdd0:headuncertainty \ufdd0:vsl".split(" "), [128.54, -0.1, 8.27, 30.96, 205.26, "Human", 0.87, 3.65, 23, 45, 47.12, 50, 0.4, 77.4]);
+myospermglyph.server.presets = cljs.core.atom.call(null, cljs.core.ObjMap.EMPTY);
 myospermglyph.server.paper_stack = cljs.core.atom.call(null, cljs.core.ObjMap.EMPTY);
 myospermglyph.server.add_to_paper_stack = function(a, b) {
   return cljs.core.swap_BANG_.call(null, myospermglyph.server.paper_stack, cljs.core.assoc, a, b)
@@ -14408,8 +14403,6 @@ myospermglyph.server.draw = function(a) {
   jayq.core.bind.call(null, jayq.core.$.call(null, e), "\ufdd0:click", function() {
     return alert("click")
   });
-  console.log(cljs.core.contains_QMARK_.call(null, cljs.core.deref.call(null, myospermglyph.server.paper_stack), b));
-  console.log([cljs.core.str("In clojure"), cljs.core.str(c), cljs.core.str(","), cljs.core.str(d)].join(""));
   e.clear();
   e.setSize(c, d);
   myospermglyph.server.create_interior_coloured_arc.call(null, e, a);
@@ -14423,11 +14416,24 @@ myospermglyph.server.draw = function(a) {
   myospermglyph.server.create_arclength_tail.call(null, e, a);
   return myospermglyph.server.create_orientation_arrow.call(null, e, a)
 };
+myospermglyph.server.get_and_store_preset = function(a, b) {
+  return jayq.core.ajax.call(null, cljs.core.PersistentArrayMap.fromArray(["\ufdd0:url", [cljs.core.str(a), cljs.core.str(b), cljs.core.str(".json")].join(""), "\ufdd0:type", "\ufdd0:get", "\ufdd0:success", function(a) {
+    return cljs.core.swap_BANG_.call(null, myospermglyph.server.presets, cljs.core.assoc, b, cljs.core.js__GT_clj.call(null, a)).call(null, console.log(a))
+  }, "\ufdd0:error", function(a, d) {
+    return console.log([cljs.core.str("There was a problem getting "), cljs.core.str(b), cljs.core.str(".json: "), cljs.core.str(d)].join(""))
+  }, "\ufdd0:processData", !1, "\ufdd0:contentType", "application/json"], !0))
+};
+myospermglyph.server.get_and_store_presets = function(a) {
+  myospermglyph.server.get_and_store_preset.call(null, a, "human");
+  return myospermglyph.server.get_and_store_preset.call(null, a, "animal")
+};
+myospermglyph.server.init = function(a) {
+  return myospermglyph.server.get_and_store_presets.call(null, a)
+};
 myospermglyph.server.update = function() {
   return myospermglyph.server.draw.call(null, cljs.core.assoc.call(null, myospermglyph.server.currsperm, "\ufdd0:vcl", getSlider("vcl").getValue(), "\ufdd0:vap", getSlider("vap").getValue(), "\ufdd0:vsl", getSlider("vsl").getValue(), "\ufdd0:bcf", getSlider("bcf").getValue()))
 };
 myospermglyph.server._draw = function(a, b) {
-  console.log([cljs.core.str("Here's the size"), cljs.core.str(b)].join(""));
   var c = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:div", a, "\ufdd0:size", b, "\ufdd0:origin", myospermglyph.server.origin, "\ufdd0:scales", myospermglyph.server.globals, "\ufdd0:params", myospermglyph.server.currsperm], !0);
   myospermglyph.server.draw.call(null, c);
   return cljs.core.clj__GT_js.call(null, a.attr("id").call(null, cljs.core.deref.call(null, myospermglyph.server.paper_stack)))
@@ -14437,3 +14443,7 @@ myospermglyph.server._update = function() {
   return myospermglyph.server.update.call(null)
 };
 goog.exportSymbol("myospermglyph.server._update", myospermglyph.server._update);
+myospermglyph.server._init = function(a) {
+  return myospermglyph.server.init.call(null, a)
+};
+goog.exportSymbol("myospermglyph.server._init", myospermglyph.server._init);

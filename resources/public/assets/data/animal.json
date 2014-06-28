@@ -1,53 +1,5 @@
 [
 {
-	"name":"Grade D",
-	"vcl":15,
-	"vap":15,
-	"vsl":15,
-	"bcf":0,
-	"alh":0,
-	"mad":0,
-	"headlength":5.03,
-	"headwidth":3.21,
-	"arclength":54.5"
-},
-{
-	"name":"Grade C",
-	"vcl":0,
-	"vap":0,
-	"vsl":0,
-	"bcf":7,
-	"alh":17,
-	"mad":40.54,
-	"headlength":5.03,
-	"headwidth":3.21,
-	"arclength":54.5"
-},
-{
-	"name":"Grade B",
-	"vcl":45,
-	"vap":45,
-	"vsl":45,
-	"bcf":4,
-	"alh":10.122163,
-	"mad":8.77,
-	"headlength":5.03,
-	"headwidth":3.21,
-	"arclength":54.5
-},
-{
-	"name":"Grade A",
-	"vcl":45,
-	"vap":45,
-	"vsl":45,
-	"bcf":4,
-	"alh":10.56,
-	"mad":14.95,
-	"headlength":5.03,
-	"headwidth":3.21,
-	"arclength":54.5
-},
-{
 	"name":"hyperactivated",
 	"vcl":180,
 	"vap":90,
@@ -124,7 +76,6 @@
 	"vsl":38.9,
 	"bcf":5,
 	"alh":2.2,
-	"mad":,
 	"headlength":8.33,
 	"headwidth":4.81,
 	"arclength":49.51
@@ -135,7 +86,7 @@
 	"vap":83.34,
 	"vsl":73.44,
 	"bcf":13.44,
-	"alh":5.78,
+	"alh":5.78
 },
 {
 	"name":"Callithrix jacchus",
@@ -215,7 +166,7 @@
 	"vsl":40.3,
 	"bcf":12.2,
 	"alh":3.65
-}
+},
 {
 	"name":"gazellen G1",
 	"vcl":127.8,

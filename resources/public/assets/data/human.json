@@ -1,0 +1,44 @@
+[
+{
+	"name":"Grade D",
+	"vcl":15,
+	"vap":15,
+	"vsl":15,
+	"headlength":5.03,
+	"headwidth":3.21,
+	"arclength":54.5
+},
+{
+	"name":"Grade C",
+	"bcf":7,
+	"alh":17,
+	"mad":40.54,
+	"headlength":5.03,
+	"headwidth":3.21,
+	"arclength":54.5
+},
+{
+	"name":"Grade B",
+	"vcl":45,
+	"vap":45,
+	"vsl":45,
+	"bcf":4,
+	"alh":10.122163,
+	"mad":8.77,
+	"headlength":5.03,
+	"headwidth":3.21,
+	"arclength":54.5
+},
+{
+	"name":"Grade A",
+	"vcl":45,
+	"vap":45,
+	"vsl":45,
+	"bcf":4,
+	"alh":10.56,
+	"mad":14.95,
+	"headlength":5.03,
+	"headwidth":3.21,
+	"arclength":54.5
+}
+]

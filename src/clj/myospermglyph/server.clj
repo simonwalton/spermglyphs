@@ -147,6 +147,8 @@
         };
 
         $(document).ready(function(){
+          myospermglyph.server._init('/assets/data/'); 
+
           var cellsize = [170,170];
           var margins = [5,5];
           gridster = $('.gridster ul').gridster({
