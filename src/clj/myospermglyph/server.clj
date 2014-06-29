@@ -21,7 +21,9 @@
            [:link {:href "/assets/css/slider.css" :rel "stylesheet"}]
            [:link {:href "/assets/css/cover.css" :rel "stylesheet"}]
            [:link {:href "/assets/css/main.css" :rel "stylesheet"}]
+           [:link {:href "/assets/css/d3.parcoords.css" :rel "stylesheet"}]
            [:link {:href "/assets/css/jquery.gridster.min.css" :rel "stylesheet"}]
+           [:link {:href "/assets/css/slick.grid.css" :rel "stylesheet"}]
            [:link {:href "//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" :rel "stylesheet"}]]
       [:body content]))
 
@@ -37,8 +39,7 @@
 (defn create-slider-group[id nicename desc sliders]
   (html
       [:div {:class (str "bs-callout bs-callout-" id)}
-        [:h4 nicename]
-        [:p desc]
+       [:img {:src "assets/img/logo_icon-footer.png"}][:div [:h4 nicename] [:div desc]]
           [:div {:class "form-horizontal"}
             (map (fn [x] (create-slider x)) sliders)
         ]]))
@@ -54,14 +55,6 @@
   ;            ]
             ]]))
 
-(defn create-zoo []
-  (let [obj (into (sorted-map-by compare) (json/read-str (slurp "resources/public/assets/data/animal.json") :key-fn keyword))
-        rows (doall (map (fn [k] (create-thumb (first k) (:img (second k)) (:name (second k)) (:desc (second k)))) obj))]
-    (html "<div class=\"row zoo-row\">" 
-      (map-indexed (fn[i x] (if (= 0 (mod i 4)) (str "</div><div class=\"row zoo-row\">" x) x)) rows)
-       "</div>"            
-    )))
-
 (defn create-human-preset[ids, img, title, desc, note]
   (let [img (if (not (string/blank? img)) img "logo_default.png")]
    (html
@@ -72,11 +65,29 @@
           (if (not (string/blank? note)) [:span [:i {:class "fa fa-info-circle"}] (str " " note)] "")
        ]]])))
                                                   
+
+(defn get-zoo-data []
+  (into (sorted-map-by compare) (json/read-str (slurp "resources/public/assets/data/animal.json") :key-fn keyword)))
+
+(defn get-human-data []
+  (json/read-str (slurp "resources/public/assets/data/human.json") :key-fn keyword))
+
+(defn create-zoo []
+  (let [rows (get-zoo-data)
+        rows (doall (map (fn [k] (create-thumb (first k) (:img (second k)) (:name (second k)) (:desc (second k)))) rows))]
+    (html "<div class=\"row zoo-row\">" 
+      (map-indexed (fn[i x] (if (= 0 (mod i 4)) (str "</div><div class=\"row zoo-row\">" x) x)) rows)
+       "</div>"            
+    )))
+
 (defn create-human-presets []
-  (let [obj (json/read-str (slurp "resources/public/assets/data/human.json") :key-fn keyword)
-        rows (doall (map (fn [k] (create-human-preset (first k) (:img (second k)) (:name (second k)) (:desc (second k)) (:note (second k)) )) obj))]
+  (let [rows (get-human-data)
+        rows (doall (map (fn [k] (create-human-preset (first k) (:img (second k)) (:name (second k)) (:desc (second k)) (:note (second k)) )) rows))]
     (html [:div {:class "media"} [:div {:class "media"} rows ]])))
-                
+
+(defn all-data-json [] 
+  (json/write-str (map (fn [k] (merge (second k) {:id (first k)} )) (merge (doall (get-human-data)) (doall (get-zoo-data))))))
+
 (defn create-navbar []
   (html
     [:div {:class "navbar navbar-inverse navbar-fixed-top" :role "navigation"}
@@ -106,6 +117,9 @@
     [:script {:src "/assets/js/bootstrap-slider.js"}]
     [:script {:src "/assets/js/underscore-min.js"}]
     [:script {:src "/assets/js/jquery.gridster.min.js"}]
+    [:script {:src "/assets/js/d3.v2.js"}]
+    [:script {:src "/assets/js/d3.parcoords.js"}]
+    [:script {:src "/assets/js/pc-filter.js"}]
     
     (create-navbar)
 
@@ -115,7 +129,7 @@
          ; left-hand col
           [:div {:class "col-md-6"}
             [:div [:img {:src "assets/img/logo_logo.png" :class "logo" }]]
-            [:div {:class "gridster spermgrid"}
+            [:div {:id "left-grid" :class "gridster spermgrid"}
               [:ul
                 [:li {:data-row 1 :data-col 1 :data-sizex 2 :data-sizey 2}[:div {:class "spermdiv spermdiv-selected" :id "spermbig"}]]
                 [:li {:data-row 1 :data-col 3 :data-sizex 1 :data-sizey 1}[:div {:class "spermdiv" :id "spermsmall0"}]]
@@ -124,15 +138,18 @@
                 [:li {:data-row 3 :data-col 2 :data-sizex 1 :data-sizey 1}[:div {:class "spermdiv" :id "spermsmall3"}]]
                 [:li {:data-row 3 :data-col 3 :data-sizex 1 :data-sizey 1}[:div {:class "spermdiv" :id "spermsmall4"}]]
               ] 
-              
             ]
+            [:div {:id "left-explore" :class ""}
+
+             ]
            ]
          ; right-hand col
           [:div {:class "col-md-6 right-controls"}
             [:ul {:class "nav nav-tabs"}
               [:li {:class "active"} [:a {:href "#manual" :data-toggle "tab"} "Manual"]]
               [:li [:a {:href "#zoo" :data-toggle "tab"} "Sperm Zoo"]]
-              [:li [:a {:href "#human" :data-toggle "tab"} "Human Presets"]]]
+              [:li [:a {:href "#human" :data-toggle "tab"} "Human Presets"]]
+              [:li [:a {:href "#explore" :data-toggle "tab"} "Explore"]]]
             [:div {:class "tab-content"}
             ; manual
               [:div {:class "fade in tab-pane active" :id "manual"} 
@@ -163,18 +180,22 @@
                   ]
                 ]
             ; zoo
-              [:div {:class "fade tab-pane" :id "zoo"} [:h2 "Sperm Zoo"] "Click an animal to see its representitive sperm glyph! Scroll down to see more animals." (create-zoo) ]
+              [:div {:class "fade tab-pane" :id "zoo"} [:h2 "Sperm Zoo"] [:p "Click an animal to see its representitive sperm glyph! Scroll down to see more animals." (create-zoo) ]]
             ; human presets
-              [:div {:class "fade tab-pane" :id "human"}[:h2 "Human Presets"] "Click an item to see its the sperm glyph for a human sperm in that category."  (create-human-presets) ]
-             ]]]
+              [:div {:class "fade tab-pane" :id "human"}[:h2 "Human Presets"] [:p "Click an item to see its the sperm glyph for a human sperm in that category."  (create-human-presets) ]]
+            ; filter
+              [:div {:class "fade tab-pane" :id "explore"}[:h2 "Explore Dimensions"] [:p "Each axis in the plot is a dimension of the cell data. You can brush to filter the sperm matching those properties, which will appear to the left."]
+                [:div {:id "explore-pc" :class "parcoords"}]
+                [:div {:id "explore-grid"}]
+             ]]]]]]
        ; bottom content
-       [:div {:class "row"} 
-        [:div {:class "cover-container row"}
+       [:div {:class "footer clearfix"} 
+       [:div {:class "footer-inner"} 
+        [:div {:class "row clearfix"}
           [:div {:class "inner cover col-md-4"}
            [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}] [:h1 {:class "cover-heading"} "What is it?"]
             [:p {:class "lead"} "Our glyph design encodes a large collection of numerical measurements of a sperm cell to summarize its complex spatiotemporal motion characteristics."]
               [:a {:href "/about" :class "btn btn-md btn-default"}"Learn More"] 
-             
            ]
           [:div {:class "inner cover col-md-4"}
            [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}]
@@ -190,9 +211,11 @@
            ]
           
        ]
-       ]]]
-    [:script " var sliders = {}; var gridster; var papers = []; var selectedDiv = null; var selectedPaper = null;"]
+       ]]
+
+    [:script " var sliders = {}; var parcoords = null; var gridster; var papers = []; var selectedDiv = null; var selectedPaper = null;"]
     [:script {:src "/js/cljs.js"}]
+    [:script (str "var allData = " (all-data-json) ";")]
     [:script "
         function getSlider(id) { return sliders[id]; }
 
@@ -268,6 +291,16 @@
              $(p.canvas).parent().click(function(div) {  setSelected($(div.currentTarget),p); });
           });
 
+          $('a[data-toggle=\"tab\"]').on('shown.bs.tab', function (e) {
+              if(e.target.hash == '#explore') {
+                parcoords = createSpermPC(allData, '#explore-pc', '#explore-grid', [550,600], 'group',
+                  ['img','name','desc','note']);
+                parcoords.render();
+              }
+              else {
+                
+              }
+          });
       });
       "]
   ))
