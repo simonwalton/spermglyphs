@@ -54,7 +54,7 @@
             ]]))
 
 (defn create-zoo []
-  (let [obj (json/read-str (slurp "resources/public/assets/data/animal.json") :key-fn keyword)
+  (let [obj (into (sorted-map-by compare) (json/read-str (slurp "resources/public/assets/data/animal.json") :key-fn keyword))
         rows (doall (map (fn [k] (create-thumb (first k) (:img (second k)) (:name (second k)) (:desc (second k)))) obj))]
     (html "<div class=\"row zoo-row\">" 
       (map-indexed (fn[i x] (if (= 0 (mod i 4)) (str "</div><div class=\"row zoo-row\">" x) x)) rows)
