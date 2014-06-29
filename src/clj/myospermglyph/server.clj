@@ -19,6 +19,7 @@
            [:link {:href "/assets/bootstrap/css/bootstrap.min.css" :rel "stylesheet"}]
            [:link {:href "/assets/bootstrap/css/bootstrap-theme.min.css" :rel "stylesheet"}]
            [:link {:href "/assets/css/slider.css" :rel "stylesheet"}]
+           [:link {:href "/assets/css/cover.css" :rel "stylesheet"}]
            [:link {:href "/assets/css/main.css" :rel "stylesheet"}]
            [:link {:href "/assets/css/jquery.gridster.min.css" :rel "stylesheet"}]
            [:link {:href "//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" :rel "stylesheet"}]]
@@ -108,12 +109,12 @@
     
     (create-navbar)
 
-    [:div {:class "container-main container"}
-      [:div {:class "container"}
-        [:div [:img {:src "assets/img/logo_logo.png" :class "logo" }]]
+    [:div {:class "container-outer container"}
+      [:div {:class "container container-main"}
         [:div {:class "row"}
          ; left-hand col
           [:div {:class "col-md-6"}
+            [:div [:img {:src "assets/img/logo_logo.png" :class "logo" }]]
             [:div {:class "gridster spermgrid"}
               [:ul
                 [:li {:data-row 1 :data-col 1 :data-sizex 2 :data-sizey 2}[:div {:class "spermdiv spermdiv-selected" :id "spermbig"}]]
@@ -134,7 +135,7 @@
               [:li [:a {:href "#human" :data-toggle "tab"} "Human Presets"]]]
             [:div {:class "tab-content"}
             ; manual
-              [:div {:class "tab-pane active" :id "manual"} 
+              [:div {:class "fade in tab-pane active" :id "manual"} 
                 [:div {:class "row"}
                   [:div {:class "col-sm-6"}
                     (create-slider-group "kinematics" "Kinematics" "Movement of the head"
@@ -162,10 +163,34 @@
                   ]
                 ]
             ; zoo
-              [:div {:class "tab-pane" :id "zoo"} [:h2 "Sperm zoo"] "Click an animal to see its representitive sperm glyph! Scroll down to see more animals." (create-zoo) ]
+              [:div {:class "fade tab-pane" :id "zoo"} [:h2 "Sperm Zoo"] "Click an animal to see its representitive sperm glyph! Scroll down to see more animals." (create-zoo) ]
             ; human presets
-              [:div {:class "tab-pane" :id "human"} (create-human-presets) ]
-             ]]]]]
+              [:div {:class "fade tab-pane" :id "human"}[:h2 "Human Presets"] "Click an item to see its the sperm glyph for a human sperm in that category."  (create-human-presets) ]
+             ]]]
+       ; bottom content
+       [:div {:class "row"} 
+        [:div {:class "cover-container row"}
+          [:div {:class "inner cover col-md-4"}
+           [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}] [:h1 {:class "cover-heading"} "What is it?"]
+            [:p {:class "lead"} "Our glyph design encodes a large collection of numerical measurements of a sperm cell to summarize its complex spatiotemporal motion characteristics."]
+              [:a {:href "/about" :class "btn btn-md btn-default"}"Learn More"] 
+             
+           ]
+          [:div {:class "inner cover col-md-4"}
+           [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}]
+           [:h1 {:class "cover-heading"} "Our Paper"]
+            [:p {:class "lead"} "For more information on our technique, including how the attributes are defined and encoded, please see our TVCG paper, to be presented at VIS 2014."]
+              [:a {:href "/assets/paper/paper.pdf" :class "btn btn-md btn-default"}"Read the PDF"]
+          ]
+          [:div {:class "inner cover col-md-4"}
+           [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}]
+           [:h1 {:class "cover-heading"} "Who are we?"]
+            [:p {:class "lead"} "Good question. We are the visualization group at Oxford University's e-Research Centre (OeRC), and are led by Professor Min Chen."] 
+              [:a {:href "/assets/paper/paper.pdf" :class "btn btn-md btn-default"} "View our Apps"]
+           ]
+          
+       ]
+       ]]]
     [:script " var sliders = {}; var gridster; var papers = []; var selectedDiv = null; var selectedPaper = null;"]
     [:script {:src "/js/cljs.js"}]
     [:script "

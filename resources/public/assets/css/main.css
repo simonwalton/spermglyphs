@@ -1,19 +1,4 @@
 
-h1, .h1, .titlea {
-	color:#444 !important;
-	font-size:50;
-	font-weight:lighter;
-	margin-bottom:-35px;
-	margin-left:20px;
-}
-
-h1, .h1, .titleb {
-	color:#444 !important;
-	font-size:60;
-	font-weight:bold;
-	margin-left:20px;
-}
-
 .thumbnail {
 	cursor:pointer;
 }
@@ -46,7 +31,7 @@ h1, .h1, .titleb {
 }
 
 .right-controls {
-	margin-top:-110px;
+	margin-top:20px;
 }
 
 h2, .h2 {
@@ -164,7 +149,16 @@ h2, .h2 {
 }
 
 .container-main {
-	margin-top:70px;
+	background:#fff;
+	width:1200px;
+	margin-top:30px;
+	height:580px;
+}
+
+.container-outer {
+	margin-top:50px;
+	background:#fff;
+	width:100%;
 }
 
 .spermgrid
@@ -213,3 +207,17 @@ h2, .h2 {
     background: red!important;
 }
 
+.lead {
+	font-size:12pt;
+}
+
+.cover-container {
+	padding-left:20px;
+	padding-right:20px;
+	width:1000px !important;
+	margin-bottom:100px;
+}
+
+.footer-img {
+	margin-top:60px;
+}
