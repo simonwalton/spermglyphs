@@ -1,8 +1,8 @@
 {
-"grade-a":
+"gradea":
 {
 	"name":"Grade A",
-	"desc":"Sperm with progressive motility. These cells are the strongest and swim fast in a straight line."
+	"desc":"Sperm with progressive motility. These cells are the strongest and swim fast in a straight line.",
 	"note":"Note the relative agreement of the VCL, VAP and VSL measures.",
 	"img":"logo_grade-a.png",
 	"vcl":64.88478,
@@ -15,7 +15,7 @@
 	"headwidth":3.21,
 	"arclength":54.5
 },
-"grade-b": {
+"gradeb": {
 	"name":"Grade B",
 	"desc":"These also move forward but tend to travel in a curved or crooked motion.",
 	"note":"Note the VCL increasing noticably compared to the VAP as the cell meanders.",
@@ -30,7 +30,7 @@
 	"headwidth":3.21,
 	"arclength":54.5
 },
-"grade-c": {
+"gradec": {
 	"name":"Grade C",
 	"desc":"These have non-progressive motility because they do not move forward despite the fact that they move their tails.",
 	"note":"Note that no VCL, VAP or VSL values are available in the data.",
@@ -42,9 +42,9 @@
 	"headwidth":3.21,
 	"arclength":54.5
 },
-"grade-d": {
+"graded": {
 	"name":"Grade D",
-	"desc":"Sperm with progressive motility. These cells are the strongest and swim fast in a straight line."
+	"desc":"Sperm with progressive motility. These cells are the strongest and swim fast in a straight line.",
 	"note":"Note the relative agreement of the VCL, VAP and VSL measures.",
 	"img":"logo_grade-a.png",
 	"headlength":5.03,

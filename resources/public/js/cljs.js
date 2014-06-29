@@ -14458,16 +14458,14 @@ myospermglyph.server.draw = function(a) {
 myospermglyph.server.get_and_store_preset = function(a, b) {
   var c = cljs.core.keyword.call(null, b), d = [cljs.core.str(a), cljs.core.str(b), cljs.core.str(".json")].join("");
   return jayq.core.ajax.call(null, cljs.core.PersistentArrayMap.fromArray(["\ufdd0:url", d, "\ufdd0:type", "\ufdd0:get", "\ufdd0:success", function(a) {
-    return cljs.core.swap_BANG_.call(null, myospermglyph.server.presets, cljs.core.assoc, c, clojure.walk.keywordize_keys.call(null, cljs.core.js__GT_clj.call(null, a, "\ufdd0:keywordize-keys", !0))).call(null, console.log(cljs.core.clj__GT_js.call(null, cljs.core.js__GT_clj.call(null, a))), console.log(cljs.core.clj__GT_js.call(null, cljs.core.js__GT_clj.call(null, a, "\ufdd0:keywordize-keys", !0))))
+    return cljs.core.swap_BANG_.call(null, myospermglyph.server.presets, cljs.core.assoc, c, clojure.walk.keywordize_keys.call(null, cljs.core.js__GT_clj.call(null, a, "\ufdd0:keywordize-keys", !0))).call(null, console.log(cljs.core.clj__GT_js.call(null, (new cljs.core.Keyword("\ufdd0:human")).call(null, cljs.core.deref.call(null, myospermglyph.server.presets)))))
   }, "\ufdd0:error", function(a, c) {
     return console.log([cljs.core.str("There was a problem getting "), cljs.core.str(b), cljs.core.str(".json: "), cljs.core.str(c)].join(""))
   }, "\ufdd0:processData", !1, "\ufdd0:contentType", "application/json"], !0))
 };
-myospermglyph.server.get_preset = function(a, b) {
-  return b.call(null, a.call(null, cljs.core.deref.call(null, myospermglyph.server.presets)))
-};
 myospermglyph.server.get_and_store_presets = function(a) {
-  return myospermglyph.server.get_and_store_preset.call(null, a, "human")
+  myospermglyph.server.get_and_store_preset.call(null, a, "human");
+  return myospermglyph.server.get_and_store_preset.call(null, a, "animal")
 };
 myospermglyph.server.init = function(a) {
   return myospermglyph.server.get_and_store_presets.call(null, a)
@@ -14488,12 +14486,19 @@ myospermglyph.server._drawManual = function(a, b, c) {
 };
 goog.exportSymbol("myospermglyph.server._drawManual", myospermglyph.server._drawManual);
 myospermglyph.server._drawHumanPreset = function(a, b, c) {
-  b = myospermglyph.server.get_preset.call(null, cljs.core.keyword.call(null, "human"), cljs.core.keyword.call(null, b));
+  b = cljs.core.keyword.call(null, "" + cljs.core.str(b)).call(null, (new cljs.core.Keyword("\ufdd0:human")).call(null, cljs.core.deref.call(null, myospermglyph.server.presets)));
   a = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:div", a, "\ufdd0:size", c, "\ufdd0:origin", myospermglyph.server.origin, "\ufdd0:scales", myospermglyph.server.globals, "\ufdd0:params", b], !0);
-  console.log(cljs.core.clj__GT_js.call(null, (new cljs.core.Keyword("\ufdd0:vap")).call(null, b)));
-  return myospermglyph.server.draw.call(null, a)
+  myospermglyph.server.draw.call(null, a);
+  return cljs.core.clj__GT_js.call(null, b)
 };
 goog.exportSymbol("myospermglyph.server._drawHumanPreset", myospermglyph.server._drawHumanPreset);
+myospermglyph.server._drawAnimalPreset = function(a, b, c) {
+  b = cljs.core.keyword.call(null, "" + cljs.core.str(b)).call(null, (new cljs.core.Keyword("\ufdd0:animal")).call(null, cljs.core.deref.call(null, myospermglyph.server.presets)));
+  a = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:div", a, "\ufdd0:size", c, "\ufdd0:origin", myospermglyph.server.origin, "\ufdd0:scales", myospermglyph.server.globals, "\ufdd0:params", b], !0);
+  myospermglyph.server.draw.call(null, a);
+  return cljs.core.clj__GT_js.call(null, b)
+};
+goog.exportSymbol("myospermglyph.server._drawAnimalPreset", myospermglyph.server._drawAnimalPreset);
 myospermglyph.server._init = function(a) {
   return myospermglyph.server.init.call(null, a)
 };

@@ -188,19 +188,16 @@
       :type :get 
       :success (fn [data text status] (
               (swap! presets assoc keyid (walk/keywordize-keys (js->clj data :keywordize-keys true)))
-              (js/console.log (clj->js (js->clj data))) 
-              (js/console.log (clj->js (js->clj data :keywordize-keys true))) 
+              (js/console.log (clj->js (:human @presets)))
               ))
       :error (fn [data text status] (js/console.log (str "There was a problem getting " id ".json: "  text)))
       :processData false
       :contentType "application/json"
       }))))
 
-(defn get-preset [preset-type preset-name]
-  (preset-name (preset-type @presets)))
-
 (defn get-and-store-presets [resourceurl]
-  (-> (get-and-store-preset resourceurl "human")))
+  (get-and-store-preset resourceurl "human")
+  (get-and-store-preset resourceurl "animal"))
 
 (defn init [resourceurl]
   (get-and-store-presets resourceurl))
@@ -224,10 +221,21 @@
     (draw sperm)))
 
 (defn ^:export _drawHumanPreset [div id size]
-  (let [params (get-preset (keyword "human") (keyword id))
-      sperm {:div div :size size :origin origin :scales globals :params params}]
-    (js/console.log (clj->js (:vap params)))
-    (draw sperm)))
+  (let [id (keyword (str id))
+      params (id(:human @presets))
+     sperm {:div div :size size :origin origin :scales globals :params params}]
+    (draw sperm)
+    (-> (clj->js params))
+    ))
+
+(defn ^:export _drawAnimalPreset [div id size]
+ (let [id (keyword (str id))
+      params (id (:animal @presets))
+     sperm {:div div :size size :origin origin :scales globals :params params}]
+    (draw sperm)
+    (-> (clj->js params))
+   ))
+
 
   ; (let [sperm currsperm
   ;   sperm (merge (get-preset "human" id) sperm)

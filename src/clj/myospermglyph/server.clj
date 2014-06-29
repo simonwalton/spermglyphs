@@ -42,11 +42,11 @@
             (map (fn [x] (create-slider x)) sliders)
         ]]))
 
-(defn create-thumb[img, title]
+(defn create-thumb[id, img, title]
   (view-layout
       [:div {:class "col-xs-6 col-md-3 zoo-thumbnail-container"}
         [:div {:class "thumbnail"}
-          [:a {:href (str "javascript:selectZooPreset('" img "');")} [:img {:src (str "assets/img/species/" img) :alt title}]]
+          [:a {:id id :class "animal-preset-link" :href (str "javascript:selectZooPreset('" img "');")} [:img {:src (str "assets/img/species/" img) :alt title}]]
           [:div {:class "caption"} title]
 ;              [:button {:type "button" :class "btn btn-primary btn-sm btn-zoo"}
  ;               [:span {:class "glyphicon glyphicon-eye-open"}] (str " " title)
@@ -55,19 +55,19 @@
 
 (defn create-zoo []
   (let [obj (json/read-str (slurp "resources/public/assets/data/animal.json") :key-fn keyword)
-        rows (doall (map (fn [k] (create-thumb (:img (second k)) (:name (second k)))) obj))]
+        rows (doall (map (fn [k] (create-thumb (first k) (:img (second k)) (:name (second k)))) obj))]
     (view-layout "<div class=\"row\">" 
       (map-indexed (fn[i x] (if (= 0 (mod i 4)) (str "</div><div class=\"row\">" x) x)) rows)
        "</div>"            
     )))
 
-(defn create-human-preset[id, img, title, desc, note]
+(defn create-human-preset[ids, img, title, desc, note]
   (let [img (if (not (string/blank? img)) img "logo_default.png")]
    (view-layout
-    [:div {:class "media sperm-preset-media-box" :id id}
+    [:div {:class "media sperm-preset-media-box" }
       [:a {:class "pull-left human-preset-link" :href "#"}[:img {:class "media-object" :src (str "assets/img/human/" img) :alt title}]]
       [:div {:class "media-body"}
-        [:a {:class "human-preset-link" :href (str "javascript:selectHumanPreset('" id "');")} [:h4 {:class "media-heading"} title]] [:p desc [:p {:class "sperm-note"}] 
+        [:a {:class "human-preset-link" :id ids :href "#"} [:h4 {:class "media-heading"} title]] [:p desc [:p {:class "sperm-note"}] 
           (if (not (string/blank? note)) [:span [:i {:class "fa fa-info-circle"}] (str " " note)] "")
        ]]])))
                                                   
@@ -179,13 +179,22 @@
           div.addClass('spermdiv-selected');
         };
 
-        function selectZooPreset(str) {
-          console.log(str);
+        function selectAnimalPreset(str) {
+          var dict = myospermglyph.server._drawAnimalPreset(selectedDiv, str, [selectedDiv.width(), selectedDiv.height()]);
+          updateManual(dict);
         };
 
         function selectHumanPreset(str) {
-          myospermglyph.server._drawHumanPreset(selectedDiv, str, [selectedDiv.width(), selectedDiv.height()]);
+          var dict = myospermglyph.server._drawHumanPreset(selectedDiv, str, [selectedDiv.width(), selectedDiv.height()]);
+          updateManual(dict);
         };
+
+        function updateManual(dict) {
+          for(i in dict) {
+            if(sliders[i] != null)
+              sliders[i].setValue(dict[i]);
+          }
+        }
 
         function manualProps() {
           var obj = {};
@@ -198,7 +207,6 @@
 
         $(document).ready(function() {
           myospermglyph.server._init('/assets/data/'); 
-
           var cellsize = [170,170];
           var margins = [5,5];
           gridster = $('.gridster ul').gridster({
@@ -226,6 +234,9 @@
           
           for(i in [0,1,2,3,4])
             papers = _.union(papers, [myospermglyph.server._draw($('#spermsmall'+i.toString()), cellsize)]);
+        
+          $('.human-preset-link').attr('href',function(d) { return 'javascript:selectHumanPreset(\"' + $(this).attr('id') + '\");'; });
+          $('.animal-preset-link').attr('href',function(d) { return 'javascript:selectAnimalPreset(\"' + $(this).attr('id') + '\");'; });
 
           _.each(papers, function(p) {
              $(p.canvas).css({'pointer-events': 'none'});
