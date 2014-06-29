@@ -24,16 +24,18 @@
           :ftc 23.0
           :ftt 0.87
           :fas -0.1
-          })
-
-
+          }) 
  
-; raphael utilities
-
+; global state
 (def presets (atom {}))
 
+(def defs-for-paper (atom {}))
+(defn set-defs-for-paper [paper defs] (swap! defs-for-paper assoc paper defs))
+
+  ; raphael utilities
 (def paper-stack (atom {}))
 (defn add-to-paper-stack [id paper] (swap! paper-stack assoc id paper))
+
 
 (def colours {:nouncertainty {:red 0.32941176, :green 0.32941176, :blue 0.84705882 }})
 (def colourmaps {:uncertainty {:red [0.804 1.0 0.549] :green [1.0 0.59 0.0] :blue [0.8 0.18 0.0]}})
@@ -164,6 +166,7 @@
             :scales (assoc globals :cscale (* 200.0 (/ 10.0 w)))
         )]
     (-> (add-to-paper-stack id paper))
+    (-> (set-defs-for-paper id (:params sperm)))
     (-> (jq/bind ($ paper) :click (fn [evn] (js/alert "click"))))
     (-> (.clear paper))
     (-> (.setSize paper w h))
@@ -209,6 +212,10 @@
        :vsl (.getValue (js/getSlider "vsl"))
        :bcf (.getValue (js/getSlider "bcf"))
        )))
+
+; exposed functionality
+
+(defn ^:export _getDefsForPaper [paper] (clj->js (paper @defs-for-paper)))
 
 (defn ^:export _draw [div, size]
   (let [sperm {:div div :size size :origin origin :scales globals :params currsperm}]

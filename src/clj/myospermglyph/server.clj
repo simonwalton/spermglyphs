@@ -27,14 +27,14 @@
 
 (defn create-slider[s]
   (let [step (get s :step 1.0)]
-  (view-layout 
+  (html
       [:div {:class "form-group"}
         [:label {:for (:id s) :class "control-label"} (:name s)] [:span {:class "control-desc"} (str " " (:desc s))]
         [:div {:style "width:100%"} [:input {:type "text" :data-slider-min (str (:min s)) :data-slider-step (str step) :data-slider-max (str (:max s)) :id (:id s) :class "create-slider"}]]]
       )))
 
 (defn create-slider-group[id nicename desc sliders]
-  (view-layout
+  (html
       [:div {:class (str "bs-callout bs-callout-" id)}
         [:h4 nicename]
         [:p desc]
@@ -42,11 +42,11 @@
             (map (fn [x] (create-slider x)) sliders)
         ]]))
 
-(defn create-thumb[id, img, title]
-  (view-layout
-      [:div {:class "col-xs-6 col-md-3 zoo-thumbnail-container"}
+(defn create-thumb[id img title desc]
+  (html
+    [:div {:class "col-xs-6 col-md-3 zoo-thumbnail-container"}
         [:div {:class "thumbnail"}
-          [:a {:id id :class "animal-preset-link" :href (str "javascript:selectZooPreset('" img "');")} [:img {:src (str "assets/img/species/" img) :alt title}]]
+          [:a {:title desc :id id :class "animal-preset-link":href (str "javascript:selectZooPreset('" img "');")} [:img {:src (str "assets/img/species/" img) :alt desc}]]
           [:div {:class "caption"} title]
 ;              [:button {:type "button" :class "btn btn-primary btn-sm btn-zoo"}
  ;               [:span {:class "glyphicon glyphicon-eye-open"}] (str " " title)
@@ -55,15 +55,15 @@
 
 (defn create-zoo []
   (let [obj (json/read-str (slurp "resources/public/assets/data/animal.json") :key-fn keyword)
-        rows (doall (map (fn [k] (create-thumb (first k) (:img (second k)) (:name (second k)))) obj))]
-    (view-layout "<div class=\"row\">" 
-      (map-indexed (fn[i x] (if (= 0 (mod i 4)) (str "</div><div class=\"row\">" x) x)) rows)
+        rows (doall (map (fn [k] (create-thumb (first k) (:img (second k)) (:name (second k)) (:desc (second k)))) obj))]
+    (html "<div class=\"row zoo-row\">" 
+      (map-indexed (fn[i x] (if (= 0 (mod i 4)) (str "</div><div class=\"row zoo-row\">" x) x)) rows)
        "</div>"            
     )))
 
 (defn create-human-preset[ids, img, title, desc, note]
   (let [img (if (not (string/blank? img)) img "logo_default.png")]
-   (view-layout
+   (html
     [:div {:class "media sperm-preset-media-box" }
       [:a {:class "pull-left human-preset-link" :href "#"}[:img {:class "media-object" :src (str "assets/img/human/" img) :alt title}]]
       [:div {:class "media-body"}
@@ -74,10 +74,10 @@
 (defn create-human-presets []
   (let [obj (json/read-str (slurp "resources/public/assets/data/human.json") :key-fn keyword)
         rows (doall (map (fn [k] (create-human-preset (first k) (:img (second k)) (:name (second k)) (:desc (second k)) (:note (second k)) )) obj))]
-    (view-layout [:div {:class "media"} [:div {:class "media"} rows ]])))
+    (html [:div {:class "media"} [:div {:class "media"} rows ]])))
                 
 (defn create-navbar []
-  (view-layout
+  (html
     [:div {:class "navbar navbar-inverse navbar-fixed-top" :role "navigation"}
       [:div {:class "container"}
         [:div {:class "navbar-header"}
@@ -94,7 +94,7 @@
           ]
           [:ul {:class "nav navbar-right"}
             [:a {:href "http://github.com" :alt "View our code on Github!"}[:i {:class "fa fa-github-square"}]]
-          ]
+          ] 
          ]]]))
 
 (defn view-content []
@@ -122,7 +122,7 @@
                 [:li {:data-row 3 :data-col 1 :data-sizex 1 :data-sizey 1}[:div {:class "spermdiv" :id "spermsmall2"}]]
                 [:li {:data-row 3 :data-col 2 :data-sizex 1 :data-sizey 1}[:div {:class "spermdiv" :id "spermsmall3"}]]
                 [:li {:data-row 3 :data-col 3 :data-sizex 1 :data-sizey 1}[:div {:class "spermdiv" :id "spermsmall4"}]]
-              ]
+              ] 
               
             ]
            ]
@@ -162,7 +162,7 @@
                   ]
                 ]
             ; zoo
-              [:div {:class "tab-pane" :id "zoo"} (create-zoo) ]
+              [:div {:class "tab-pane" :id "zoo"} [:h2 "Sperm zoo"] "Click an animal to see its representitive sperm glyph! Scroll down to see more animals." (create-zoo) ]
             ; human presets
               [:div {:class "tab-pane" :id "human"} (create-human-presets) ]
              ]]]]]
@@ -174,9 +174,9 @@
         function setSelected(div, paper) {
           selectedPaper = paper;
           selectedDiv = div;
-          console.log(div);
           $('.spermdiv').attr('class','spermdiv');
           div.addClass('spermdiv-selected');
+          updateManual(myospermglyph.server._getDefsForPaper(selectedDiv.attr('id')));
         };
 
         function selectAnimalPreset(str) {

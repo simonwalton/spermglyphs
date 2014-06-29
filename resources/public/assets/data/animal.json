@@ -72,7 +72,7 @@
 },
 "catfish":
 {
-	"name":"African Cat Fish",
+	"name":"African Catfish",
 	"img":"catfish.jpg",
 	"vcl":108.12,
 	"vap":83.34,
@@ -104,6 +104,7 @@
 "rat-on-drugs":
 {
 	"name":"Rat on drugs",
+	"desc":"This rat has been dosed with EGEE.",
 	"img":"rat-on-drugs.jpg",
 	"vcl":342.2,
 	"vap":163.7,

@@ -26,10 +26,19 @@ h1, .h1, .titleb {
 	width:100%;
 }
 
+.zoo-row {
+	width:98%;
+	margin-left:8px;
+}
+
 .zoo-thumbnail-container {
 	padding:5px;
-	margin:0px;
 	margin-bottom:-17px;
+}
+
+#zoo {
+	overflow-y: scroll;
+	height:620px;
 }
 
 .logo {
@@ -54,10 +63,7 @@ h2, .h2 {
 .slider-track {
 }
 
-#zoo {
-	overflow-y: scroll;
-	height:720px;
-}
+
 
 .control-label {
 	font-weight:bold;

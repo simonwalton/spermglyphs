@@ -14355,6 +14355,10 @@ myospermglyph.server.origin = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:x"
 myospermglyph.server.globals = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:cscale", 3, "\ufdd0:cbase", 350, "\ufdd0:hscale", 4, "\ufdd0:tscale", 1.5], !0);
 myospermglyph.server.currsperm = cljs.core.PersistentHashMap.fromArrays("\ufdd0:vap \ufdd0:fas \ufdd0:headlength \ufdd0:bcf \ufdd0:vcl \ufdd0:name \ufdd0:ftt \ufdd0:headwidth \ufdd0:ftc \ufdd0:mad \ufdd0:alh \ufdd0:fta \ufdd0:headuncertainty \ufdd0:vsl".split(" "), [128.54, -0.1, 8.27, 30.96, 205.26, "Human", 0.87, 3.65, 23, 45, 47.12, 50, 0.4, 77.4]);
 myospermglyph.server.presets = cljs.core.atom.call(null, cljs.core.ObjMap.EMPTY);
+myospermglyph.server.defs_for_paper = cljs.core.atom.call(null, cljs.core.ObjMap.EMPTY);
+myospermglyph.server.set_defs_for_paper = function(a, b) {
+  return cljs.core.swap_BANG_.call(null, myospermglyph.server.defs_for_paper, cljs.core.assoc, a, b)
+};
 myospermglyph.server.paper_stack = cljs.core.atom.call(null, cljs.core.ObjMap.EMPTY);
 myospermglyph.server.add_to_paper_stack = function(a, b) {
   return cljs.core.swap_BANG_.call(null, myospermglyph.server.paper_stack, cljs.core.assoc, a, b)
@@ -14438,6 +14442,7 @@ myospermglyph.server.draw = function(a) {
   var b = (new cljs.core.Keyword("\ufdd0:div")).call(null, a).attr("id"), c = cljs.core.first.call(null, (new cljs.core.Keyword("\ufdd0:size")).call(null, a)), d = cljs.core.second.call(null, (new cljs.core.Keyword("\ufdd0:size")).call(null, a)), e = cljs.core.contains_QMARK_.call(null, cljs.core.deref.call(null, myospermglyph.server.paper_stack), b) ? b.call(null, cljs.core.deref.call(null, myospermglyph.server.paper_stack)) : Raphael(b, c, d), a = cljs.core.assoc.call(null, a, "\ufdd0:origin", 
   cljs.core.PersistentArrayMap.fromArray(["\ufdd0:x", 0.5 * c, "\ufdd0:y", 0.5 * d], !0), "\ufdd0:scales", cljs.core.assoc.call(null, myospermglyph.server.globals, "\ufdd0:cscale", 200 * (10 / c)));
   myospermglyph.server.add_to_paper_stack.call(null, b, e);
+  myospermglyph.server.set_defs_for_paper.call(null, b, (new cljs.core.Keyword("\ufdd0:params")).call(null, a));
   jayq.core.bind.call(null, jayq.core.$.call(null, e), "\ufdd0:click", function() {
     return alert("click")
   });
@@ -14473,6 +14478,10 @@ myospermglyph.server.init = function(a) {
 myospermglyph.server.updateManual = function() {
   return myospermglyph.server.draw.call(null, cljs.core.assoc.call(null, myospermglyph.server.currsperm, "\ufdd0:vcl", getSlider("vcl").getValue(), "\ufdd0:vap", getSlider("vap").getValue(), "\ufdd0:vsl", getSlider("vsl").getValue(), "\ufdd0:bcf", getSlider("bcf").getValue()))
 };
+myospermglyph.server._getDefsForPaper = function(a) {
+  return cljs.core.clj__GT_js.call(null, a.call(null, cljs.core.deref.call(null, myospermglyph.server.defs_for_paper)))
+};
+goog.exportSymbol("myospermglyph.server._getDefsForPaper", myospermglyph.server._getDefsForPaper);
 myospermglyph.server._draw = function(a, b) {
   var c = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:div", a, "\ufdd0:size", b, "\ufdd0:origin", myospermglyph.server.origin, "\ufdd0:scales", myospermglyph.server.globals, "\ufdd0:params", myospermglyph.server.currsperm], !0);
   console.log(cljs.core.clj__GT_js.call(null, c));
