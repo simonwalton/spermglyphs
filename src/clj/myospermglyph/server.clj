@@ -3,7 +3,10 @@
             [compojure.handler :as handler]
             [compojure.route :as route]
             [ring.util.response :as response]
-            [clojure.math.numeric-tower :as math])
+            [clojure.math.numeric-tower :as math]
+            [clojure.data.json :as json]
+            [clojure.string :as string]
+    )
   (:use [hiccup.core]
         [compojure.core]))
 
@@ -32,13 +35,12 @@
 
 (defn create-slider-group[id nicename desc sliders]
   (view-layout
-    [:div {:class "col-sm-6"}
       [:div {:class (str "bs-callout bs-callout-" id)}
         [:h4 nicename]
         [:p desc]
           [:div {:class "form-horizontal"}
             (map (fn [x] (create-slider x)) sliders)
-        ]]]))
+        ]]))
 
 (defn create-thumb[img, title]
   (view-layout
@@ -49,16 +51,31 @@
 ;              [:button {:type "button" :class "btn btn-primary btn-sm btn-zoo"}
  ;               [:span {:class "glyphicon glyphicon-eye-open"}] (str " " title)
   ;            ]
-            ]])) 
+            ]]))
+
+(defn create-zoo []
+  (let [obj (json/read-str (slurp "resources/public/assets/data/animal.json") :key-fn keyword)
+        rows (doall (map (fn [k] (create-thumb (:img (second k)) (:name (second k)))) obj))]
+    (view-layout "<div class=\"row\">" 
+      (map-indexed (fn[i x] (if (= 0 (mod i 4)) (str "</div><div class=\"row\">" x) x)) rows)
+       "</div>"            
+    )))
 
 (defn create-human-preset[id, img, title, desc, note]
-  (view-layout
+  (let [img (if (not (string/blank? img)) img "logo_default.png")]
+   (view-layout
     [:div {:class "media sperm-preset-media-box" :id id}
       [:a {:class "pull-left human-preset-link" :href "#"}[:img {:class "media-object" :src (str "assets/img/human/" img) :alt title}]]
       [:div {:class "media-body"}
-        [:a {:class "human-preset-link" :href (str "javascript:selectHumanPreset('" id "');")} [:h4 {:class "media-heading"} title]] [:p desc [:p {:class "sperm-note"}] [:i {:class "fa fa-info-circle"}] (str " " note)]
-       ]]))
-
+        [:a {:class "human-preset-link" :href (str "javascript:selectHumanPreset('" id "');")} [:h4 {:class "media-heading"} title]] [:p desc [:p {:class "sperm-note"}] 
+          (if (not (string/blank? note)) [:span [:i {:class "fa fa-info-circle"}] (str " " note)] "")
+       ]]])))
+                                                  
+(defn create-human-presets []
+  (let [obj (json/read-str (slurp "resources/public/assets/data/human.json") :key-fn keyword)
+        rows (doall (map (fn [k] (create-human-preset (first k) (:img (second k)) (:name (second k)) (:desc (second k)) (:note (second k)) )) obj))]
+    (view-layout [:div {:class "media"} [:div {:class "media"} rows ]])))
+                
 (defn create-navbar []
   (view-layout
     [:div {:class "navbar navbar-inverse navbar-fixed-top" :role "navigation"}
@@ -119,48 +136,36 @@
             ; manual
               [:div {:class "tab-pane active" :id "manual"} 
                 [:div {:class "row"}
-                  (create-slider-group "kinematics" "Kinematics" "Movement of the head"
-                    [{:id "vcl" :name "VCL" :desc "Curvilinear Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
-                     {:id "vsl" :name "VSL" :desc "Straight-line Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
-                     {:id "vap" :name "VAP" :desc "Average Path Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
-                     {:id "bcf" :name "BCF" :desc "Beat Cross Frequency <i>Hz</i>" :min 0 :max 50}
-                     {:id "alh" :name "ALH" :desc "Amp. of Lateral Head Disp. &micro;<i>m</i>" :min 0 :max 50}
-                     {:id "mad" :name "MAD" :desc "Mean Anglular Displacement, &deg;" :min 0 :max 60}])
-                  (create-slider-group "mechanics" "Mechanics" "Mechanics of the flagella"
-                    [{:id "fta" :name "FTA" :desc "Total Projected Arclength, &micro;<i>m</i>" :min 20 :max 400}
-                     {:id "ftc" :name "FTC" :desc "Change in Angle, &deg;" :min 0 :max 100}
-                     {:id "ftt" :name "FTT" :desc "Total Torque, <i>N</i>&micro;" :min 80 :max 300}
-                     {:id "fas" :name "FAS" :desc "Asymmetry" :min -1 :max 1 :step 0.1}])
+                  [:div {:class "col-sm-6"}
+                    (create-slider-group "kinematics" "Kinematics" "Movement of the head"
+                      [{:id "vcl" :name "VCL" :desc "Curvilinear Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
+                       {:id "vsl" :name "VSL" :desc "Straight-line Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
+                       {:id "vap" :name "VAP" :desc "Average Path Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
+                       {:id "bcf" :name "BCF" :desc "Beat Cross Frequency <i>Hz</i>" :min 0 :max 50}
+                       {:id "alh" :name "ALH" :desc "Amp. of Lateral Head Disp. &micro;<i>m</i>" :min 0 :max 50}
+                       {:id "mad" :name "MAD" :desc "Mean Anglular Displacement, &deg;" :min 0 :max 60}])
+                    (create-slider-group "uncertainty" "Uncertainty" "Machine vision uncertainty"
+                      [{:id "headuncertainty" :name "Head" :desc "In capturing the head" :min 80 :max 300}
+                      {:id "uf" :name "Flagella" :desc "In capturing the flagella" :min 30 :max 70}])
+                  ]
+                  [:div {:class "col-sm-6"}
+                    (create-slider-group "mechanics" "Mechanics" "Mechanics of the flagella"
+                      [{:id "fta" :name "FTA" :desc "Total Projected Arclength, &micro;<i>m</i>" :min 20 :max 400}
+                       {:id "ftc" :name "FTC" :desc "Change in Angle, &deg;" :min 0 :max 100}
+                       {:id "ftt" :name "FTT" :desc "Total Torque, <i>N</i>&micro;" :min 80 :max 300}
+                       {:id "fas" :name "FAS" :desc "Asymmetry" :min -1 :max 1 :step 0.1}])
+                     (create-slider-group "morphological" "Morphological" "Head characteristics"
+                      [{:id "headlength" :name "Length" :desc "The length of the head" :min 80 :max 300} 
+                       {:id "headwidth" :name "Width" :desc "The width of the head" :min 30 :max 70}
+                       {:id "headrotation" :name "Rotation" :desc "The head's rotation, &deg" :min -50 :max 50}])
+                     ]
+                  ]
                 ]
-                [:div {:class "row"}
-                  (create-slider-group "morphological" "Kinematics" "Head characteristics"
-                    [{:id "headlength" :name "Length" :desc "The length of the head" :min 80 :max 300} 
-                     {:id "headwidth" :name "Width" :desc "The width of the head" :min 30 :max 70}
-                     {:id "headrotation" :name "Rotation" :desc "The head's rotation, &deg" :min -50 :max 50}])
-                  (create-slider-group "uncertainty" "Uncertainty" "Machine vision uncertainty"
-                    [{:id "headuncertainty" :name "Head" :desc "In capturing the head" :min 80 :max 300}
-                     {:id "uf" :name "Flagella" :desc "In capturing the flagella" :min 30 :max 70}])
-                ]
-              ]
             ; zoo
-              [:div {:class "tab-pane" :id "zoo"}
-                [:div {:class "row"}
-                  (create-thumb "rat.jpg" "Rat") (create-thumb "mouse.jpg" "Mouse") (create-thumb "rabbit.jpg" "Rabbit") (create-thumb "hamster.jpg" "Marmoset")]
-                [:div {:class "row"}
-                  (create-thumb "boar.jpg" "Boar") (create-thumb "bull.jpg" "Bull") (create-thumb "marmoset.jpg" "Marmoset") (create-thumb "donkey.jpg" "Donkey")]
-                [:div {:class "row"}
-                  (create-thumb "spermwhale.jpg" "Sperm Whale") (create-thumb "cat.jpg" "Cat") (create-thumb "gazelle.jpg" "Gazelle")]
-              ]
+              [:div {:class "tab-pane" :id "zoo"} (create-zoo) ]
             ; human presets
-              [:div {:class "tab-pane" :id "human"}
-                [:div {:class "media"}
-                  (create-human-preset "grade-a" "logo_grade-a.png" "Grade A" "Sperm with progressive motility. These cells are the strongest and swim fast in a straight line." "Note the relative agreement of the VCL, VAP and VSL measures.")
-                  (create-human-preset "grade-b" "logo_grade-b.png" "Grade B" "These also move forward but tend to travel in a curved or crooked motion." "Note the VCL increasing noticably compared to the VAP as the cell meanders.")
-                  (create-human-preset "grade-c" "logo_grade-c.png" "Grade C" "These have non-progressive motility because they do not move forward despite the fact that they move their tails." "Note that no VCL, VAP or VSL values are available in the data.")
-                  (create-human-preset "grade-d" "logo_grade-d.png" "Grade D" "These are immotile and fail to move at all." "Note that no VCL, VAP or VSL values are available in the data.")
-                ]
-               ]
-            ]]]]]
+              [:div {:class "tab-pane" :id "human"} (create-human-presets) ]
+             ]]]]]
     [:script " var sliders = {}; var gridster; var papers = []; var selectedDiv = null; var selectedPaper = null;"]
     [:script {:src "/js/cljs.js"}]
     [:script "
@@ -191,7 +196,7 @@
           return obj;
         };
 
-        $(document).ready(function(){
+        $(document).ready(function() {
           myospermglyph.server._init('/assets/data/'); 
 
           var cellsize = [170,170];

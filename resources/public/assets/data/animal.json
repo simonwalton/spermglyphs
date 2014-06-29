@@ -1,58 +1,44 @@
-[
 {
-	"name":"hyperactivated",
-	"vcl":180,
-	"vap":90,
-	"vsl":81,
-	"bcf":6,
-	"alh":10,
-	"mad":40,
-	"headlength":5.03,
-	"headwidth":3.21,
-	"arclength":54.5
-},
-{
-	"name":"Human",
-	"vcl":45,
-	"vap":45,
-	"vsl":45,
-	"bcf":4,
-	"alh":10.3410815,
-	"mad":11.86,
-	"headlength":5.03,
-	"headwidth":3.21,
-	"arclength":54.5
-},
+"boar":
 {
 	"name":"Boar",
+	"img":"boar.jpg",
 	"vsl":50.7,
 	"headlength":8.23,
 	"headwidth":4.36,
 	"arclength":39.75
 },
+"bull":
 {
 	"name":"Bull",
+	"img":"bull.jpg",
 	"vsl":81.4,
 	"headlength":9.56,
 	"headwidth":4.91,
 	"arclength":46.61
 },
+"possum":
 {
 	"name":"Possum",
+	"img":"possum.jpg",
 	"vsl":150.9,
 	"headlength":5.1,
 	"headwidth":2.73,
 	"arclength":93.4
 },
+"ram":
 {
 	"name":"Ram",
+	"img":"ram.jpg",
 	"vsl":93.9,
 	"headlength":8.2,
 	"headwidth":4.25,
 	"arclength":46.5
 },
+"mouse":
 {
 	"name":"Mouse",
+	"img":"mouse.jpg",
 	"vcl":205.26,
 	"vap":128.54,
 	"vsl":77.4,
@@ -63,14 +49,18 @@
 	"headwidth":3.65,
 	"arclength":125
 },
+"horse":
 {
 	"name":"Horse",
+	"img":"horse.jpg",
 	"headlength":6.41,
 	"headwidth":3,
 	"arclength":53.6
 },
+"rabbit":
 {
 	"name":"Rabbit",
+	"img":"rabbit.jpg",
 	"vcl":73.9,
 	"vap":47.8,
 	"vsl":38.9,
@@ -80,16 +70,20 @@
 	"headwidth":4.81,
 	"arclength":49.51
 },
+"catfish":
 {
 	"name":"African Cat Fish",
+	"img":"catfish.jpg",
 	"vcl":108.12,
 	"vap":83.34,
 	"vsl":73.44,
 	"bcf":13.44,
 	"alh":5.78
 },
+"marmoset":
 {
-	"name":"Callithrix jacchus",
+	"name":"Maromset",
+	"img":"marmoset.jpg",
 	"vcl":132.85,
 	"vap":113.95,
 	"vsl":108.35,
@@ -97,122 +91,102 @@
 	"alh":5.8,
 	"mad":27.2
 },
+"rat-a":
 {
-	"name":"Rat A",
+	"name":"Rat",
+	"img":"rat.jpg",
 	"vcl":83.81,
 	"vap":51.77,
 	"vsl":39.97,
 	"bcf":17.05,
 	"alh":5.4
 },
+"rat-on-drugs"
 {
-	"name":"Rat B",
-	"vcl":71.92,
-	"vap":51.61,
-	"vsl":40.07,
-	"bcf":12.01,
-	"alh":5.71
-},
-{
-	"name":"Rat on drug",
+	"name":"Rat on drugs",
+	"img":"rat-on-drugs.jpg",
 	"vcl":342.2,
 	"vap":163.7,
 	"vsl":98.5,
 	"bcf":24.4,
 	"alh":23.2
 },
+"turkey":
 {
 	"name":"Turkey",
+	"img": "turkey.jpg",
 	"vcl":90.9,
 	"vap":44,
 	"vsl":25,
 	"bcf":9,
 	"mad":81.1
 },
+"hamster":
 {
 	"name":"Hamster",
+	"img": "hamster.jpg",
 	"vcl":262,
 	"vap":211,
 	"vsl":188,
 	"bcf":19.4,
 	"alh":13.4
 },
+"bull":
 {
 	"name":"Bull",
+	"img": "bull.jpg",
 	"vcl":142.7,
 	"vap":100,
 	"vsl":91.5,
 	"bcf":21.6,
 	"alh":5.1
 },
+"yorkshire-boar":
 {
 	"name":"Yorkshire Boar",
+	"img": "boar.jpg",
 	"vcl":109.92,
 	"vap":59,
 	"vsl":35.9,
 	"bcf":5.8,
 	"alh":7.2
 },
+"pig":
 {
-	"name":"pg",
+	"name":"Pig",
+	"img": "pig.jpg",
 	"vcl":186.5,
 	"vap":94.8,
 	"vsl":50.5
 },
+"donkey":
 {
 	"name":"donkey",
+	"img": "donkey.jpg",
 	"vcl":93.9,
 	"vap":58.5,
 	"vsl":40.3,
 	"bcf":12.2,
 	"alh":3.65
 },
-{
-	"name":"gazellen G1",
-	"vcl":127.8,
-	"vap":53,
-	"vsl":41.3,
-	"bcf":1.51,
-	"alh":31.5
-},
-{
-	"name":"G2",
-	"vcl":87.9,
-	"vap":87.3,
-	"vsl":23,
-	"bcf":0.02,
-	"alh":0.15
-},
-{
-	"name":"G3",
-	"vcl":160,
-	"vap":158.9,
-	"vsl":22,
-	"bcf":0.03,
-	"alh":0.2
-},
-{
-	"name":"G4",
-	"vcl":61,
-	"vap":51.9,
-	"vsl":4.6,
-	"bcf":0.08,
-	"alh":0.63
-},
+"rabbit":
 {
 	"name":"Rabbit",
+	"img": "rabbit.jpg",
 	"vcl":87.45,
 	"vap":45.26,
 	"vsl":33.77,
 	"bcf":24.62,
 	"alh":4.18
 },
+"sperm-whale":
 {
 	"name":"Sperm Whale",
+	"img": "spermwhale.jpg",
 	"vcl":316.2,
 	"vap":259.1,
 	"vsl":239.7,
 	"bcf":33.1,
 	"alh":9.7
 }
-]
+}

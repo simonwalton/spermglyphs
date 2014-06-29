@@ -54,6 +54,11 @@ h2, .h2 {
 .slider-track {
 }
 
+#zoo {
+	overflow-y: scroll;
+	height:720px;
+}
+
 .control-label {
 	font-weight:bold;
 	font-size:8pt;
@@ -66,6 +71,7 @@ h2, .h2 {
 .bs-callout {
 	margin: 10px -5px;
 	padding: 35px;
+	margin-right:-13px;
 	border-left: 5px solid;
 }
 
@@ -77,7 +83,7 @@ h2, .h2 {
 .bs-callout-kinematics {
 	background-color: #ffc2aa;
 	border-color: #803315;
-	height:400px;
+	height:380px;
 }
 
 .bs-callout-kinematics {
@@ -97,7 +103,7 @@ h2, .h2 {
 .bs-callout-morphological {
 	background-color: #ffe3aa;
 	border-color: #805d15;
-	height: 250px;
+	height: 280px;
 }
 
 .bs-callout-morphological {
@@ -107,7 +113,7 @@ h2, .h2 {
 .bs-callout-uncertainty {
 	background-color: #7887ab;
 	border-color: #162856;
-	height: 250px;
+	height: 200px;
 }
 
 .bs-callout-uncertainty {

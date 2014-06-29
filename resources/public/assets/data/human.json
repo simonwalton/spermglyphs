@@ -1,21 +1,25 @@
 {
-"grade-d": {
-	"name":"Grade D",
-	"headlength":5.03,
-	"headwidth":3.21,
-	"arclength":54.5
-},
-"grade-c": {
-	"name":"Grade C",
-	"bcf":7,
-	"alh":17,
-	"mad":40.54,
+"grade-a":
+{
+	"name":"Grade A",
+	"desc":"Sperm with progressive motility. These cells are the strongest and swim fast in a straight line."
+	"note":"Note the relative agreement of the VCL, VAP and VSL measures.",
+	"img":"logo_grade-a.png",
+	"vcl":64.88478,
+	"vap":59.701995,
+	"vsl":57.092085,
+	"bcf":4,
+	"alh":10.56,
+	"mad":14.95,
 	"headlength":5.03,
 	"headwidth":3.21,
 	"arclength":54.5
 },
 "grade-b": {
 	"name":"Grade B",
+	"desc":"These also move forward but tend to travel in a curved or crooked motion.",
+	"note":"Note the VCL increasing noticably compared to the VAP as the cell meanders.",
+	"img":"logo_grade-b.png",
 	"vcl":49.99563,
 	"vap":41.12289,
 	"vsl":24.926715,
@@ -26,15 +30,51 @@
 	"headwidth":3.21,
 	"arclength":54.5
 },
-"grade-a":
+"grade-c": {
+	"name":"Grade C",
+	"desc":"These have non-progressive motility because they do not move forward despite the fact that they move their tails.",
+	"note":"Note that no VCL, VAP or VSL values are available in the data.",
+	"img":"logo_grade-c.png",
+	"bcf":7,
+	"alh":17,
+	"mad":40.54,
+	"headlength":5.03,
+	"headwidth":3.21,
+	"arclength":54.5
+},
+"grade-d": {
+	"name":"Grade D",
+	"desc":"Sperm with progressive motility. These cells are the strongest and swim fast in a straight line."
+	"note":"Note the relative agreement of the VCL, VAP and VSL measures.",
+	"img":"logo_grade-a.png",
+	"headlength":5.03,
+	"headwidth":3.21,
+	"arclength":54.5
+},
+"hyperactivated":
+{	
+	"name":"Hyperactivated",
+	"desc":"Hyperactivated sperm, exhibiting asymmetric and irregular beat patterns and high velocities associated with fertilization and penetration of the oocyte.",
+	"vcl":180,
+	"vap":90,
+	"vsl":81,
+	"bcf":6,
+	"alh":10,
+	"mad":40,
+	"headlength":5.03,
+	"headwidth":3.21,
+	"arclength":54.5
+},
+"average":
 {
-	"name":"Grade A",
-	"vcl":64.88478,
-	"vap":59.701995,
-	"vsl":57.092085,
+	"name":"Average",
+	"desc":"The sperm of the Average Joe.",
+	"vcl":57.44,
+	"vap":45,
+	"vsl":45,
 	"bcf":4,
-	"alh":10.56,
-	"mad":14.95,
+	"alh":10.3410815,
+	"mad":11.86,
 	"headlength":5.03,
 	"headwidth":3.21,
 	"arclength":54.5
