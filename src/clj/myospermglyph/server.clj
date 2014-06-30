@@ -145,7 +145,7 @@
                 [:li {:data-row 3 :data-col 3 :data-sizex 1 :data-sizey 1}[:div {:class "spermdiv" :id "spermsmall4"}]]
               ] 
             ]
-            [:div {:id "left-explore" :class ""}
+            [:div {:id "left-explore" :style "display:none"}
               [:div {:id "left-explore-grid" :class ""}
                   (create-pc-grid) 
                ]

@@ -1,6 +1,7 @@
 
 body {
 	color:#ccc;
+	background:#222 !important;
 }
 
 .cover-container {
@@ -164,10 +165,10 @@ h2, .h2 {
 }
 
 .container-main {
-	background:#333;
+	background:#222;
 	width:1200px;
 	margin-top:30px;
-	height:800px;
+	height:780px;
 }
 
 .container-main > .row{
@@ -253,7 +254,7 @@ h2, .h2 {
 
 .footer-inner {
 	width:1000px;
-	height:400px;
+	height:250px;
 	margin-right:auto;
 	margin-left:auto;
 }
