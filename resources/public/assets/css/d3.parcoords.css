@@ -37,16 +37,26 @@
     -o-transition: opacity 0.3s;
 }
 
+.tick > text {
+  font-color: #ccc;
+	text-shadow:none;
+	fill: #ccc;
+
+}
+
 .parcoords canvas.faded {
     opacity: 0.5;
 }
 
-text {
-	fill:#ccc;
+text .label {
+    font-color: #ccc;
 	text-shadow:none;
+	fill: #ccc;
 }
 
 .label {
     font-size: 1em;
     font-color: #ccc;
+	text-shadow:none;
+	fill: #ccc;
 }

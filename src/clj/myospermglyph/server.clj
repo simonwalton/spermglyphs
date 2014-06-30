@@ -85,8 +85,14 @@
         rows (doall (map (fn [k] (create-human-preset (first k) (:img (second k)) (:name (second k)) (:desc (second k)) (:note (second k)) )) rows))]
     (html [:div {:class "media"} [:div {:class "media"} rows ]])))
 
+(defn all-data []
+  (map (fn [k] (merge (second k) {:id (first k)} )) (merge (doall (get-human-data)) (doall (get-zoo-data)))))
+
 (defn all-data-json [] 
-  (json/write-str (map (fn [k] (merge (second k) {:id (first k)} )) (merge (doall (get-human-data)) (doall (get-zoo-data))))))
+  (json/write-str (all-data))) 
+
+(defn create-pc-grid []
+  (html (map (fn [x] (html [:div {:class "pull-left pc-result-box" :id (str "pc-result-box-" (name (:id x)))}])) (all-data))))
 
 (defn create-navbar []
   (html
@@ -140,7 +146,9 @@
               ] 
             ]
             [:div {:id "left-explore" :class ""}
-
+              [:div {:id "left-explore-grid" :class ""}
+                  (create-pc-grid) 
+               ]
              ]
            ]
          ; right-hand col
@@ -253,6 +261,45 @@
           return obj;
         };
 
+        var pcGridDivs = {};
+        var prevSels = [];
+        function updatePCGrid(selected) {
+          var newentries = {};
+          var removed = _.difference(prevSels,_.pluck(selected,'id'));
+          prevSels = _.pluck(selected,'id');
+
+          _.each(removed, function(id) {
+             console.log('hiding div',pcGridDivs[id]);
+             pcGridDivs[id].div.hide();
+          });
+
+
+          // keep pcGridDivs up to date (add only; we never remove)
+          // [id] -> [str_markup, { params }]
+          _.each(_.values(selected), function(item) {
+            if(!_.has(pcGridDivs,item.id))
+              pcGridDivs[item.id] = {div: $('#pc-result-box-'+item.id), params: item, svg: null};
+          });
+
+          // for each entry in current selection, draw it
+          var i = 1;
+          _.each(_.values(selected), function(item) {
+            var id = item.id;
+            var params = pcGridDivs[id].params;
+            //var paper = pcGridDivs[id].paper;
+            var div = pcGridDivs[id].div; 
+            div.show();
+            //if(paper == null) {
+              var paper = myospermglyph.server._drawParams(div, params, [div.width(), div.height()]);
+              //pcGridDivs[id].svg = div.children().first();
+            //}
+            // else {
+             // console.log('Appending paper',paper,'to',div);
+              //div.append(paper);
+            // }
+          });
+        }
+
         $(document).ready(function() {
           myospermglyph.server._init('/assets/data/'); 
           var cellsize = [170,170];
@@ -286,19 +333,26 @@
           $('.human-preset-link').attr('href',function(d) { return 'javascript:selectHumanPreset(\"' + $(this).attr('id') + '\");'; });
           $('.animal-preset-link').attr('href',function(d) { return 'javascript:selectAnimalPreset(\"' + $(this).attr('id') + '\");'; });
 
+          var i = 0;
           _.each(papers, function(p) {
              $(p.canvas).css({'pointer-events': 'none'});
              $(p.canvas).parent().click(function(div) {  setSelected($(div.currentTarget),p); });
+             i++;
           });
 
+          // create the floats for the pc results
           $('a[data-toggle=\"tab\"]').on('shown.bs.tab', function (e) {
               if(e.target.hash == '#explore') {
                 parcoords = createSpermPC(allData, '#explore-pc', '#explore-grid', [550,600], 'group',
                   ['img','name','desc','note']);
                 parcoords.render();
+                $('#left-grid').hide();
+                $('#left-explore').show();
               }
               else {
-                
+                $('#left-grid').show();
+                $('#left-explore').hide();
+                freePCGrid();
               }
           });
       });

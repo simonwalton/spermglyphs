@@ -14438,6 +14438,10 @@ myospermglyph.server.create_inner = function(a, b) {
   var c = (new cljs.core.Keyword("\ufdd0:cbase")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b));
   return myospermglyph.server.attr.call(null, a.circle((new cljs.core.Keyword("\ufdd0:x")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), (new cljs.core.Keyword("\ufdd0:y")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), c, c), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "#666", "\ufdd0:stroke-width", 1, "\ufdd0:fill", "#ccc"], !0))
 };
+myospermglyph.server.create_label = function(a, b) {
+  return myospermglyph.server.attr.call(null, a.text((new cljs.core.Keyword("\ufdd0:x")).call(null, (new cljs.core.Keyword("\ufdd0:origin")).call(null, b)), cljs.core.second.call(null, (new cljs.core.Keyword("\ufdd0:size")).call(null, b)) - 20, (new cljs.core.Keyword("\ufdd0:name")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b))), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:font-size", 12, "\ufdd0:font-weight", "bold", "\ufdd0:text-anchor", "centre", "\ufdd0:fill", "#EA553C"], 
+  !0))
+};
 myospermglyph.server.draw = function(a) {
   var b = (new cljs.core.Keyword("\ufdd0:div")).call(null, a).attr("id"), c = cljs.core.first.call(null, (new cljs.core.Keyword("\ufdd0:size")).call(null, a)), d = cljs.core.second.call(null, (new cljs.core.Keyword("\ufdd0:size")).call(null, a)), e = cljs.core.contains_QMARK_.call(null, cljs.core.deref.call(null, myospermglyph.server.paper_stack), b) ? b.call(null, cljs.core.deref.call(null, myospermglyph.server.paper_stack)) : Raphael(b, c, d), a = cljs.core.assoc.call(null, a, "\ufdd0:origin", 
   cljs.core.PersistentArrayMap.fromArray(["\ufdd0:x", 0.5 * c, "\ufdd0:y", 0.5 * d], !0), "\ufdd0:scales", cljs.core.assoc.call(null, myospermglyph.server.globals, "\ufdd0:cscale", 200 * (10 / c)));
@@ -14448,6 +14452,7 @@ myospermglyph.server.draw = function(a) {
   });
   e.clear();
   e.setSize(c, d);
+  console.log("whot", c, d, b, e);
   myospermglyph.server.create_interior_coloured_arc.call(null, e, a);
   myospermglyph.server.create_inner.call(null, e, a);
   myospermglyph.server.create_mad.call(null, e, a);
@@ -14458,6 +14463,7 @@ myospermglyph.server.draw = function(a) {
   myospermglyph.server.create_vap.call(null, e, a);
   myospermglyph.server.create_arclength_tail.call(null, e, a);
   myospermglyph.server.create_orientation_arrow.call(null, e, a);
+  myospermglyph.server.create_label.call(null, e, a);
   return cljs.core.clj__GT_js.call(null, b.call(null, cljs.core.deref.call(null, myospermglyph.server.paper_stack)))
 };
 myospermglyph.server.get_and_store_preset = function(a, b) {
@@ -14508,6 +14514,11 @@ myospermglyph.server._drawAnimalPreset = function(a, b, c) {
   return cljs.core.clj__GT_js.call(null, b)
 };
 goog.exportSymbol("myospermglyph.server._drawAnimalPreset", myospermglyph.server._drawAnimalPreset);
+myospermglyph.server._drawParams = function(a, b, c) {
+  a = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:div", a, "\ufdd0:size", c, "\ufdd0:origin", myospermglyph.server.origin, "\ufdd0:scales", myospermglyph.server.globals, "\ufdd0:params", cljs.core.js__GT_clj.call(null, b, "\ufdd0:keywordize-keys", !0)], !0);
+  return myospermglyph.server.draw.call(null, a)
+};
+goog.exportSymbol("myospermglyph.server._drawParams", myospermglyph.server._drawParams);
 myospermglyph.server._init = function(a) {
   return myospermglyph.server.init.call(null, a)
 };

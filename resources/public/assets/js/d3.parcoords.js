@@ -352,7 +352,13 @@ d3.parcoords = function (config) {
 		__.allowNonQuantitative = true;
 		this.detectDimensions();
 		return this;
-	;}
+	}
+
+	pc.ignore = function(ignore) {
+		__.ignore = ignore;
+		this.detectDimensions();
+		return this;
+	}
 
     // Jason Davies, http://bl.ocks.org/1341281
     pc.reorderable = function () {

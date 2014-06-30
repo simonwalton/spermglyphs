@@ -88,6 +88,8 @@ h2, .h2 {
 
 .bs-callout img {
 	float:left;
+	width:30px;
+	height:30px;
 	margin-top:10px;
 	margin-right:10px;
 }
@@ -100,7 +102,7 @@ h2, .h2 {
 }
 
 .bs-callout-kinematics {
-	color:#048587;
+	color:#bbb;
 	height:380px;
 }
 
@@ -195,6 +197,11 @@ h2, .h2 {
 #explore-grid {
 	width:100%;
 	height:200px;
+}
+
+.pc-result-box {
+	width:130px;
+	height:130px;
 }
 
 .gridster ul {

@@ -152,6 +152,9 @@
         (attr {:stroke "#666", :stroke-width 1, :fill "#ccc"})
         )))
 
+(defn create-label [paper sperm]
+  (-> (.text paper (:x (:origin sperm)) (- (second (:size sperm)) 20) (:name (:params sperm)))
+      (attr {:font-size 12, :font-weight "bold", :text-anchor "centre",  :fill "#EA553C"})))
 ; entry
 
 (defn draw [sperm]
@@ -170,6 +173,7 @@
     (-> (jq/bind ($ paper) :click (fn [evn] (js/alert "click"))))
     (-> (.clear paper))
     (-> (.setSize paper w h))
+    (-> (js/console.log "whot" w h id paper))
     (-> (create-interior-coloured-arc paper sperm))
     (-> (create-inner paper sperm))
     (-> (create-mad paper sperm))
@@ -180,6 +184,7 @@
     (-> (create-vap paper sperm))
     (-> (create-arclength-tail paper sperm))
     (-> (create-orientation-arrow paper sperm))
+    (-> (create-label paper sperm))
     (-> (clj->js (id @paper-stack)))
   ))
 
@@ -243,6 +248,9 @@
     (-> (clj->js params))
    ))
 
+(defn ^:export _drawParams [div params size]
+ (let [sperm {:div div :size size :origin origin :scales globals :params (js->clj params :keywordize-keys true)}]
+   (->(draw sperm))))
 
   ; (let [sperm currsperm
   ;   sperm (merge (get-preset "human" id) sperm)

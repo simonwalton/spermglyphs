@@ -3,6 +3,7 @@ function createSpermPC(pc_data, placement, gridplacement, size, colorGroup, igno
 		
 	var parcoords = d3.parcoords()(placement)
 		.data(pc_data)
+		.allowNonQuantitative()
 		.alpha(0.55)
 		.colorGroup(colorGroup)
 		.height(size[1])
@@ -27,7 +28,7 @@ function createSpermPC(pc_data, placement, gridplacement, size, colorGroup, igno
 	
 	// update grid on brush
 	parcoords.on("brush", function (d) {
-		
+		updatePCGrid(d);
 	});
 	parcoords.on("brushend", function(d) {
 	
