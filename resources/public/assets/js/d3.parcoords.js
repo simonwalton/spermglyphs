@@ -155,11 +155,15 @@ d3.parcoords = function (config) {
 
         // default styles, needs to be set when canvas width changes
         ctx.foreground.strokeStyle = __.color;
-        ctx.foreground.lineWidth = 1.4;
+        ctx.foreground.lineWidth = 2.0;
         ctx.foreground.globalCompositeOperation = __.composite;
-        ctx.foreground.globalAlpha = __.alpha;
-        ctx.highlight.lineWidth = 3;
-        ctx.shadows.strokeStyle = "#dadada";
+        ctx.foreground.globalAlpha = 1.0;//.alpha;
+		ctx.highlight.lineWidth = 2.0;
+        ctx.highlight.strokeStyle = "#068587";
+		ctx.highlight.globalCompositeOperation = __.composite;
+        ctx.highlight.globalAlpha = 0.2;//__.alpha;
+
+        ctx.shadows.strokeStyle = "#333333";
         ctx.extents.strokeStyle = "rgba(140,140,140,0.25)";
         ctx.extents.fillStyle = "rgba(255,255,255,0.4)";
 
@@ -202,7 +206,9 @@ d3.parcoords = function (config) {
 
     pc.render.default = function () {
         pc.clear('foreground');
+        pc.clear('highlight');
         if (__.brushed) {
+            __.data.forEach(path_highlight);
             __.brushed.forEach(path_foreground);
         } else {
             __.data.forEach(path_foreground);
@@ -474,7 +480,7 @@ d3.parcoords = function (config) {
 
     // draw single polyline
     function color_path(d, ctx) {
-        ctx.strokeStyle = __.colorMap(d[__.colorGroup]);
+        //ctx.strokeStyle = __.colorMap(d[__.colorGroup]);
 		
         ctx.beginPath();
         __.dimensions.map(function (p, i) {

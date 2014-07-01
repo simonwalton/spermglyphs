@@ -381,9 +381,9 @@
 (def app (handler/site main-routes))
 
 (defroutes main-routes
-  (GET "/" []
-      (response/redirect "web-page-name.html"))
-      (route/resources "/"))
+  (GET "/about" []
+      (response/redirect "about.html"))
+      (route/resources "/about"))
 
 
 

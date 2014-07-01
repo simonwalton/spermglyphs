@@ -10,6 +10,7 @@ function createSpermPC(pc_data, placement, gridplacement, size, colorGroup, igno
 		.width(size[0])
 		.colorMap(getColorMap())
 		.alpha(1.0)
+		.shadows()
 		.vertical()
 		.margin({
 			top: 10,
@@ -17,7 +18,7 @@ function createSpermPC(pc_data, placement, gridplacement, size, colorGroup, igno
 			right: 20,
 			bottom: 10
 		})
-		.colorMap(d3.scale.ordinal().range(["#F15A29"]))
+		.colorMap(d3.scale.ordinal().range(["#F15A29","#068587"]))
 		.ignore(ignore)
 		.reorderable()
 		.brushable()
