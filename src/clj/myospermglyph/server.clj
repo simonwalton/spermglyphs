@@ -146,7 +146,7 @@
               ] 
             ]
             [:div {:id "left-explore" :style "display:none"}
-              [:div {:id "left-explore-grid" :class ""}
+              [:div {:id "left-explore-grid"} 
                   (create-pc-grid) 
                ]
              ]
@@ -192,9 +192,14 @@
             ; human presets
               [:div {:class "fade tab-pane" :id "human"}[:h2 "Human Presets"] [:p "Click an item to see its the sperm glyph for a human sperm in that category."  (create-human-presets) ]]
             ; filter
-              [:div {:class "fade tab-pane" :id "explore"}[:h2 "Explore Dimensions"] [:p "Each axis in the plot is a dimension of the cell data. You can brush to filter the sperm matching those properties, which will appear to the left."]
-                [:div {:id "explore-pc" :class "parcoords"}]
-                [:div {:id "explore-grid"}]
+              [:div {:class "fade tab-pane" :id "explore"}
+                [:div {:style "height:80px"}
+                 [:h2 {:class "pull-left"} "Explore Dimensions"]
+                 [:button {:type "button" :id "reset-brushes" :class "pull-right btn btn-default"} "Reset Brushes"]]
+                [:div {:class "clearfix"} 
+                  [:p "Each axis in the plot is a dimension of the cell data. You can brush to filter the sperm matching those properties, which will appear to the left."]
+                  [:div {:id "explore-pc" :class "parcoords"}]
+                ]
              ]]]]]]
        ; bottom content
        [:div {:class "footer clearfix"} 
@@ -339,6 +344,8 @@
              $(p.canvas).parent().click(function(div) {  setSelected($(div.currentTarget),p); });
              i++;
           });
+
+          $('#reset-brushes').click(function() { parcoords.brushReset(); });
 
           // create the floats for the pc results
           $('a[data-toggle=\"tab\"]').on('shown.bs.tab', function (e) {

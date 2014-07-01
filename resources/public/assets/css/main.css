@@ -172,11 +172,11 @@ h2, .h2 {
 }
 
 .container-main > .row{
-	height:800px;
+	height:600px;
 }
 
 .container-main > .row > div{
-	height:800px;
+	height:600px;
 }
 
 .container-outer {
@@ -190,14 +190,30 @@ h2, .h2 {
 	height:100%;
 }
 
+#reset-brushes
+{
+	margin:20px;
+}
+
 #explore-pc {
 	width:100%;
 	height:400px;
 }
 
-#explore-grid {
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color:#EA553C;
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+#left-explore-grid {
 	width:100%;
-	height:200px;
+	height:100%;
+	overflow-y:auto;
 }
 
 .pc-result-box {
