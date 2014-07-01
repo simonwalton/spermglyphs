@@ -132,9 +132,14 @@
     [:div {:class "container-outer container"}
       [:div {:class "container container-main"}
         [:div {:class "row"}
-         ; left-hand col
+            ; left-hand col
           [:div {:class "col-md-6"}
             [:div [:img {:src "assets/img/logo_logo.png" :class "logo" }]]
+            [:div {:class "alert alert-warning alert-dismissible"  :role "alert"}
+              [:button {:type "button" :class "btn btn-warning pull-right" :id "dismiss-instructions" :data-dismiss "alert"}
+              [:span {:aria-hidden "true"}[:i {:class "fa fa-times-circle"}] " Got it!"][:span {:class "sr-only"} "Close"]]
+              "Select a glyph below "[:i {:class "fa fa-arrow-circle-down"}] " and modify to the right " [:i {:class "fa fa-arrow-circle-right"}] ". "
+            ]
             [:div {:id "left-grid" :class "gridster spermgrid"}
               [:ul
                 [:li {:data-row 1 :data-col 1 :data-sizex 2 :data-sizey 2}[:div {:class "spermdiv spermdiv-selected" :id "spermbig"}]]
@@ -220,7 +225,7 @@
            [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}]
            [:h1 {:class "cover-heading"} "Who are we?"]
             [:p {:class "lead"} "Good question. We are the visualization group at Oxford University's e-Research Centre (OeRC), and are led by Professor Min Chen."] 
-              [:a {:href "/assets/paper/paper.pdf" :class "btn btn-md btn-default"} "View our Apps"]
+              [:a {:href "http://www.ovii.org/" :class "btn btn-md btn-default"} "View our Apps"]
            ]
           
        ]
@@ -355,6 +360,7 @@
                 parcoords.render();
                 $('#left-grid').hide();
                 $('#left-explore').show();
+                parcoords.brushReset();
               }
               else {
                 $('#left-grid').show();

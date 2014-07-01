@@ -190,6 +190,11 @@ h2, .h2 {
 	height:100%;
 }
 
+#dismiss-instructions
+{
+	margin-top:-7px;
+}
+
 #reset-brushes
 {
 	margin:20px;
@@ -270,7 +275,7 @@ h2, .h2 {
 
 .footer-inner {
 	width:1000px;
-	height:250px;
+	height:450px;
 	margin-right:auto;
 	margin-left:auto;
 }
