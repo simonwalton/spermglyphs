@@ -241,13 +241,13 @@ h2, .h2 {
 
 .gridster {
     margin: 0 auto;
-    opacity: .8;
+    opacity: 1.0;
 
-    -webkit-transition: opacity .6s;
+/*    -webkit-transition: opacity .6s;
     -moz-transition: opacity .6s;
     -o-transition: opacity .6s;
     -ms-transition: opacity .6s;
-    transition: opacity .6s;
+    transition: opacity .6s;*/
 }
 
 .gridster .gs-w {

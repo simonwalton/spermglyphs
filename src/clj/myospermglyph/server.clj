@@ -365,7 +365,7 @@
               else {
                 $('#left-grid').show();
                 $('#left-explore').hide();
-                freePCGrid();
+                //freePCGrid();
               }
           });
       });

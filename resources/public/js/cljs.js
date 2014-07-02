@@ -14452,7 +14452,6 @@ myospermglyph.server.draw = function(a) {
   });
   e.clear();
   e.setSize(c, d);
-  console.log("whot", c, d, b, e);
   myospermglyph.server.create_interior_coloured_arc.call(null, e, a);
   myospermglyph.server.create_inner.call(null, e, a);
   myospermglyph.server.create_mad.call(null, e, a);
@@ -14469,7 +14468,7 @@ myospermglyph.server.draw = function(a) {
 myospermglyph.server.get_and_store_preset = function(a, b) {
   var c = cljs.core.keyword.call(null, b), d = [cljs.core.str(a), cljs.core.str(b), cljs.core.str(".json")].join("");
   return jayq.core.ajax.call(null, cljs.core.PersistentArrayMap.fromArray(["\ufdd0:url", d, "\ufdd0:type", "\ufdd0:get", "\ufdd0:success", function(a) {
-    return cljs.core.swap_BANG_.call(null, myospermglyph.server.presets, cljs.core.assoc, c, clojure.walk.keywordize_keys.call(null, cljs.core.js__GT_clj.call(null, a, "\ufdd0:keywordize-keys", !0))).call(null, console.log(cljs.core.clj__GT_js.call(null, (new cljs.core.Keyword("\ufdd0:human")).call(null, cljs.core.deref.call(null, myospermglyph.server.presets)))))
+    return cljs.core.swap_BANG_.call(null, myospermglyph.server.presets, cljs.core.assoc, c, clojure.walk.keywordize_keys.call(null, cljs.core.js__GT_clj.call(null, a, "\ufdd0:keywordize-keys", !0))).call(null)
   }, "\ufdd0:error", function(a, c) {
     return console.log([cljs.core.str("There was a problem getting "), cljs.core.str(b), cljs.core.str(".json: "), cljs.core.str(c)].join(""))
   }, "\ufdd0:processData", !1, "\ufdd0:contentType", "application/json"], !0))
@@ -14490,13 +14489,11 @@ myospermglyph.server._getDefsForPaper = function(a) {
 goog.exportSymbol("myospermglyph.server._getDefsForPaper", myospermglyph.server._getDefsForPaper);
 myospermglyph.server._draw = function(a, b) {
   var c = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:div", a, "\ufdd0:size", b, "\ufdd0:origin", myospermglyph.server.origin, "\ufdd0:scales", myospermglyph.server.globals, "\ufdd0:params", myospermglyph.server.currsperm], !0);
-  console.log(cljs.core.clj__GT_js.call(null, c));
   return myospermglyph.server.draw.call(null, c)
 };
 goog.exportSymbol("myospermglyph.server._draw", myospermglyph.server._draw);
 myospermglyph.server._drawManual = function(a, b, c) {
   a = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:div", a, "\ufdd0:size", b, "\ufdd0:origin", myospermglyph.server.origin, "\ufdd0:scales", myospermglyph.server.globals, "\ufdd0:params", clojure.walk.keywordize_keys.call(null, cljs.core.js__GT_clj.call(null, c, "\ufdd0:keywordize-keys", !0))], !0);
-  console.log(cljs.core.clj__GT_js.call(null, a));
   return myospermglyph.server.draw.call(null, a)
 };
 goog.exportSymbol("myospermglyph.server._drawManual", myospermglyph.server._drawManual);

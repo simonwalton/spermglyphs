@@ -173,7 +173,6 @@
     (-> (jq/bind ($ paper) :click (fn [evn] (js/alert "click"))))
     (-> (.clear paper))
     (-> (.setSize paper w h))
-    (-> (js/console.log "whot" w h id paper))
     (-> (create-interior-coloured-arc paper sperm))
     (-> (create-inner paper sperm))
     (-> (create-mad paper sperm))
@@ -196,7 +195,6 @@
       :type :get 
       :success (fn [data text status] (
               (swap! presets assoc keyid (walk/keywordize-keys (js->clj data :keywordize-keys true)))
-              (js/console.log (clj->js (:human @presets)))
               ))
       :error (fn [data text status] (js/console.log (str "There was a problem getting " id ".json: "  text)))
       :processData false
@@ -224,12 +222,10 @@
 
 (defn ^:export _draw [div, size]
   (let [sperm {:div div :size size :origin origin :scales globals :params currsperm}]
-    (js/console.log (clj->js sperm))
     (draw sperm)))
 
 (defn ^:export _drawManual [div size props]
   (let [sperm {:div div :size size :origin origin :scales globals :params (walk/keywordize-keys (js->clj props :keywordize-keys true))}]
-    (js/console.log (clj->js sperm))
     (draw sperm)))
 
 (defn ^:export _drawHumanPreset [div id size]
