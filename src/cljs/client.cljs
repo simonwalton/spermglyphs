@@ -18,6 +18,7 @@
           :alh 47.12
           :mad 45
           :headlength 8.27
+          :headangle 0.0
           :headwidth 3.65
           :headuncertainty 0.4
           :fta 50.0
@@ -71,12 +72,13 @@
   (-> (.ellipse paper (:x (:origin sperm)) (:y (:origin sperm))
               (/ (* (:headwidth (:params sperm)) (:hscale (:scales sperm))) (:cscale (:scales sperm)))
               (/ (* (:headlength (:params sperm)) (:hscale (:scales sperm))) (:cscale (:scales sperm))))
-      (attr {:stroke "black", :fill (raphaelcolour (:nouncertainty colours)), :stroke-width 1}))
-  )
+      (attr {:stroke "black", :fill (raphaelcolour (:nouncertainty colours)), :stroke-width 1})
+      (.transform (format "r%.2f" (:headangle (:params sperm))))
+  ))
 
 (defn create-ring [paper sperm value]
   (let [radius (/ (+ (:cbase (:scales sperm)) value) (:cscale (:scales sperm)))]
-    (-> (.path paper (format "M%d,%d m%d,%d a%d,%d %d %d,%d %d,%d" (:x (:origin sperm)) (:y (:origin sperm)) 0 (- radius) radius radius 0 1 1 radius radius ))
+    (-> (.path paper (format "M%.5f,%.5f m%.5f,%.5f a%.5f,%.5f %.5f %d,%d %.5f,%.5f" (:x (:origin sperm)) (:y (:origin sperm)) 0 (- radius) radius radius 0 1 1 radius radius ))
         (attr {:stroke "black", :fill "none", :stroke-width 1})
         (.transform (format "t%d,%dr-45" (- radius) radius))
   )))
@@ -84,7 +86,7 @@
 (defn create-filled-ring [paper sperm colour from to]
   (let  [ra (/ (+ (:cbase (:scales sperm)) from) (:cscale (:scales sperm)))
         rb (/ (+ (:cbase (:scales sperm)) to) (:cscale (:scales sperm)))]
-    (-> (.path paper (format "M%d,%d   m%d,%d          v%d         a%d,%d    %d     %d,%d    %d,%d   h%d   Z           "                            
+    (-> (.path paper (format "M%.5f,%.5f   m%.5f,%.5f          v%.5f         a%.5f,%.5f    %.5f     %d,%d    %.5f,%.5f   h%.5f   Z  "                            
                              (:x (:origin sperm)) (:y (:origin sperm))   0 (- ra)   (- (- rb ra))    rb rb      0      1 0     rb rb   (- (- rb ra) )))
         (attr {:stroke "none", :fill colour, :stroke-width 1})
         (.transform "r135")
@@ -92,20 +94,22 @@
 
 (defn create-filled-pie-slice [paper sperm rada radb angle offset rotation]
   (let  [ang (deg-to-rad (- 90 angle ))
-         ra rada
-         rb radb
+         ra (float rada)
+         rb (float radb)
          hrb (* 0.5 rb)
          rbra (- rb ra)
+         large-arc-flag (if (>= angle 180.0) 1 0)
          firstsnap [ (* rb (js/Math.cos ang)) (- (* rb (js/Math.sin ang)))  ]
          secondsnap [ (* ra (js/Math.cos ang)) (- (* ra (js/Math.sin ang))) ]
-         thirdsnap [ (* ra (js/Math.cos (deg-to-rad (+ 90)))) (- (* ra (js/Math.sin (deg-to-rad (+ 90))))) ]
+         thirdsnap [ (* ra (js/Math.cos (deg-to-rad (+ 90.0)))) (- (* ra (js/Math.sin (deg-to-rad (+ 90.0))))) ]
          ]
-    (-> (.path paper (format "M%d,%d   m0,%d        v%d     a%d,%d    %d     %d,%d                %d,%d                                          l%d,%d    a%d,%d %d %d,%d %d,%d  z"                       
-                             (:x (:origin sperm)) (:y (:origin sperm))   (- ra)   (- rbra)    rb rb      0      0 1  (get firstsnap 0) (+ (get firstsnap 1) rb) 
+    (-> (js/console.log (str rada) ))
+
+      (->(.path paper (format "M%.5f,%.5f     m0,%.5f        v%.5f     a%.5f,%.5f    %.5f     %d,%d                %.5f,%.5f    l%.5f,%.5f    a%.5f,%.5f %.5f %d,%d %.5f,%.5f  z"                       
+                             (:x (:origin sperm)) (:y (:origin sperm))   (- ra)   (- rbra)    rb rb      0     large-arc-flag 1  (get firstsnap 0) (+ (get firstsnap 1) rb) 
                              (- (get secondsnap 0) (get firstsnap 0))  (- (get secondsnap 1) (get firstsnap 1)  )
-                             ra ra 0 0 0 (- (get thirdsnap 0) (get secondsnap 0))  (- (get thirdsnap 1) (get secondsnap 1) ))) ; second arc
-                             
-        (.transform (format "R%d %d,%d T%d,%d" rotation (:x (:origin sperm)) (:y (:origin sperm)) (get offset 0) (get offset 1) ) )
+                             ra ra 0 large-arc-flag 0 (- (get thirdsnap 0) (get secondsnap 0))  (- (get thirdsnap 1) (get secondsnap 1) ))) ; second arc                       
+        (.transform (format "R%.5f %.5f,%.5f T%.5f,%.5f" rotation (:x (:origin sperm)) (:y (:origin sperm)) (get offset 0) (get offset 1) ) )
         )))
 
 ; semen-specific
@@ -123,7 +127,7 @@
 
 (defn create-orientation-arrow [paper sperm]
   (let [radius (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))]
-    (-> (.path paper (format "M%d,%d m%d,%d l%d,%d l%d,%d z " (:x (:origin sperm)) (:y (:origin sperm)) (- 10) (- radius) 10 (- 15) 10 15))
+    (-> (.path paper (format "M%.5f,%.5f m%.5f,%.5f l%.5f,%.5f l%.5f,%.5f z " (:x (:origin sperm)) (:y (:origin sperm)) (- 10) (- radius) 10 (- 15) 10 15))
         (attr {:stroke "none", :fill "black" })
         )))
  
@@ -141,9 +145,10 @@
 
 (defn create-bcf-ring [paper sperm] 
   (let [r (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))
-        ang (:bcf (:params sperm))
+        r2 (/ (+ (:cbase (:scales sperm)) (+ (:vcl (:params sperm))) 70) (:cscale (:scales sperm)))
+        ang (* (:bcf (:params sperm)) 5.0)
         ]
-    (-> (create-filled-pie-slice paper sperm r (+ 20 r) ang [0 0] 270)
+    (-> (create-filled-pie-slice paper sperm r r2 ang [0 0] 220)
       (attr {:stroke "none", :fill "#ccc"}))))
 
 (defn create-inner [paper sperm]

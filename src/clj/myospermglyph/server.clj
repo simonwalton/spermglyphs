@@ -59,7 +59,7 @@
           [:div {:class "inner cover col-md-4"}
            [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}] [:h2 {:class "cover-heading"} "What is it?"]
             [:p {:class "lead"} "We have devised a glyph design encoding 20 numerical measurements of a sperm cell to summarize its complex spatiotemporal motion characteristics. Do you want to see?"]
-              [:a {:href "/about" :class "btn btn-md btn-default"}"Yes! Let's Go!"] 
+              [:a {:href "/try" :class "btn btn-md btn-default"}"Make your own Glyph!"] 
            ]
           [:div {:class "inner cover col-md-4"}
            [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}]
@@ -254,9 +254,9 @@
                        {:id "ftt" :name "FTT" :desc "Total Torque, <i>N</i>&micro;" :min 80 :max 300}
                        {:id "fas" :name "FAS" :desc "Asymmetry" :min -1 :max 1 :step 0.1}])
                      (create-slider-group "morphological" "Morphological" "Head characteristics"
-                      [{:id "headlength" :name "Length" :desc "The length of the head" :min 80 :max 300} 
-                       {:id "headwidth" :name "Width" :desc "The width of the head" :min 30 :max 70}
-                       {:id "headrotation" :name "Rotation" :desc "The head's rotation, &deg" :min -50 :max 50}])
+                      [{:id "headlength" :name "Length" :desc "The length of the head" :min 1 :max 7 :step 0.5} 
+                       {:id "headwidth" :name "Width" :desc "The width of the head" :min 1 :max 7 :step 0.5}
+                       {:id "headangle" :name "Rotation" :desc "The head's rotation, &deg" :min -50 :max 50}])
                      ]
                   ]
                 ]
