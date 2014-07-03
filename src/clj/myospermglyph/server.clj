@@ -50,29 +50,30 @@
     [:div {:class "container-outer container"}
       [:div {:class "container container-main"}
         [:div {:class "logo-container"} [:img {:src "assets/img/logo_logo.png" :class "logo" }]]
-        [:div {:class "blurb"} "Glyph-Based Video Visualization for Semen Analysis"]
+        [:div {:class "blurb"} "Glyph-Based Video Visualization for Semen Analysis"
+          [:p {:class "blurb"} "Brian Duffy, Jeyarajan Thiyagalingam, Simon Walton, Anne Trefethen, Jackson C. Kirkman-Brown, Eamonn A. Gaffney and Min Chen"]]
        ; bottom content
        [:div {:class "footer clearfix"} 
        [:div {:class "footer-inner"} 
         [:div {:class "row clearfix"}
           [:div {:class "inner cover col-md-4"}
            [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}] [:h2 {:class "cover-heading"} "What is it?"]
-            [:p {:class "lead"} "Our glyph design encodes a large collection of numerical measurements of a sperm cell to summarize its complex spatiotemporal motion characteristics."]
-              [:a {:href "/about" :class "btn btn-md btn-default"}"Learn More"] 
+            [:p {:class "lead"} "We have devised a glyph design encoding 20 numerical measurements of a sperm cell to summarize its complex spatiotemporal motion characteristics. Do you want to see?"]
+              [:a {:href "/about" :class "btn btn-md btn-default"}"Yes! Let's Go!"] 
            ]
           [:div {:class "inner cover col-md-4"}
            [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}]
            [:h2 {:class "cover-heading"} "Our Paper"]
-            [:p {:class "lead"} "For more information on our technique, including how the attributes are defined and encoded, please see our TVCG paper, to be presented at VIS 2014."]
-              [:a {:href "/assets/paper/paper.pdf" :class "btn btn-md btn-default"}"Read the PDF"]
+            [:p {:class "lead"} "For more information on our technique, including how the attributes of the sperm cell were defined and encoded, please see our TVCG paper to be presented at " [:a {:href "http://ieeevis.org"}"IEEE VIS 2014"] " in Paris."]
+              [:a {:href "/assets/paper/tvcg.pdf" :class "btn btn-md btn-default"}"Read the PDF"] "&nbsp; &nbsp;"
+              [:a {:href "/assets/paper/semen-glyph.bib" :class "btn btn-md btn-default"}"Get the Bibtex"]
           ]
           [:div {:class "inner cover col-md-4"}
            [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}]
            [:h2 {:class "cover-heading"} "Who are we?"]
-            [:p {:class "lead"} "Good question. We are the visualization group at Oxford University's e-Research Centre (OeRC), and are led by Professor Min Chen."] 
+            [:p {:class "lead"} "Good question! We are the Oxford Visual Informatics Lab (aka Ovii) at Oxford University's " [:a {:href "http://www.oerc.ox.ac.uk/"} "e-Research Centre (OeRC)"], " and we are led by Professor Min Chen."] 
               [:a {:href "http://www.ovii.org/" :class "btn btn-md btn-default"} "View our Apps"]
            ]
-          
        ]
        ]]
        ]]))
@@ -173,7 +174,7 @@
         [:div {:class "navbar-header"}
           [:button {:type "button" :class "navbar-toggle" :data-toggle "collapse" :data-target ".navbar-collapse"}
             [:span {:class "sr-only"} "Toggle navigation"]]
-            [:a {:class "navbar-brand" :href "#"}[:img {:src "assets/img/logo_logo.png" :class "logo-top"}]]
+            [:a {:class "navbar-brand" :href "/"}[:img {:src "assets/img/logo_logo.png" :class "logo-top"}]]
         ]
         [:div {:class "collapse navbar-collapse"}
           [:ul {:class "nav navbar-right"}
