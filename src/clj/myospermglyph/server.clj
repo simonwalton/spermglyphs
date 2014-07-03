@@ -10,6 +10,77 @@
   (:use [hiccup.core]
         [compojure.core]))
 
+;
+; /
+;
+
+(defn main-layout [& content]
+  (html
+      [:head
+           [:meta {:http-equiv "Content-type"
+                        :content "text/html; charset=utf-8"}]
+           [:title "Ovii | Make your own Sperm Glyph"]
+           [:link {:href "/assets/bootstrap/css/bootstrap.min.css" :rel "stylesheet"}]
+           [:link {:href "/assets/bootstrap/css/bootstrap-theme.min.css" :rel "stylesheet"}]
+           [:link {:href "/assets/css/slider.css" :rel "stylesheet"}]
+           [:link {:href "/assets/css/cover.css" :rel "stylesheet"}]
+           [:link {:href "/assets/css/main.css" :rel "stylesheet"}]
+           [:link {:href "/assets/css/d3.parcoords.css" :rel "stylesheet"}]
+           [:link {:href "/assets/css/jquery.gridster.min.css" :rel "stylesheet"}]
+           [:link {:href "/assets/css/slick.grid.css" :rel "stylesheet"}]
+           [:link {:href "//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" :rel "stylesheet"}]]
+           [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans" :rel "stylesheet" :type "text/css"}]
+      [:body content]))
+
+
+(defn main-content []
+  (main-layout
+    [:script {:src "/assets/js/raphael-min.js"}]
+    [:script {:src "/assets/js/jquery.min.js"}]
+    [:script {:src "/assets/bootstrap/js/bootstrap.min.js"}]
+    [:script {:src "/assets/js/bootstrap-slider.js"}]
+    [:script {:src "/assets/js/underscore-min.js"}]
+    [:script {:src "/assets/js/jquery.gridster.min.js"}]
+    [:script {:src "/assets/js/d3.v2.js"}]
+    [:script {:src "/assets/js/d3.parcoords.js"}]
+    [:script {:src "/assets/js/pc-filter.js"}]
+    
+    (create-navbar)
+
+    [:div {:class "container-outer container"}
+      [:div {:class "container container-main"}
+        [:div {:class "logo-container"} [:img {:src "assets/img/logo_logo.png" :class "logo" }]]
+        [:div {:class "blurb"} "Glyph-Based Video Visualization for Semen Analysis"]
+       ; bottom content
+       [:div {:class "footer clearfix"} 
+       [:div {:class "footer-inner"} 
+        [:div {:class "row clearfix"}
+          [:div {:class "inner cover col-md-4"}
+           [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}] [:h2 {:class "cover-heading"} "What is it?"]
+            [:p {:class "lead"} "Our glyph design encodes a large collection of numerical measurements of a sperm cell to summarize its complex spatiotemporal motion characteristics."]
+              [:a {:href "/about" :class "btn btn-md btn-default"}"Learn More"] 
+           ]
+          [:div {:class "inner cover col-md-4"}
+           [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}]
+           [:h2 {:class "cover-heading"} "Our Paper"]
+            [:p {:class "lead"} "For more information on our technique, including how the attributes are defined and encoded, please see our TVCG paper, to be presented at VIS 2014."]
+              [:a {:href "/assets/paper/paper.pdf" :class "btn btn-md btn-default"}"Read the PDF"]
+          ]
+          [:div {:class "inner cover col-md-4"}
+           [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}]
+           [:h2 {:class "cover-heading"} "Who are we?"]
+            [:p {:class "lead"} "Good question. We are the visualization group at Oxford University's e-Research Centre (OeRC), and are led by Professor Min Chen."] 
+              [:a {:href "http://www.ovii.org/" :class "btn btn-md btn-default"} "View our Apps"]
+           ]
+          
+       ]
+       ]]
+       ]]))
+
+;
+; /try
+;
+
 (defn view-layout [& content]
   (html
       [:head
@@ -25,6 +96,7 @@
            [:link {:href "/assets/css/jquery.gridster.min.css" :rel "stylesheet"}]
            [:link {:href "/assets/css/slick.grid.css" :rel "stylesheet"}]
            [:link {:href "//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" :rel "stylesheet"}]]
+           [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans" :rel "stylesheet" :type "text/css"}]
       [:body content]))
 
 
@@ -100,18 +172,12 @@
       [:div {:class "container"}
         [:div {:class "navbar-header"}
           [:button {:type "button" :class "navbar-toggle" :data-toggle "collapse" :data-target ".navbar-collapse"}
-            [:span {:class "sr-only"} "Toggle navigation"]
-          ]
-          [:a {:class "navbar-brand" :href "#"}"Ovii"]
+            [:span {:class "sr-only"} "Toggle navigation"]]
+            [:a {:class "navbar-brand" :href "#"}[:img {:src "assets/img/logo_logo.png" :class "logo-top"}]]
         ]
         [:div {:class "collapse navbar-collapse"}
-          [:ul {:class "nav navbar-nav"}
-            [:li {:class "active"}[:a {:href "#"} [:i {:class "fa fa-home"}]  " Home"]]
-            [:li [:a {:href "#about"} [:i {:class "fa fa-question-circle"}] " About"]]
-            [:li [:a {:href "#contact"} [:i {:class "fa fa-file-pdf-o fa-inverse"}] " Paper"]]
-          ]
           [:ul {:class "nav navbar-right"}
-            [:a {:href "http://github.com" :alt "View our code on Github!"}[:i {:class "fa fa-github-square"}]]
+            [:a {:href "http://github.com" :alt "View our code on Github!"}[:i {:class "fa fa-github-square github-top"}]]
           ] 
          ]]]))
 
@@ -131,12 +197,13 @@
 
     [:div {:class "container-outer container"}
       [:div {:class "container container-main"}
+      
         [:div {:class "row"}
             ; left-hand col
           [:div {:class "col-md-6"}
-            [:div [:img {:src "assets/img/logo_logo.png" :class "logo" }]]
-            [:div {:class "alert alert-warning alert-dismissible"  :role "alert"}
-              [:button {:type "button" :class "btn btn-warning pull-right" :id "dismiss-instructions" :data-dismiss "alert"}
+            [:div {:class "logo-container"} [:img {:src "assets/img/logo_logo.png" :class "logo-small" }]]
+            [:div {:class "alert alert-info alert-dismissible"  :role "alert"}
+              [:button {:type "button" :class "btn pull-right" :id "dismiss-instructions" :data-dismiss "alert"}
               [:span {:aria-hidden "true"}[:i {:class "fa fa-times-circle"}] " Got it!"][:span {:class "sr-only"} "Close"]]
               "Select a glyph below "[:i {:class "fa fa-arrow-circle-down"}] " and modify to the right " [:i {:class "fa fa-arrow-circle-right"}] ". "
             ]
@@ -159,10 +226,10 @@
          ; right-hand col
           [:div {:class "col-md-6 right-controls"}
             [:ul {:class "nav nav-tabs"}
-              [:li {:class "active"} [:a {:href "#manual" :data-toggle "tab"} "Manual"]]
-              [:li [:a {:href "#zoo" :data-toggle "tab"} "Sperm Zoo"]]
-              [:li [:a {:href "#human" :data-toggle "tab"} "Human Presets"]]
-              [:li [:a {:href "#explore" :data-toggle "tab"} "Explore"]]]
+              [:li {:class "active"} [:a {:href "#manual" :data-toggle "tab"}[:i {:class "fa fa-cogs"}] " Manual"]]
+              [:li [:a {:href "#zoo" :data-toggle "tab"}[:i {:class "fa fa-paw"}] " Animal"]]
+              [:li [:a {:href "#human" :data-toggle "tab"}[:i {:class "fa fa-child"}] " Human"]]
+              [:li [:a {:href "#explore" :data-toggle "tab"}[:i {:class "fa fa-eye"}] " Explore"]]]
             [:div {:class "tab-content"}
             ; manual
               [:div {:class "fade in tab-pane active" :id "manual"} 
@@ -193,7 +260,7 @@
                   ]
                 ]
             ; zoo
-              [:div {:class "fade tab-pane" :id "zoo"} [:h2 "Sperm Zoo"] [:p "Click an animal to see its representitive sperm glyph! Scroll down to see more animals." (create-zoo) ]]
+              [:div {:class "fade tab-pane" :id "zoo"} [:h2 "Animal Presets"] [:p "Click an animal to see its sperm glyph! Scroll down for more animals." (create-zoo) ]]
             ; human presets
               [:div {:class "fade tab-pane" :id "human"}[:h2 "Human Presets"] [:p "Click an item to see its the sperm glyph for a human sperm in that category."  (create-human-presets) ]]
             ; filter
@@ -206,30 +273,7 @@
                   [:div {:id "explore-pc" :class "parcoords"}]
                 ]
              ]]]]]]
-       ; bottom content
-       [:div {:class "footer clearfix"} 
-       [:div {:class "footer-inner"} 
-        [:div {:class "row clearfix"}
-          [:div {:class "inner cover col-md-4"}
-           [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}] [:h1 {:class "cover-heading"} "What is it?"]
-            [:p {:class "lead"} "Our glyph design encodes a large collection of numerical measurements of a sperm cell to summarize its complex spatiotemporal motion characteristics."]
-              [:a {:href "/about" :class "btn btn-md btn-default"}"Learn More"] 
-           ]
-          [:div {:class "inner cover col-md-4"}
-           [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}]
-           [:h1 {:class "cover-heading"} "Our Paper"]
-            [:p {:class "lead"} "For more information on our technique, including how the attributes are defined and encoded, please see our TVCG paper, to be presented at VIS 2014."]
-              [:a {:href "/assets/paper/paper.pdf" :class "btn btn-md btn-default"}"Read the PDF"]
-          ]
-          [:div {:class "inner cover col-md-4"}
-           [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}]
-           [:h1 {:class "cover-heading"} "Who are we?"]
-            [:p {:class "lead"} "Good question. We are the visualization group at Oxford University's e-Research Centre (OeRC), and are led by Professor Min Chen."] 
-              [:a {:href "http://www.ovii.org/" :class "btn btn-md btn-default"} "View our Apps"]
-           ]
-          
-       ]
-       ]]
+
 
     [:script " var sliders = {}; var parcoords = null; var gridster; var papers = []; var selectedDiv = null; var selectedPaper = null;"]
     [:script {:src "/js/cljs.js"}]
@@ -312,8 +356,8 @@
 
         $(document).ready(function() {
           myospermglyph.server._init('/assets/data/'); 
-          var cellsize = [170,170];
-          var margins = [5,5];
+          var cellsize = [175,175];
+          var margins = [10,10];
           gridster = $('.gridster ul').gridster({
             widget_base_dimensions: cellsize,
             widget_margins: margins, 
@@ -372,18 +416,9 @@
       "]
   ))
 
-
-(defroutes main-routes
-  (GET "/" []
-      (view-content))
-      (route/resources "/"))
- 
 (def app (handler/site main-routes))
 
 (defroutes main-routes
-  (GET "/about" []
-      (response/redirect "about.html"))
-      (route/resources "/about"))
-
-
-
+  (GET "/" [] (main-content))
+  (GET "/try" [] (view-content))
+      (route/resources "/"))

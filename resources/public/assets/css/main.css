@@ -2,6 +2,7 @@
 body {
 	color:#ccc;
 	background:#222 !important;
+	font-family: 'Open Sans', sans-serif;
 }
 
 .cover-container {
@@ -19,7 +20,16 @@ body {
 	width:100%;
 }
 
-.row {
+.alert-info {
+	background:#ddd;
+	border-color:#333;
+	color: #333;
+}
+
+.alert-info > button {
+}
+
+p {
 }
 
 .zoo-row {
@@ -37,9 +47,28 @@ body {
 	height:620px;
 }
 
-.logo {
-	margin:10px;
+.logo-container
+{
+	margin-top:20px;
+	width:100%;
+	margin-left:-30px;
+	text-align:center;
 }
+
+.logo {
+	margin-left:auto;
+	margin-right:auto;
+	height:300px;
+	text-align:center;
+}
+
+.logo-small {
+	margin-left:10px;
+	margin-right:auto;
+	height:100px;
+	text-align:center;
+}
+
 
 .right-controls {
 	margin-top:20px;
@@ -64,6 +93,7 @@ h2, .h2 {
 .control-label {
 	font-weight:bold;
 	font-size:8pt;
+	margin-bottom:5px;
 }
 
 .control-desc {
@@ -72,19 +102,28 @@ h2, .h2 {
 
 .bs-callout {
 	margin: 10px -5px;
-	padding: 10px;
+	padding: 15;
 	margin-right:-10px;
+	margin-bottom:60px;
+	color:#ccc;
+}
+
+.form-horizontal
+{
+	margin-left:30px;
 }
 
 .bs-callout div {
 	margin-top: 0;
-	margin-bottom: 5px;
 	float:left;
+	font-size:9pt;
+	margin-bottom:5px;
 }
 
 .bs-callout div > h4 {
 	margin:0px;
-	margin-top:15px;
+	margin-top:10px;
+	color: #ea553c;
 }
 
 .bs-callout img {
@@ -103,23 +142,19 @@ h2, .h2 {
 }
 
 .bs-callout-kinematics {
-	color:#bbb;
 	height:380px;
 }
 
 .bs-callout-mechanics {
-	height:300px;
-	color:#4eb79e;
+	height:377px;
 }
 
 .bs-callout-morphological {
 	height: 280px;
-	color: #f1b032;
 }
 
 .bs-callout-uncertainty {
 	height: 200px;
-	color: #ea553c;
 }
 
 .human-preset-link {
@@ -128,6 +163,25 @@ h2, .h2 {
 
 .human-preset-box {
 	cursor:pointer;
+}
+
+.nav-tabs
+{
+}
+
+.tab-pane {
+
+    padding: 20px;
+}
+
+.tab-content
+{
+}
+
+ul > li.active 
+{
+	color:red;
+	background:green;
 }
 
 .nav .icon-dark {
@@ -144,6 +198,18 @@ h2, .h2 {
 	margin-top:10px;
 	color:#ccc;
 	font-size:24pt;
+}
+
+.github-top
+{
+	color:#aaa;
+	padding-top:8px;
+}
+
+.logo-top {
+	height:40px;
+	text-align:center;
+	margin-top:-8x;
 }
 
 .sperm-note {
@@ -188,6 +254,7 @@ h2, .h2 {
 {
 	width:100%;
 	height:100%;
+	margin:0px;
 }
 
 #dismiss-instructions
@@ -197,7 +264,7 @@ h2, .h2 {
 
 #reset-brushes
 {
-	margin:20px;
+	margin-top:20px;
 }
 
 #explore-pc {
@@ -228,6 +295,10 @@ h2, .h2 {
 
 .gridster ul {
 	list-style: none;
+	margin:0px;
+	width:100%;
+	height:100%;
+	margin-left:-6px;
 }
 
 .gridster li {
@@ -266,11 +337,22 @@ h2, .h2 {
 
 .lead {
 	font-size:12pt;
+	margin-top:20px;
+}
+
+.blurb {
+	font-size:24pt;
+	color: #ccc;
+	text-align:center;
+	margin-left:auto;
+	margin-right:auto;
+	width:1000px;
 }
 
 .footer {
 	background:#222;
 	width:100%;
+	margin-top:50px;
 }
 
 .footer-inner {
@@ -286,5 +368,7 @@ h2, .h2 {
 }
 
 .footer-img {
-	margin-top:60px;
+	margin-top:16px;
+	float:left;
+	margin-right:13px;
 }
