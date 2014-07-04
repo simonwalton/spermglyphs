@@ -8,7 +8,7 @@
 (def globals {:cscale 3.00
               :cbase 350.0
               :hscale 4.00
-              :tscale 1.50}) 
+              :tscale 1.50}) ; /fscale
 
 (def currsperm {:name "Human"
           :vcl 205.26
@@ -22,7 +22,7 @@
           :headwidth 3.65
           :headuncertainty 0.4
           :fta 50.0
-          :ftc 23.0
+          :ftc 23.0 ;/ fca
           :ftt 0.87
           :fas -0.1
           }) 
@@ -103,8 +103,6 @@
          secondsnap [ (* ra (js/Math.cos ang)) (- (* ra (js/Math.sin ang))) ]
          thirdsnap [ (* ra (js/Math.cos (deg-to-rad (+ 90.0)))) (- (* ra (js/Math.sin (deg-to-rad (+ 90.0))))) ]
          ]
-    (-> (js/console.log (str rada) ))
-
       (->(.path paper (format "M%.5f,%.5f     m0,%.5f        v%.5f     a%.5f,%.5f    %.5f     %d,%d                %.5f,%.5f    l%.5f,%.5f    a%.5f,%.5f %.5f %d,%d %.5f,%.5f  z"                       
                              (:x (:origin sperm)) (:y (:origin sperm))   (- ra)   (- rbra)    rb rb      0     large-arc-flag 1  (get firstsnap 0) (+ (get firstsnap 1) rb) 
                              (- (get secondsnap 0) (get firstsnap 0))  (- (get secondsnap 1) (get firstsnap 1)  )
@@ -142,13 +140,33 @@
         ]
     (-> (create-filled-pie-slice paper sperm 0 (:fta (:params sperm)) flaglength [0 zeroring] (- (+ 180 (* 0.5 flaglength))))
       (attr {:stroke "#666", :fill "#ccc"}))))
+ 
+(defn create-fas [paper sperm]
+  (let [radius (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))
+        k (+ (int (/ (:fta (:params sperm)) 50.0)) 1)
+        dk (/ (* 50.0 (:tscale (:scales sperm))) (:cscale (:scales sperm)))
+        asymm-length (* k dk)
+        ang (deg-to-rad (:fas (:params sperm)))
+        r (* (* (/ (:cbase (:scales sperm)) (:cscale (:scales sperm))) 0.05) (:tscale (:scales sperm)))
+        s (.set paper)
+        ]
+    (-> s (.push
+          ; line 
+          (-> (.path paper (format "M0,%.5fv%.5f" 0 asymm-length))
+              (attr {:stroke "#000", :stroke-width 5}))
+          )
+       ; (.push (apply (fn [i] (-> (.ellipse paper 0 (* i dk) 15.0 15.0) (attr {:fill "#f00"}))) [0 1 2 3 4 5]))
+      )
+      (doseq [i [0 1 2 3]] (-> s (.push (-> (.ellipse paper 0 (* i dk) r r) (attr {:fill "#f00"})))))
+      (-> s (.transform (format "R%.2f %.2f %.2f T%.2f,%.2f" ang 0 0 (:x (:origin sperm)) (+ radius (:y (:origin sperm) )))))
+  ))
 
 (defn create-bcf-ring [paper sperm] 
   (let [r (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))
         r2 (/ (+ (:cbase (:scales sperm)) (+ (:vcl (:params sperm))) 70) (:cscale (:scales sperm)))
         ang (* (:bcf (:params sperm)) 5.0)
         ]
-    (-> (create-filled-pie-slice paper sperm r r2 ang [0 0] 220)
+    (-> (create-filled-pie-slice paper sperm r r2 ang [0 0] 225)
       (attr {:stroke "none", :fill "#ccc"}))))
 
 (defn create-inner [paper sperm]
@@ -188,6 +206,7 @@
     (-> (create-vap paper sperm))
     (-> (create-arclength-tail paper sperm))
     (-> (create-orientation-arrow paper sperm))
+    (-> (create-fas paper sperm))
     (-> (create-label paper sperm))
     (-> (clj->js (id @paper-stack)))
   ))
