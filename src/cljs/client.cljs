@@ -33,11 +33,10 @@
 (def defs-for-paper (atom {}))
 (defn set-defs-for-paper [paper defs] (swap! defs-for-paper assoc paper defs))
 
-  ; raphael utilities
 (def paper-stack (atom {}))
 (defn add-to-paper-stack [id paper] (swap! paper-stack assoc id paper))
 
-
+  ; raphael utilities
 (def colours {:nouncertainty {:red 0.32941176, :green 0.32941176, :blue 0.84705882 }})
 (def colourmaps {:uncertainty {:red [0.804 1.0 0.549] :green [1.0 0.59 0.0] :blue [0.8 0.18 0.0]}})
 
@@ -47,11 +46,18 @@
   )
 ) 
 
+;
+(defn push-to-set [rset robjs]
+  (reduce #(.push %1 %2) rset robjs))
+
+; linear interpolation
 (defn lerp [a b t]
   (+ a (* (- b a) t )))
 
+; degrees to radians
 (defn deg-to-rad [d] (* d 0.0174532925))
 
+; take a colourmap (see above) and sample at a normalised position to return a raphaeljs colour
 (defn sample-colourmap [cm t]
   (let [idx (* t (- (count (:red cm)) 1.0))
         a (js/Math.floor idx)
@@ -109,6 +115,9 @@
                              ra ra 0 large-arc-flag 0 (- (get thirdsnap 0) (get secondsnap 0))  (- (get thirdsnap 1) (get secondsnap 1) ))) ; second arc                       
         (.transform (format "R%.5f %.5f,%.5f T%.5f,%.5f" rotation (:x (:origin sperm)) (:y (:origin sperm)) (get offset 0) (get offset 1) ) )
         )))
+
+(defn create-path-between-circles [paper ra rb angrad]
+  (.path paper (format "M%.3f,%.3f L%.3f,%.3f" (* ra (js/Math.cos angrad)) (* ra (js/Math.sin angrad)) (* rb (js/Math.cos angrad)) (* rb (js/Math.sin angrad)) )))
 
 ; semen-specific
 (defn create-interior-coloured-arc [paper sperm]
@@ -181,7 +190,6 @@
       (-> s (.transform (format "r%.3f %.3f %.3f T%.3f,%.3f" ang 0 0 (:x (:origin sperm)) (+ radius (:y (:origin sperm) )))))
   ))
 
-
 (defn create-bcf-ring [paper sperm] 
   (let [r (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))
         r2 (/ (+ (:cbase (:scales sperm)) (+ (:vcl (:params sperm))) 70) (:cscale (:scales sperm)))
@@ -189,6 +197,26 @@
         ]
     (-> (create-filled-pie-slice paper sperm r r2 ang [0 0] 225)
       (attr {:stroke "none", :fill "#ccc"}))))
+
+(defn create-bcf-guides [paper sperm] 
+  (let [r (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))
+        r2 (/ (+ (:cbase (:scales sperm)) (+ (:vcl (:params sperm))) 90) (:cscale (:scales sperm)))
+        ang (* (:bcf (:params sperm)) 5.0)
+        angr (deg-to-rad ang)
+        g (+ 1 (* 30.0 (js/Math.ceil (/ ang 30.0))))
+        ]
+    (-> (.set paper)
+        ; grey guides - only for bcf
+        (push-to-set (map #(create-path-between-circles paper r r2 (deg-to-rad %1)) (range 135 (+ 135 g) 30)))
+        (attr {:stroke "#999", :stroke-width 4})
+        (.transform (format "t%.2f,%.2f" (:x (:origin sperm)) (:y (:origin sperm))))
+    )
+    (-> (.set paper)
+        ; black guides - always-on
+        (push-to-set (map #(create-path-between-circles paper r r2 (deg-to-rad %1)) [0 180]))
+        (.transform (format "t%.2f,%.2f" (:x (:origin sperm)) (:y (:origin sperm))))
+        (attr {:stroke "#000", :stroke-width 8}))
+    ))
 
 (defn create-inner [paper sperm]
   (let [radius (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))]
@@ -234,6 +262,7 @@
     (-> (create-mad paper sperm))
     (-> (create-head paper sperm))
     (-> (create-bcf-ring paper sperm))
+    (-> (create-bcf-guides paper sperm))
     (-> (create-vcl paper sperm))
     (-> (create-vsl paper sperm))
     (-> (create-vap paper sperm))
