@@ -203,7 +203,7 @@
 ; create beat cross frequency outer filled ring
 (defn create-bcf-ring [paper sperm] 
   (let [r (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))
-        r2 (/ (+ (:cbase (:scales sperm)) (+ (:vcl (:params sperm))) 70) (:cscale (:scales sperm)))
+        r2 (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm)) 25.0) (:cscale (:scales sperm)))
         ang (* (:bcf (:params sperm)) 5.0)
         ]
     (-> (create-filled-pie-slice paper sperm r r2 ang [0 0] 225)
@@ -211,25 +211,31 @@
 
 ; create the every x degrees guides around the outermost ring
 (defn create-bcf-guides [paper sperm] 
-  (let [r (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))
-        r2 (/ (+ (:cbase (:scales sperm)) (+ (:vcl (:params sperm))) 90) (:cscale (:scales sperm)))
+  (let [ra (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))
+        rb (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm)) 25.0) (:cscale (:scales sperm)))
         ang (* (:bcf (:params sperm)) 5.0)
         angr (deg-to-rad ang)
         g (+ 1 (* 30.0 (js/Math.ceil (/ ang 30.0))))
         ]
     (-> (.set paper)
-        ; grey guides - only for bcf
-        (push-to-set (map #(create-path-between-circles paper r r2 (deg-to-rad %1)) (range 135 (+ 135 g) 30)))
+        (push-to-set (map #(create-path-between-circles paper ra rb (deg-to-rad %1)) (range 135 (+ 135 g) 30)))
         (attr {:stroke "#999", :stroke-width 4})
         (.transform (format "t%.2f,%.2f" (:x (:origin sperm)) (:y (:origin sperm))))
-    )
-    (-> (.set paper)
+    )))
+    
+(defn create-alh-lines [paper sperm] 
+  (let [ra (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))
+        rb (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm)) (:alh (:params sperm))) (:cscale (:scales sperm)))
+        ang (* (:bcf (:params sperm)) 5.0)
+        angr (deg-to-rad ang)
+        g (+ 1 (* 30.0 (js/Math.ceil (/ ang 30.0))))
+        ]
+     (-> (.set paper)
         ; black guides - always-on
-        (push-to-set (map #(create-path-between-circles paper r r2 (deg-to-rad %1)) [0 180]))
+        (push-to-set (map #(create-path-between-circles paper ra rb (deg-to-rad %1)) [0 180]))
         (.transform (format "t%.2f,%.2f" (:x (:origin sperm)) (:y (:origin sperm))))
-        (attr {:stroke "#000", :stroke-width 8}))
+        (attr {:stroke "#000", :stroke-width 6}))
     ))
-
 ; create the zero-velocity ring, filled
 (defn create-inner [paper sperm]
   (let [radius (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))]
@@ -278,6 +284,7 @@
     (-> (create-head paper sperm))
     (-> (create-bcf-ring paper sperm))
     (-> (create-bcf-guides paper sperm))
+    (-> (create-alh-lines paper sperm))
     (-> (create-vcl paper sperm))
     (-> (create-vsl paper sperm))
     (-> (create-vap paper sperm))
@@ -346,6 +353,5 @@
 
 (defn ^:export _init [resourceurl] (init resourceurl))
 
-; jq
 
 
