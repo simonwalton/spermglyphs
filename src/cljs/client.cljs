@@ -150,14 +150,14 @@
 (defn create-mad [paper sperm]
   (-> (create-filled-pie-slice paper sperm 0 (/ (:cbase (:scales sperm)) (:cscale (:scales sperm))) (:mad (:params sperm)) [0 0] (- (* 0.5 (:mad (:params sperm)))))
         (attr {:stroke "#666", :fill "white"})))
-      
+
 ; create the grey filled tail (ftc, fta)
 (defn create-arclength-tail [paper sperm]
   (let [zeroring (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))
-        changeinangle (* (:ftc (:params sperm)) 16.0)
+        changeinangle (* (:ftc (:params sperm)) 1.0)
         flaglength (/ (* (:fta (:params sperm)) (:tscale (:scales sperm))) (:cscale (:scales sperm)))
         ]
-    (-> (create-filled-pie-slice paper sperm 0 (:fta (:params sperm)) flaglength [0 zeroring] (- (+ 180 (* 0.5 flaglength))))
+    (-> (create-filled-pie-slice paper sperm 0 flaglength changeinangle [0 zeroring] (- (+ 180 (* 0.5 changeinangle))))
       (attr {:stroke "#666", :fill "#ccc"}))))
  
 ; create the tail asymmetry line with little spheres
@@ -189,13 +189,15 @@
         ang (* 30.0 (:fas (:params sperm)))
         r (* (* (/ (:cbase (:scales sperm)) (:cscale (:scales sperm))) 0.05) (:tscale (:scales sperm)))
         s (.set paper)
+        width (/ (+ 0.1 (* (:ftt (:params sperm)) (:tscale (:scales sperm)))) (:cscale (:scales sperm)))
         ]
     (-> s (.push
           ; line 
           (-> (.path paper (format "M0,%.5fv%.5f" 0 asymm-length))
-              (attr {:stroke "#000", :stroke-width 5}))
+              (attr {:stroke "#000", :stroke-width width}))
           )
       )
+      ; ellipses
       (doseq [i (range (+ k 1))] (-> s (.push (-> (.ellipse paper 0 (* i dk) r r) (attr {:fill "#000"})))))
       (-> s (.transform (format "r%.3f %.3f %.3f T%.3f,%.3f" ang 0 0 (:x (:origin sperm)) (+ radius (:y (:origin sperm) )))))
   ))

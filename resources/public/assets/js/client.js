@@ -104,7 +104,7 @@ $(document).ready(function() {
   }).data('gridster');
 
   $('.create-slider').each(function(i) {
-	var sl = $(this).slider().on('slide', function(ev) {
+	var sl = $(this).slider({formater: function(val) { return parseFloat(val).toFixed(2); }} ).on('slide', function(ev) {
 	  constrainSliders();
 	  myospermglyph.server._drawManual(selectedDiv, [selectedDiv.width(), selectedDiv.height()], manualProps());
 	}).data('slider');

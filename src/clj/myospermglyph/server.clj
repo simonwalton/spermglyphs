@@ -237,25 +237,25 @@
                 [:div {:class "row"}
                   [:div {:class "col-sm-6"}
                     (create-slider-group "kinematics" "Kinematics" "Movement of the head"
-                      [                       {:id "vsl" :name "VSL" :desc "Straight-line Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
+                      [{:id "vsl" :name "VSL" :desc "Straight-line Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
                        {:id "vap" :name "VAP" :desc "Average Path Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
                        {:id "vcl" :name "VCL" :desc "Curvilinear Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
                        {:id "bcf" :name "BCF" :desc "Beat Cross Frequency <i>Hz</i>" :min 0 :max 50}
                        {:id "alh" :name "ALH" :desc "Amp. of Lateral Head Disp. &micro;<i>m</i>" :min 0 :max 50}
                        {:id "mad" :name "MAD" :desc "Mean Anglular Displacement, &deg;" :min 0 :max 60}])
                     (create-slider-group "uncertainty" "Uncertainty" "Machine vision uncertainty"
-                      [{:id "headuncertainty" :name "Head" :desc "In capturing the head" :min 80 :max 300}
-                      {:id "uf" :name "Flagella" :desc "In capturing the flagella" :min 30 :max 70}])
+                      [{:id "headuncertainty" :name "Head" :desc "In capturing the head" :min 0 :max 1 :step 0.01}
+                      {:id "uf" :name "Flagella" :desc "In capturing the flagella" :min 0 :max 1 :step 0.01}])
                   ]
                   [:div {:class "col-sm-6"}
                     (create-slider-group "mechanics" "Mechanics" "Mechanics of the flagella"
                       [{:id "fta" :name "FTA" :desc "Total Projected Arclength, &micro;<i>m</i>" :min 20 :max 400}
-                       {:id "ftc" :name "FTC" :desc "Change in Angle, &deg;" :min 0 :max 100}
-                       {:id "ftt" :name "FTT" :desc "Total Torque, <i>N</i>&micro;" :min 80 :max 300}
-                       {:id "fas" :name "FAS" :desc "Asymmetry" :min -1 :max 1 :step 0.1}])
+                       {:id "ftc" :name "FTC" :desc "Change in Angle, &deg;" :min 0 :max 60}
+                       {:id "ftt" :name "FTT" :desc "Total Torque, <i>N</i>&micro;" :min 0 :max 1 :step 0.05}
+                       {:id "fas" :name "FAS" :desc "Asymmetry" :min -1 :max 1 :step 0.05}])
                      (create-slider-group "morphological" "Morphological" "Head characteristics"
-                      [{:id "headlength" :name "Length" :desc "The length of the head" :min 1 :max 7 :step 0.5} 
-                       {:id "headwidth" :name "Width" :desc "The width of the head" :min 1 :max 7 :step 0.5}
+                      [{:id "headlength" :name "Length" :desc "The length of the head" :min 1 :max 7 :step 0.25} 
+                       {:id "headwidth" :name "Width" :desc "The width of the head" :min 1 :max 7 :step 0.25}
                        {:id "headangle" :name "Rotation" :desc "The head's rotation, &deg" :min -50 :max 50}])
                      ]
                   ]
