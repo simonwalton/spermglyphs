@@ -14442,7 +14442,6 @@ myospermglyph.server.create_fas = function(a, b) {
   var c = (new cljs.core.Keyword("\ufdd0:cbase")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)), d = ((new cljs.core.Keyword("\ufdd0:fta")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b)) / 50 | 0) + 1, e = 50 * (new cljs.core.Keyword("\ufdd0:tscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, 
   (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)), f = d * e, g = 30 * (new cljs.core.Keyword("\ufdd0:fas")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b)), h = 0.05 * ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b))) * (new cljs.core.Keyword("\ufdd0:tscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, 
   b)), i = a.set();
-  console.log("" + cljs.core.str(g));
   i.push(myospermglyph.server.attr.call(null, a.path(cljs.core.format.call(null, "M0,%.5fv%.5f", 0, f)), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "#000", "\ufdd0:stroke-width", 5], !0)));
   for(var d = cljs.core.seq.call(null, cljs.core.range.call(null, d + 1)), f = null, j = 0, k = 0;;) {
     if(k < j) {
@@ -14463,7 +14462,6 @@ myospermglyph.server.create_ftc = function(a, b) {
   var c = (new cljs.core.Keyword("\ufdd0:cbase")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)), d = ((new cljs.core.Keyword("\ufdd0:fta")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b)) / 50 | 0) + 1, e = 50 * (new cljs.core.Keyword("\ufdd0:tscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, 
   (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)), f = d * e, g = 30 * (new cljs.core.Keyword("\ufdd0:fas")).call(null, (new cljs.core.Keyword("\ufdd0:params")).call(null, b)), h = 0.05 * ((new cljs.core.Keyword("\ufdd0:cbase")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b)) / (new cljs.core.Keyword("\ufdd0:cscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, b))) * (new cljs.core.Keyword("\ufdd0:tscale")).call(null, (new cljs.core.Keyword("\ufdd0:scales")).call(null, 
   b)), i = a.set();
-  console.log("" + cljs.core.str(g));
   i.push(myospermglyph.server.attr.call(null, a.path(cljs.core.format.call(null, "M0,%.5fv%.5f", 0, f)), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:stroke", "#000", "\ufdd0:stroke-width", 5], !0)));
   for(var d = cljs.core.seq.call(null, cljs.core.range.call(null, d + 1)), f = null, j = 0, k = 0;;) {
     if(k < j) {
@@ -14551,9 +14549,6 @@ myospermglyph.server.get_and_store_presets = function(a) {
 };
 myospermglyph.server.init = function(a) {
   return myospermglyph.server.get_and_store_presets.call(null, a)
-};
-myospermglyph.server.updateManual = function() {
-  return myospermglyph.server.draw.call(null, cljs.core.assoc.call(null, myospermglyph.server.currsperm, "\ufdd0:vcl", getSlider("vcl").getValue(), "\ufdd0:vap", getSlider("vap").getValue(), "\ufdd0:vsl", getSlider("vsl").getValue(), "\ufdd0:bcf", getSlider("bcf").getValue()))
 };
 myospermglyph.server._getDefsForPaper = function(a) {
   return cljs.core.clj__GT_js.call(null, a.call(null, cljs.core.deref.call(null, myospermglyph.server.defs_for_paper)))

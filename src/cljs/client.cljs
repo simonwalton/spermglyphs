@@ -46,7 +46,7 @@
   )
 ) 
 
-;
+; push to a given raphaeljs set a bunch of raphael objects (resulting in the set)
 (defn push-to-set [rset robjs]
   (reduce #(.push %1 %2) rset robjs))
 
@@ -69,11 +69,11 @@
         ]
   (-> (raphaelcolour {:red r :green g :blue b}))))
 
-; general drawing 
-
+; nicer way of specifying raphael attributes 
 (defn- attr [object attributes]
   (.attr object (clj->js attributes)))
 
+; cell head
 (defn create-head [paper sperm]
   (-> (.ellipse paper (:x (:origin sperm)) (:y (:origin sperm))
               (/ (* (:headwidth (:params sperm)) (:hscale (:scales sperm))) (:cscale (:scales sperm)))
@@ -82,6 +82,7 @@
       (.transform (format "r%.2f" (:headangle (:params sperm))))
   ))
 
+; general cell ring given an attribute value (e.g. VCL value)
 (defn create-ring [paper sperm value]
   (let [radius (/ (+ (:cbase (:scales sperm)) value) (:cscale (:scales sperm)))]
     (-> (.path paper (format "M%.5f,%.5f m%.5f,%.5f a%.5f,%.5f %.5f %d,%d %.5f,%.5f" (:x (:origin sperm)) (:y (:origin sperm)) 0 (- radius) radius radius 0 1 1 radius radius ))
@@ -89,6 +90,7 @@
         (.transform (format "t%d,%dr-45" (- radius) radius))
   )))
 
+; create a filled ring region between two radii
 (defn create-filled-ring [paper sperm colour from to]
   (let  [ra (/ (+ (:cbase (:scales sperm)) from) (:cscale (:scales sperm)))
         rb (/ (+ (:cbase (:scales sperm)) to) (:cscale (:scales sperm)))]
@@ -98,6 +100,7 @@
         (.transform "r135")
   )))
 
+; create a pie slice between two angles and two radiii with a specified initial rotation
 (defn create-filled-pie-slice [paper sperm rada radb angle offset rotation]
   (let  [ang (deg-to-rad (- 90 angle ))
          ra (float rada)
@@ -116,32 +119,39 @@
         (.transform (format "R%.5f %.5f,%.5f T%.5f,%.5f" rotation (:x (:origin sperm)) (:y (:origin sperm)) (get offset 0) (get offset 1) ) )
         )))
 
+; create a line between two circles given their radii and an angle (rad)
 (defn create-path-between-circles [paper ra rb angrad]
   (.path paper (format "M%.3f,%.3f L%.3f,%.3f" (* ra (js/Math.cos angrad)) (* ra (js/Math.sin angrad)) (* rb (js/Math.cos angrad)) (* rb (js/Math.sin angrad)) )))
 
-; semen-specific
+; create the interior uncertainty ring
 (defn create-interior-coloured-arc [paper sperm]
   (-> (create-filled-ring paper sperm (sample-colourmap (:uncertainty colourmaps) (:headuncertainty (:params sperm))) 0 (:vsl (:params sperm)))))
 
+; create the VCL
 (defn create-vcl [paper sperm]
   (-> (create-ring paper sperm (:vcl (:params sperm)))))
 
+; create the VSL
 (defn create-vsl [paper sperm]
   (-> (create-ring paper sperm (:vsl (:params sperm)))))
 
+; create the VAP
 (defn create-vap [paper sperm]
   (-> (create-ring paper sperm (:vap (:params sperm)))))
 
+; create the orientation arrow (SLD)
 (defn create-orientation-arrow [paper sperm]
   (let [radius (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))]
     (-> (.path paper (format "M%.5f,%.5f m%.5f,%.5f l%.5f,%.5f l%.5f,%.5f z " (:x (:origin sperm)) (:y (:origin sperm)) (- 10) (- radius) 10 (- 15) 10 15))
         (attr {:stroke "none", :fill "black" })
         )))
  
+; create the mean angular displacement pie segment
 (defn create-mad [paper sperm]
   (-> (create-filled-pie-slice paper sperm 0 (/ (:cbase (:scales sperm)) (:cscale (:scales sperm))) (:mad (:params sperm)) [0 0] (- (* 0.5 (:mad (:params sperm)))))
         (attr {:stroke "#666", :fill "white"})))
       
+; create the grey filled tail (ftc, fta)
 (defn create-arclength-tail [paper sperm]
   (let [zeroring (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))
         changeinangle (* (:ftc (:params sperm)) 16.0)
@@ -150,6 +160,7 @@
     (-> (create-filled-pie-slice paper sperm 0 (:fta (:params sperm)) flaglength [0 zeroring] (- (+ 180 (* 0.5 flaglength))))
       (attr {:stroke "#666", :fill "#ccc"}))))
  
+; create the tail asymmetry line with little spheres
 (defn create-fas [paper sperm]
   (let [radius (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))
         k (+ (int (/ (:fta (:params sperm)) 50.0)) 1)
@@ -159,7 +170,6 @@
         r (* (* (/ (:cbase (:scales sperm)) (:cscale (:scales sperm))) 0.05) (:tscale (:scales sperm)))
         s (.set paper)
         ]
-    (js/console.log (str ang))
     (-> s (.push
           ; line 
           (-> (.path paper (format "M0,%.5fv%.5f" 0 asymm-length))
@@ -170,6 +180,7 @@
       (-> s (.transform (format "r%.3f %.3f %.3f T%.3f,%.3f" ang 0 0 (:x (:origin sperm)) (+ radius (:y (:origin sperm) )))))
   ))
 
+; create the change-in-angle of tail (FCA/FTC)
 (defn create-ftc [paper sperm]
   (let [radius (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))
         k (+ (int (/ (:fta (:params sperm)) 50.0)) 1)
@@ -179,7 +190,6 @@
         r (* (* (/ (:cbase (:scales sperm)) (:cscale (:scales sperm))) 0.05) (:tscale (:scales sperm)))
         s (.set paper)
         ]
-    (js/console.log (str ang))
     (-> s (.push
           ; line 
           (-> (.path paper (format "M0,%.5fv%.5f" 0 asymm-length))
@@ -190,6 +200,7 @@
       (-> s (.transform (format "r%.3f %.3f %.3f T%.3f,%.3f" ang 0 0 (:x (:origin sperm)) (+ radius (:y (:origin sperm) )))))
   ))
 
+; create beat cross frequency outer filled ring
 (defn create-bcf-ring [paper sperm] 
   (let [r (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))
         r2 (/ (+ (:cbase (:scales sperm)) (+ (:vcl (:params sperm))) 70) (:cscale (:scales sperm)))
@@ -198,6 +209,7 @@
     (-> (create-filled-pie-slice paper sperm r r2 ang [0 0] 225)
       (attr {:stroke "none", :fill "#ccc"}))))
 
+; create the every x degrees guides around the outermost ring
 (defn create-bcf-guides [paper sperm] 
   (let [r (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))
         r2 (/ (+ (:cbase (:scales sperm)) (+ (:vcl (:params sperm))) 90) (:cscale (:scales sperm)))
@@ -218,12 +230,14 @@
         (attr {:stroke "#000", :stroke-width 8}))
     ))
 
+; create the zero-velocity ring, filled
 (defn create-inner [paper sperm]
   (let [radius (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))]
     (-> (.circle paper (:x (:origin sperm)) (:y (:origin sperm)) radius radius)
         (attr {:stroke "#666", :stroke-width 1, :fill "#ccc"})
         )))
 
+; create the crosshair guides for the zero-velocity ring
 (defn create-inner-guides [paper sperm]
   (let [r (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))
         d (* r 2.0)
@@ -235,11 +249,12 @@
         (.transform (format "t%.2f,%.2f" (:x (:origin sperm)) (:y (:origin sperm))))
         )))
 
+; create a label from the name parameter
 (defn create-label [paper sperm]
   (-> (.text paper (:x (:origin sperm)) (- (second (:size sperm)) 20) (:name (:params sperm)))
       (attr {:font-size 12, :font-weight "bold", :text-anchor "centre",  :fill "#EA553C"})))
-; entry
 
+; entrypoint for drawing the entire cell
 (defn draw [sperm]
   (let [id (.attr (:div sperm) "id")
         w (first (:size sperm))
@@ -274,6 +289,7 @@
     (-> (clj->js (id @paper-stack)))
   ))
 
+; given a url, grab a json file containing a key/val dictionary of sperm parameters and store into `presets` atom under id
 (defn get-and-store-preset [url id]
   (let [keyid (keyword id)
     url (str url id ".json")]
@@ -288,23 +304,16 @@
       :contentType "application/json"
       }))))
 
+; get all known presets from server
 (defn get-and-store-presets [resourceurl]
   (get-and-store-preset resourceurl "human")
   (get-and-store-preset resourceurl "animal"))
 
+; initialise ourselves for the first time
 (defn init [resourceurl]
   (get-and-store-presets resourceurl))
 
-(defn updateManual [props]
-  (draw (assoc currsperm
-       :vcl (.getValue (js/getSlider "vcl"))
-       :vap (.getValue (js/getSlider "vap"))
-       :vsl (.getValue (js/getSlider "vsl"))
-       :bcf (.getValue (js/getSlider "bcf"))
-       )))
-
 ; exposed functionality
-
 (defn ^:export _getDefsForPaper [paper] (clj->js (paper @defs-for-paper)))
 
 (defn ^:export _draw [div, size]
@@ -334,13 +343,6 @@
 (defn ^:export _drawParams [div params size]
  (let [sperm {:div div :size size :origin origin :scales globals :params (js->clj params :keywordize-keys true)}]
    (->(draw sperm))))
-
-  ; (let [sperm currsperm
-  ;   sperm (merge (get-preset "human" id) sperm)
-  ;   sperm (assoc sperm :div div :size size :origin origin :scales globals)]
-  ;   (-> (js/console.log "plok"))
-  ;   (-> (js/console.log (clj->js sperm)))
-  ;   (-> (draw sperm))))
 
 (defn ^:export _init [resourceurl] (init resourceurl))
 
