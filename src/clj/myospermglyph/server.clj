@@ -237,9 +237,9 @@
                 [:div {:class "row"}
                   [:div {:class "col-sm-6"}
                     (create-slider-group "kinematics" "Kinematics" "Movement of the head"
-                      [{:id "vcl" :name "VCL" :desc "Curvilinear Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
-                       {:id "vsl" :name "VSL" :desc "Straight-line Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
+                      [{:id "vsl" :name "VSL" :desc "Straight-line Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
                        {:id "vap" :name "VAP" :desc "Average Path Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
+                       {:id "vcl" :name "VCL" :desc "Curvilinear Velocity, &micro;<i>m</i>/s" :min 20 :max 400}
                        {:id "bcf" :name "BCF" :desc "Beat Cross Frequency <i>Hz</i>" :min 0 :max 50}
                        {:id "alh" :name "ALH" :desc "Amp. of Lateral Head Disp. &micro;<i>m</i>" :min 0 :max 50}
                        {:id "mad" :name "MAD" :desc "Mean Anglular Displacement, &deg;" :min 0 :max 60}])
@@ -316,6 +316,18 @@
           return obj;
         };
 
+        function constrainSliders() {
+          var vsl = parseFloat(sliders['vsl'].getValue());
+          var vap = parseFloat(sliders['vap'].getValue());
+          var vcl = parseFloat(sliders['vcl'].getValue());
+          if(vsl > vap) {
+            sliders['vsl'].setValue(sliders['vap'].getValue());
+          }
+          if(vap > vcl) {
+            sliders['vap'].setValue(sliders['vcl'].getValue());
+          }
+        }
+
         var pcGridDivs = {};
         var prevSels = [];
         function updatePCGrid(selected) {
@@ -355,6 +367,7 @@
           });
         }
 
+       
         $(document).ready(function() {
           myospermglyph.server._init('/assets/data/'); 
           var cellsize = [175,175];
@@ -373,6 +386,7 @@
 
           $('.create-slider').each(function(i) {
             var sl = $(this).slider().on('slide', function(ev) {
+              constrainSliders();
               myospermglyph.server._drawManual(selectedDiv, [selectedDiv.width(), selectedDiv.height()], manualProps());
             }).data('slider');
             sliders[$(this).prop('id')] = sl;
