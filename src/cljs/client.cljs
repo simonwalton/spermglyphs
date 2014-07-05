@@ -146,20 +146,41 @@
         k (+ (int (/ (:fta (:params sperm)) 50.0)) 1)
         dk (/ (* 50.0 (:tscale (:scales sperm))) (:cscale (:scales sperm)))
         asymm-length (* k dk)
-        ang (deg-to-rad (:fas (:params sperm)))
+        ang (* 30.0 (:fas (:params sperm)))
         r (* (* (/ (:cbase (:scales sperm)) (:cscale (:scales sperm))) 0.05) (:tscale (:scales sperm)))
         s (.set paper)
         ]
+    (js/console.log (str ang))
     (-> s (.push
           ; line 
           (-> (.path paper (format "M0,%.5fv%.5f" 0 asymm-length))
               (attr {:stroke "#000", :stroke-width 5}))
           )
-       ; (.push (apply (fn [i] (-> (.ellipse paper 0 (* i dk) 15.0 15.0) (attr {:fill "#f00"}))) [0 1 2 3 4 5]))
       )
-      (doseq [i [0 1 2 3]] (-> s (.push (-> (.ellipse paper 0 (* i dk) r r) (attr {:fill "#f00"})))))
-      (-> s (.transform (format "R%.2f %.2f %.2f T%.2f,%.2f" ang 0 0 (:x (:origin sperm)) (+ radius (:y (:origin sperm) )))))
+      (doseq [i (range (+ k 1))] (-> s (.push (-> (.ellipse paper 0 (* i dk) r r) (attr {:fill "#000"})))))
+      (-> s (.transform (format "r%.3f %.3f %.3f T%.3f,%.3f" ang 0 0 (:x (:origin sperm)) (+ radius (:y (:origin sperm) )))))
   ))
+
+(defn create-ftc [paper sperm]
+  (let [radius (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))
+        k (+ (int (/ (:fta (:params sperm)) 50.0)) 1)
+        dk (/ (* 50.0 (:tscale (:scales sperm))) (:cscale (:scales sperm)))
+        asymm-length (* k dk)
+        ang (* 30.0 (:fas (:params sperm)))
+        r (* (* (/ (:cbase (:scales sperm)) (:cscale (:scales sperm))) 0.05) (:tscale (:scales sperm)))
+        s (.set paper)
+        ]
+    (js/console.log (str ang))
+    (-> s (.push
+          ; line 
+          (-> (.path paper (format "M0,%.5fv%.5f" 0 asymm-length))
+              (attr {:stroke "#000", :stroke-width 5}))
+          )
+      )
+      (doseq [i (range (+ k 1))] (-> s (.push (-> (.ellipse paper 0 (* i dk) r r) (attr {:fill "#000"})))))
+      (-> s (.transform (format "r%.3f %.3f %.3f T%.3f,%.3f" ang 0 0 (:x (:origin sperm)) (+ radius (:y (:origin sperm) )))))
+  ))
+
 
 (defn create-bcf-ring [paper sperm] 
   (let [r (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))
@@ -173,6 +194,17 @@
   (let [radius (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))]
     (-> (.circle paper (:x (:origin sperm)) (:y (:origin sperm)) radius radius)
         (attr {:stroke "#666", :stroke-width 1, :fill "#ccc"})
+        )))
+
+(defn create-inner-guides [paper sperm]
+  (let [r (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))
+        d (* r 2.0)
+        ]
+    (-> (.set paper)
+        (.push (.path paper (format "M%.2f,0 h%.2f" (- r) d)))
+        (.push (.path paper (format "M0 %.2f v%.2f" (- r) d)))
+        (attr {:stroke "#fff", :stroke-width 3})
+        (.transform (format "t%.2f,%.2f" (:x (:origin sperm)) (:y (:origin sperm))))
         )))
 
 (defn create-label [paper sperm]
@@ -198,6 +230,7 @@
     (-> (.setSize paper w h))
     (-> (create-interior-coloured-arc paper sperm))
     (-> (create-inner paper sperm))
+    (-> (create-inner-guides paper sperm))
     (-> (create-mad paper sperm))
     (-> (create-head paper sperm))
     (-> (create-bcf-ring paper sperm))
@@ -207,6 +240,7 @@
     (-> (create-arclength-tail paper sperm))
     (-> (create-orientation-arrow paper sperm))
     (-> (create-fas paper sperm))
+    (-> (create-ftc paper sperm))
     (-> (create-label paper sperm))
     (-> (clj->js (id @paper-stack)))
   ))
