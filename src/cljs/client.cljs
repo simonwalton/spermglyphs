@@ -5,9 +5,9 @@
 
 (def origin {:x 280 :y 260})
 
-(def globals {:cscale 3.00
+(def globals {:cscale 1.00
               :cbase 350.0
-              :hscale 4.00
+              :hscale 8.00
               :tscale 1.50}) ; /fscale
 
 (def currsperm {:name "Human"
@@ -160,7 +160,7 @@
     (-> (create-filled-pie-slice paper sperm 0 flaglength changeinangle [0 zeroring] (- (+ 180 (* 0.5 changeinangle))))
       (attr {:stroke "#666", :fill "#ccc"}))))
  
-; create the tail asymmetry line with little spheres
+; create the tail asymmetry line with little spheres (FAS and FTA and FTT)
 (defn create-fas [paper sperm]
   (let [radius (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))
         k (+ (int (/ (:fta (:params sperm)) 50.0)) 1)
@@ -169,27 +169,7 @@
         ang (* 30.0 (:fas (:params sperm)))
         r (* (* (/ (:cbase (:scales sperm)) (:cscale (:scales sperm))) 0.05) (:tscale (:scales sperm)))
         s (.set paper)
-        ]
-    (-> s (.push
-          ; line 
-          (-> (.path paper (format "M0,%.5fv%.5f" 0 asymm-length))
-              (attr {:stroke "#000", :stroke-width 5}))
-          )
-      )
-      (doseq [i (range (+ k 1))] (-> s (.push (-> (.ellipse paper 0 (* i dk) r r) (attr {:fill "#000"})))))
-      (-> s (.transform (format "r%.3f %.3f %.3f T%.3f,%.3f" ang 0 0 (:x (:origin sperm)) (+ radius (:y (:origin sperm) )))))
-  ))
-
-; create the change-in-angle of tail (FCA/FTC)
-(defn create-ftc [paper sperm]
-  (let [radius (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))
-        k (+ (int (/ (:fta (:params sperm)) 50.0)) 1)
-        dk (/ (* 50.0 (:tscale (:scales sperm))) (:cscale (:scales sperm)))
-        asymm-length (* k dk)
-        ang (* 30.0 (:fas (:params sperm)))
-        r (* (* (/ (:cbase (:scales sperm)) (:cscale (:scales sperm))) 0.05) (:tscale (:scales sperm)))
-        s (.set paper)
-        width (/ (+ 0.1 (* (:ftt (:params sperm)) (:tscale (:scales sperm)))) (:cscale (:scales sperm)))
+        width (/ (+ 1.0 (* 2.0 (:ftt (:params sperm)) (:tscale (:scales sperm)))) 1.0)
         ]
     (-> s (.push
           ; line 
@@ -197,7 +177,6 @@
               (attr {:stroke "#000", :stroke-width width}))
           )
       )
-      ; ellipses
       (doseq [i (range (+ k 1))] (-> s (.push (-> (.ellipse paper 0 (* i dk) r r) (attr {:fill "#000"})))))
       (-> s (.transform (format "r%.3f %.3f %.3f T%.3f,%.3f" ang 0 0 (:x (:origin sperm)) (+ radius (:y (:origin sperm) )))))
   ))
