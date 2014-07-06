@@ -130,15 +130,15 @@
 
 ; create the VCL
 (defn create-vcl [paper sperm]
-  (-> (create-ring paper sperm (:vcl (:params sperm)))))
+  (-> (create-ring paper sperm (:vcl (:params sperm))) (attr {:stroke "#666"})))
 
 ; create the VSL
 (defn create-vsl [paper sperm]
-  (-> (create-ring paper sperm (:vsl (:params sperm)))))
+  (-> (create-ring paper sperm (:vsl (:params sperm))) (attr {:stroke "#666"})))
 
 ; create the VAP
 (defn create-vap [paper sperm]
-  (-> (create-ring paper sperm (:vap (:params sperm)))))
+  (-> (create-ring paper sperm (:vap (:params sperm))) (attr {:stroke "#000"})))
 
 ; create the orientation arrow (SLD)
 (defn create-orientation-arrow [paper sperm]
@@ -267,8 +267,8 @@
     (-> (create-mad paper sperm))
     (-> (create-head paper sperm))
     (-> (create-bcf-ring paper sperm))
-    (-> (create-bcf-guides paper sperm))
     (-> (create-alh-lines paper sperm))
+    (-> (create-bcf-guides paper sperm))
     (-> (create-vcl paper sperm))
     (-> (create-vsl paper sperm))
     (-> (create-vap paper sperm))
