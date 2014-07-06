@@ -17,6 +17,7 @@
           :bcf 30.96
           :alh 47.12
           :mad 45
+          :uf 0.5
           :headlength 8.27
           :headangle 0.0
           :headwidth 3.65
@@ -160,7 +161,7 @@
     (-> (create-filled-pie-slice paper sperm 0 flaglength changeinangle [0 zeroring] (- (+ 180 (* 0.5 changeinangle))))
       (attr {:stroke "#666", :fill "#ccc"}))))
  
-; create the tail asymmetry line with little spheres (FAS and FTA and FTT)
+; create the tail asymmetry line with little spheres
 (defn create-fas [paper sperm]
   (let [radius (/ (:cbase (:scales sperm)) (:cscale (:scales sperm)))
         k (+ (int (/ (:fta (:params sperm)) 50.0)) 1)
@@ -170,6 +171,7 @@
         r (* (* (/ (:cbase (:scales sperm)) (:cscale (:scales sperm))) 0.05) (:tscale (:scales sperm)))
         s (.set paper)
         width (/ (+ 1.0 (* 2.0 (:ftt (:params sperm)) (:tscale (:scales sperm)))) 1.0)
+        spherecol (sample-colourmap (:uncertainty colourmaps) (:uf (:params sperm)))
         ]
     (-> s (.push
           ; line 
@@ -177,9 +179,10 @@
               (attr {:stroke "#000", :stroke-width width}))
           )
       )
-      (doseq [i (range (+ k 1))] (-> s (.push (-> (.ellipse paper 0 (* i dk) r r) (attr {:fill "#000"})))))
+      (doseq [i (range (+ k 1))] (-> s (.push (-> (.ellipse paper 0 (* i dk) r r) (attr {:fill spherecol, :stroke-width 1 :stroke "#000"})))))
       (-> s (.transform (format "r%.3f %.3f %.3f T%.3f,%.3f" ang 0 0 (:x (:origin sperm)) (+ radius (:y (:origin sperm) )))))
   ))
+
 
 ; create beat cross frequency outer filled ring
 (defn create-bcf-ring [paper sperm] 
@@ -272,7 +275,6 @@
     (-> (create-arclength-tail paper sperm))
     (-> (create-orientation-arrow paper sperm))
     (-> (create-fas paper sperm))
-    (-> (create-ftc paper sperm))
     (-> (create-label paper sperm))
     (-> (clj->js (id @paper-stack)))
   ))
