@@ -278,14 +278,18 @@
 
 
     [:script " var sliders = {}; var parcoords = null; var gridster; var papers = []; var selectedDiv = null; var selectedPaper = null;"]
-    [:script {:src "/js/cljs.js"}]
+    [:script {:src "/cljs.js"}]
     [:script (str "var allData = " (all-data-json) ";")]
     [:script {:src "/assets/js/client.js"}]
   ))
 
-
 (defroutes main-routes
-  (GET "/js/resources/public/js/cljs.js.map.merged" [], (slurp "resources/public/js/cljs.js.map.merged"))
+;  (GET "/js/resources/public/js/cljs.js.map.merged" [], (slurp "resources/public/js/cljs.js.map.merged"))
+ ; (GET "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/cljs/core.cljs" [], (slurp "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/cljs/core.cljs"))
+  ;(GET "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/clojure/walk.cljs" [], (slurp "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/clojure/walk.cljs"))
+  ;(GET "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/clojure/string.cljs" [], (slurp "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/clojure/string.cljs"))
+ ; (GET "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/cljs/reader.cljs" [], (slurp "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/cljs/reader.cljs"))
+ ; (GET "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/jayq/core.cljs" [], (slurp "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/jayq/core.cljs"))
   (GET "/" [] (main-content))
   (GET "/try" [] (view-content))
       (route/resources "/"))

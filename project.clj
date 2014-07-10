@@ -3,26 +3,25 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.5.1"]
-               [org.clojure/clojurescript "0.0-1806"]
+  :dependencies [[org.clojure/clojure "1.6.0"]
+               [org.clojure/clojurescript "0.0-2268"]
               [org.clojure/math.numeric-tower "0.0.4"]
                [compojure "1.1.5"]
-               [jayq "2.4.0"]
+               [jayq "2.5.1"]
                [hiccup "1.0.4"]]
-:plugins [[lein-cljsbuild "0.3.2"]
-          [lein-ring "0.8.7"]]
+:plugins [[lein-cljsbuild "1.0.3"]
+          [lein-ring "0.8.11"]]
   :source-paths ["src/clj"]
 :cljsbuild {
   :builds {
     :main {
       :source-paths ["src/cljs"],
-      :id "main",
+      :id "dev2",
       :compiler {
-        :output-dir "resources/public/js/",
-        :output-to "resources/public/js/cljs.js",
+        :output-dir "resources/public/",
+        :output-to "resources/public/cljs.js",
         :optimizations :simple,
-        :source-map-path "assets/js/",
-        :source-map "resources/public/js/cljs.js.map",
+        :source-map "resources/public/cljs.js.map",
         :pretty-print true
       }
     }}

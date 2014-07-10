@@ -1,6 +1,5 @@
 (ns myospermglyph.server
-    (:require [jayq.core :as jq] [clojure.walk :as walk])
-    (:use [jayq.core :only [$]])
+    (:require [jayq.core :as jq] [clojure.walk :as walk] [goog.string :as gstring] [goog.string.format] )
 )
 
 (def origin {:x 280 :y 260})
@@ -28,6 +27,11 @@
           :fas -0.1
           }) 
  
+(defn format
+  "Formats a string using goog.string.format."
+  [fmt & args]
+  (apply gstring/format fmt args))
+
 ; global state
 (def presets (atom {}))
 
@@ -46,6 +50,7 @@
       (int (* 255 (:red colour))) (int (* 255 (:green colour))) (int (* 255 (:blue colour))))
   )
 ) 
+
 
 ; push to a given raphaeljs set a bunch of raphael objects (resulting in the set)
 (defn push-to-set [rset robjs]
@@ -82,7 +87,7 @@
       (attr {:stroke "black", :fill (raphaelcolour (:nouncertainty colours)), :stroke-width 1})
       (.transform (format "r%.2f" (:headangle (:params sperm))))
   ))
-   
+ 
 ; general cell ring given an attribute value (e.g. VCL value)
 (defn create-ring [paper sperm value]
   (let [radius (/ (+ (:cbase (:scales sperm)) value) (:cscale (:scales sperm)))]
@@ -258,7 +263,7 @@
         )]
     (-> (add-to-paper-stack id paper))
     (-> (set-defs-for-paper id (:params sperm)))
-    (-> (jq/bind ($ paper) :click (fn [evn] (js/alert "click"))))
+    (-> (jq/bind ( paper) :click (fn [evn] (js/alert "click"))))
     (-> (.clear paper))
     (-> (.setSize paper w h))
     (-> (create-interior-coloured-arc paper sperm))
