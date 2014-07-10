@@ -11,6 +11,25 @@
               :hscale 8.00
               :tscale 1.50}) ; /fscale
 
+
+(def defaultsperm {:name "Blank Sperm"
+          :vcl 205.26
+          :vap 128.54
+          :vsl 77.4
+          :bcf 30.96
+          :alh 47.12
+          :mad 45
+          :uf 0.5
+          :headlength 8.27
+          :headangle 0.0
+          :headwidth 3.65
+          :headuncertainty 0.4
+          :fta 50.0
+          :ftc 23.0 ;/ fca
+          :ftt 0.87
+          :fas -0.1
+          }) 
+
 (def currsperm {:name "Human"
           :vcl 205.26
           :vap 128.54
@@ -313,7 +332,7 @@
 
 (defn ^:export _drawHumanPreset [div id size]
   (let [id (keyword (str id))
-      params (id(:human @presets))
+      params (merge defaultsperm (id (:human @presets)))
      sperm {:div div :size size :origin origin :scales globals :params params}]
     (draw sperm)
     (-> (clj->js params))
@@ -321,7 +340,7 @@
 
 (defn ^:export _drawAnimalPreset [div id size]
  (let [id (keyword (str id))
-      params (id (:animal @presets))
+      params (merge defaultsperm (id (:animal @presets)))
      sperm {:div div :size size :origin origin :scales globals :params params}]
     (draw sperm)
     (-> (clj->js params))
