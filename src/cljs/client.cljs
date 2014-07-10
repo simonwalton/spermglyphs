@@ -1,7 +1,9 @@
 (ns myospermglyph.server
-    (:require [jayq.core :as jq] [clojure.walk :as walk] [goog.string :as gstring] [goog.string.format] )
+    (:require [jayq.core :as jq] [clojure.walk :as walk] [goog.string :as gstring]  [goog.string.format] )
+    (:use [jayq.core :only [$ css html ajax-m]])
+    (:use-macros [jayq.macros :only [let-ajax]])
 )
-
+ 
 (def origin {:x 280 :y 260})
 
 (def globals {:cscale 1.00
@@ -26,31 +28,27 @@
           :ftt 0.87
           :fas -0.1
           }) 
- 
-(defn format
-  "Formats a string using goog.string.format."
-  [fmt & args]
-  (apply gstring/format fmt args))
 
 ; global state
 (def presets (atom {}))
 
 (def defs-for-paper (atom {}))
-(defn set-defs-for-paper [paper defs] (swap! defs-for-paper assoc paper defs))
+(defn set-defs-for-paper [paper-id defs] (swap! defs-for-paper assoc (keyword paper-id) defs))
+(defn get-defs-for-paper [paper-id] ((keyword paper-id) @defs-for-paper)) 
 
 (def paper-stack (atom {}))
-(defn add-to-paper-stack [id paper] (swap! paper-stack assoc id paper))
+(defn add-to-paper-stack [id paper] (swap! paper-stack assoc (keyword id) paper))
+(defn get-from-paper-stack [id] ((keyword id) @paper-stack))
 
   ; raphael utilities
 (def colours {:nouncertainty {:red 0.32941176, :green 0.32941176, :blue 0.84705882 }})
 (def colourmaps {:uncertainty {:red [0.804 1.0 0.549] :green [1.0 0.59 0.0] :blue [0.8 0.18 0.0]}})
 
 (defn raphaelcolour [colour]
-  (.getRGB js/Raphael (format "rgb(%d,%d,%d)" 
+     (.getRGB js/Raphael (gstring/format "rgb(%d,%d,%d)" 
       (int (* 255 (:red colour))) (int (* 255 (:green colour))) (int (* 255 (:blue colour))))
   )
 ) 
-
 
 ; push to a given raphaeljs set a bunch of raphael objects (resulting in the set)
 (defn push-to-set [rset robjs]
@@ -85,22 +83,22 @@
               (/ (* (:headwidth (:params sperm)) (:hscale (:scales sperm))) (:cscale (:scales sperm)))
               (/ (* (:headlength (:params sperm)) (:hscale (:scales sperm))) (:cscale (:scales sperm))))
       (attr {:stroke "black", :fill (raphaelcolour (:nouncertainty colours)), :stroke-width 1})
-      (.transform (format "r%.2f" (:headangle (:params sperm))))
+      (.transform (gstring/format "r%.2f" (:headangle (:params sperm))))
   ))
  
 ; general cell ring given an attribute value (e.g. VCL value)
 (defn create-ring [paper sperm value]
   (let [radius (/ (+ (:cbase (:scales sperm)) value) (:cscale (:scales sperm)))]
-    (-> (.path paper (format "M%.5f,%.5f m%.5f,%.5f a%.5f,%.5f %.5f %d,%d %.5f,%.5f" (:x (:origin sperm)) (:y (:origin sperm)) 0 (- radius) radius radius 0 1 1 radius radius ))
+    (-> (.path paper (gstring/format "M%.5f,%.5f m%.5f,%.5f a%.5f,%.5f %.5f %d,%d %.5f,%.5f" (:x (:origin sperm)) (:y (:origin sperm)) 0 (- radius) radius radius 0 1 1 radius radius ))
         (attr {:stroke "black", :fill "none", :stroke-width 1})
-        (.transform (format "t%d,%dr-45" (- radius) radius))
+        (.transform (gstring/format "t%d,%dr-45" (- radius) radius))
   )))
     
 ; create a filled ring region between two radii
 (defn create-filled-ring [paper sperm colour from to]
   (let  [ra (/ (+ (:cbase (:scales sperm)) from) (:cscale (:scales sperm)))
         rb (/ (+ (:cbase (:scales sperm)) to) (:cscale (:scales sperm)))]
-    (-> (.path paper (format "M%.5f,%.5f   m%.5f,%.5f          v%.5f         a%.5f,%.5f    %.5f     %d,%d    %.5f,%.5f   h%.5f   Z  "                            
+    (-> (.path paper (gstring/format "M%.5f,%.5f   m%.5f,%.5f          v%.5f         a%.5f,%.5f    %.5f     %d,%d    %.5f,%.5f   h%.5f   Z  "                            
                              (:x (:origin sperm)) (:y (:origin sperm))   0 (- ra)   (- (- rb ra))    rb rb      0      1 0     rb rb   (- (- rb ra) )))
         (attr {:stroke "none", :fill colour, :stroke-width 1})
         (.transform "r135")
@@ -118,16 +116,16 @@
          secondsnap [ (* ra (js/Math.cos ang)) (- (* ra (js/Math.sin ang))) ]
          thirdsnap [ (* ra (js/Math.cos (deg-to-rad (+ 90.0)))) (- (* ra (js/Math.sin (deg-to-rad (+ 90.0))))) ]
          ]
-      (->(.path paper (format "M%.5f,%.5f     m0,%.5f        v%.5f     a%.5f,%.5f    %.5f     %d,%d                %.5f,%.5f    l%.5f,%.5f    a%.5f,%.5f %.5f %d,%d %.5f,%.5f  z"                       
+      (->(.path paper (gstring/format "M%.5f,%.5f     m0,%.5f        v%.5f     a%.5f,%.5f    %.5f     %d,%d                %.5f,%.5f    l%.5f,%.5f    a%.5f,%.5f %.5f %d,%d %.5f,%.5f  z"                       
                              (:x (:origin sperm)) (:y (:origin sperm))   (- ra)   (- rbra)    rb rb      0     large-arc-flag 1  (get firstsnap 0) (+ (get firstsnap 1) rb) 
                              (- (get secondsnap 0) (get firstsnap 0))  (- (get secondsnap 1) (get firstsnap 1)  )
                              ra ra 0 large-arc-flag 0 (- (get thirdsnap 0) (get secondsnap 0))  (- (get thirdsnap 1) (get secondsnap 1) ))) ; second arc                       
-        (.transform (format "R%.5f %.5f,%.5f T%.5f,%.5f" rotation (:x (:origin sperm)) (:y (:origin sperm)) (get offset 0) (get offset 1) ) )
+        (.transform (gstring/format "R%.5f %.5f,%.5f T%.5f,%.5f" rotation (:x (:origin sperm)) (:y (:origin sperm)) (get offset 0) (get offset 1) ) )
         )))
 
 ; create a line between two circles given their radii and an angle (rad)
 (defn create-path-between-circles [paper ra rb angrad]
-  (.path paper (format "M%.3f,%.3f L%.3f,%.3f" (* ra (js/Math.cos angrad)) (* ra (js/Math.sin angrad)) (* rb (js/Math.cos angrad)) (* rb (js/Math.sin angrad)) )))
+  (.path paper (gstring/format "M%.3f,%.3f L%.3f,%.3f" (* ra (js/Math.cos angrad)) (* ra (js/Math.sin angrad)) (* rb (js/Math.cos angrad)) (* rb (js/Math.sin angrad)) )))
 
 ; create the interior uncertainty ring
 (defn create-interior-coloured-arc [paper sperm]
@@ -148,7 +146,7 @@
 ; create the orientation arrow (SLD)
 (defn create-orientation-arrow [paper sperm]
   (let [radius (/ (+ (:cbase (:scales sperm)) (:vcl (:params sperm))) (:cscale (:scales sperm)))]
-    (-> (.path paper (format "M%.5f,%.5f m%.5f,%.5f l%.5f,%.5f l%.5f,%.5f z " (:x (:origin sperm)) (:y (:origin sperm)) (- 10) (- radius) 10 (- 15) 10 15))
+    (-> (.path paper (gstring/format "M%.5f,%.5f m%.5f,%.5f l%.5f,%.5f l%.5f,%.5f z " (:x (:origin sperm)) (:y (:origin sperm)) (- 10) (- radius) 10 (- 15) 10 15))
         (attr {:stroke "none", :fill "black" })
         )))
  
@@ -180,12 +178,12 @@
         ]
     (-> s (.push
           ; line 
-          (-> (.path paper (format "M0,%.5fv%.5f" 0 asymm-length))
+          (-> (.path paper (gstring/format "M0,%.5fv%.5f" 0 asymm-length))
               (attr {:stroke "#000", :stroke-width width}))
           )
       )
       (doseq [i (range (+ k 1))] (-> s (.push (-> (.ellipse paper 0 (* i dk) r r) (attr {:fill spherecol, :stroke-width 1 :stroke "#000"})))))
-      (-> s (.transform (format "r%.3f %.3f %.3f T%.3f,%.3f" ang 0 0 (:x (:origin sperm)) (+ radius (:y (:origin sperm) )))))
+      (-> s (.transform (gstring/format "r%.3f %.3f %.3f T%.3f,%.3f" ang 0 0 (:x (:origin sperm)) (+ radius (:y (:origin sperm) )))))
   ))
 
 
@@ -209,7 +207,7 @@
     (-> (.set paper)
         (push-to-set (map #(create-path-between-circles paper ra rb (deg-to-rad %1)) (range 135 (+ 135 g) 30)))
         (attr {:stroke "#999", :stroke-width 4})
-        (.transform (format "t%.2f,%.2f" (:x (:origin sperm)) (:y (:origin sperm))))
+        (.transform (gstring/format "t%.2f,%.2f" (:x (:origin sperm)) (:y (:origin sperm))))
     )))
     
 (defn create-alh-lines [paper sperm] 
@@ -222,7 +220,7 @@
      (-> (.set paper)
         ; black guides - always-on
         (push-to-set (map #(create-path-between-circles paper ra rb (deg-to-rad %1)) [0 180]))
-        (.transform (format "t%.2f,%.2f" (:x (:origin sperm)) (:y (:origin sperm))))
+        (.transform (gstring/format "t%.2f,%.2f" (:x (:origin sperm)) (:y (:origin sperm))))
         (attr {:stroke "#000", :stroke-width 6}))
     ))
 ; create the zero-velocity ring, filled
@@ -238,12 +236,12 @@
         d (* r 2.0)
         ]
     (-> (.set paper)
-        (.push (.path paper (format "M%.2f,0 h%.2f" (- r) d)))
-        (.push (.path paper (format "M0 %.2f v%.2f" (- r) d)))
+        (.push (.path paper (gstring/format "M%.2f,0 h%.2f" (- r) d)))
+        (.push (.path paper (gstring/format "M0 %.2f v%.2f" (- r) d)))
         (attr {:stroke "#fff", :stroke-width 3})
-        (.transform (format "t%.2f,%.2f" (:x (:origin sperm)) (:y (:origin sperm))))
+        (.transform (gstring/format "t%.2f,%.2f" (:x (:origin sperm)) (:y (:origin sperm))))
         )))
-
+ 
 ; create a label from the name parameter
 (defn create-label [paper sperm]
   (-> (.text paper (:x (:origin sperm)) (- (second (:size sperm)) 20) (:name (:params sperm)))
@@ -254,50 +252,44 @@
   (let [id (.attr (:div sperm) "id")
         w (first (:size sperm))
         h (second (:size sperm))
-        paper (if (contains? @paper-stack id)
-                (id @paper-stack)
+        paper (if (contains? @paper-stack (keyword id))
+                (get-from-paper-stack id)
                 (js/Raphael id w h))
         sperm (assoc sperm 
             :origin {:x (* 0.5 w) :y (* 0.5 h)}
             :scales (assoc globals :cscale (* 200.0 (/ 10.0 w)))
-        )]
-    (-> (add-to-paper-stack id paper))
-    (-> (set-defs-for-paper id (:params sperm)))
-    (-> (jq/bind ( paper) :click (fn [evn] (js/alert "click"))))
-    (-> (.clear paper))
-    (-> (.setSize paper w h))
-    (-> (create-interior-coloured-arc paper sperm))
-    (-> (create-inner paper sperm))
-    (-> (create-inner-guides paper sperm))
-    (-> (create-mad paper sperm))
-    (-> (create-head paper sperm))
-    (-> (create-bcf-ring paper sperm))
-    (-> (create-alh-lines paper sperm))
-    (-> (create-bcf-guides paper sperm))
-    (-> (create-vcl paper sperm))
-    (-> (create-vsl paper sperm))
-    (-> (create-vap paper sperm))
-    (-> (create-arclength-tail paper sperm))
-    (-> (create-orientation-arrow paper sperm))
-    (-> (create-fas paper sperm))
-    (-> (create-label paper sperm))
-    (-> (clj->js (id @paper-stack)))
+        )] 
+    (add-to-paper-stack id paper)
+    (set-defs-for-paper id (:params sperm))
+    (.clear paper)
+    (.setSize paper w h)
+    (create-interior-coloured-arc paper sperm)
+    (create-inner paper sperm)
+    (create-inner-guides paper sperm)
+    (create-mad paper sperm)
+    (create-head paper sperm)
+    (create-bcf-ring paper sperm)
+    (create-alh-lines paper sperm)
+    (create-bcf-guides paper sperm)
+    (create-vcl paper sperm)
+    (create-vsl paper sperm)
+    (create-vap paper sperm)
+    (create-arclength-tail paper sperm)
+    (create-orientation-arrow paper sperm)
+    (create-fas paper sperm)
+    (create-label paper sperm)
+    (clj->js (get-from-paper-stack id))
   ))
-
+ 
 ; given a url, grab a json file containing a key/val dictionary of sperm parameters and store into `presets` atom under id
 (defn get-and-store-preset [url id]
   (let [keyid (keyword id)
-    url (str url id ".json")]
-  (->(jq/ajax {
-      :url url
-      :type :get 
-      :success (fn [data text status] (
-              (swap! presets assoc keyid (walk/keywordize-keys (js->clj data :keywordize-keys true)))
-              ))
-      :error (fn [data text status] (js/console.log (str "There was a problem getting " id ".json: "  text)))
-      :processData false
-      :contentType "application/json"
-      }))))
+    url-complete (str url id ".json")]
+    (let-ajax [j {:url url-complete
+                  :dataType :json}]
+      (js/console.log (clj->js j))
+      (swap! presets assoc keyid (js->clj j :keywordize-keys true))
+      )))
 
 ; get all known presets from server
 (defn get-and-store-presets [resourceurl]
@@ -309,7 +301,7 @@
   (get-and-store-presets resourceurl))
 
 ; exposed functionality
-(defn ^:export _getDefsForPaper [paper] (clj->js (paper @defs-for-paper)))
+(defn ^:export _getDefsForPaper [paper] (clj->js (get-defs-for-paper paper)))
 
 (defn ^:export _draw [div, size]
   (let [sperm {:div div :size size :origin origin :scales globals :params currsperm}]

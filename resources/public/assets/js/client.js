@@ -6,6 +6,7 @@ function setSelected(div, paper) {
   selectedDiv = div;
   $('.spermdiv').attr('class','spermdiv');
   div.addClass('spermdiv-selected');
+  console.log("ID",selectedDiv.attr('id'));
   updateManual(myospermglyph.server._getDefsForPaper(selectedDiv.attr('id')));
 };
 

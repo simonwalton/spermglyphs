@@ -278,10 +278,11 @@
 
 
     [:script " var sliders = {}; var parcoords = null; var gridster; var papers = []; var selectedDiv = null; var selectedPaper = null;"]
-    [:script {:src "/cljs.js"}]
+    [:script {:src "/auto-js/cljs.js"}]
     [:script (str "var allData = " (all-data-json) ";")]
     [:script {:src "/assets/js/client.js"}]
   ))
+
 
 (defroutes main-routes
 ;  (GET "/js/resources/public/js/cljs.js.map.merged" [], (slurp "resources/public/js/cljs.js.map.merged"))
