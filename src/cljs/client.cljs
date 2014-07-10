@@ -82,7 +82,7 @@
       (attr {:stroke "black", :fill (raphaelcolour (:nouncertainty colours)), :stroke-width 1})
       (.transform (format "r%.2f" (:headangle (:params sperm))))
   ))
-
+   
 ; general cell ring given an attribute value (e.g. VCL value)
 (defn create-ring [paper sperm value]
   (let [radius (/ (+ (:cbase (:scales sperm)) value) (:cscale (:scales sperm)))]
@@ -90,7 +90,7 @@
         (attr {:stroke "black", :fill "none", :stroke-width 1})
         (.transform (format "t%d,%dr-45" (- radius) radius))
   )))
-
+    
 ; create a filled ring region between two radii
 (defn create-filled-ring [paper sperm colour from to]
   (let  [ra (/ (+ (:cbase (:scales sperm)) from) (:cscale (:scales sperm)))

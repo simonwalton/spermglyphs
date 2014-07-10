@@ -15,12 +15,19 @@
 :cljsbuild {
   :builds {
     :main {
-          :source-path "src/cljs"
-          :compiler {
-                    :output-to "resources/public/js/cljs.js"
-                    :optimizations :simple
-                    :pretty-print true}}}}
-
+      :source-paths ["src/cljs"],
+      :id "main",
+      :compiler {
+        :output-dir "resources/public/js/",
+        :output-to "resources/public/js/cljs.js",
+        :optimizations :simple,
+        :source-map-path "assets/js/",
+        :source-map "resources/public/js/cljs.js.map",
+        :pretty-print true
+      }
+    }}
+    }
+  
   :main myospermglyph.server
 :ring {:handler myospermglyph.server/app}
   )

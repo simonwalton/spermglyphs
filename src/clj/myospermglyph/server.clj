@@ -32,6 +32,20 @@
            [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans" :rel "stylesheet" :type "text/css"}]
       [:body content]))
 
+(defn create-navbar []
+  (html
+    [:div {:class "navbar navbar-inverse navbar-fixed-top" :role "navigation"}
+      [:div {:class "container"}
+        [:div {:class "navbar-header"}
+          [:button {:type "button" :class "navbar-toggle" :data-toggle "collapse" :data-target ".navbar-collapse"}
+            [:span {:class "sr-only"} "Toggle navigation"]]
+            [:a {:class "navbar-brand" :href "/"}[:img {:src "assets/img/logo_logo.png" :class "logo-top"}]]
+        ]
+        [:div {:class "collapse navbar-collapse"}
+          [:ul {:class "nav navbar-right"}
+            [:a {:href "http://github.com" :alt "View our code on Github!"}[:i {:class "fa fa-github-square github-top"}]]
+          ] 
+         ]]]))
 
 (defn main-content []
   (main-layout
@@ -167,20 +181,7 @@
 (defn create-pc-grid []
   (html (map (fn [x] (html [:div {:class "pull-left pc-result-box" :id (str "pc-result-box-" (name (:id x)))}])) (all-data))))
 
-(defn create-navbar []
-  (html
-    [:div {:class "navbar navbar-inverse navbar-fixed-top" :role "navigation"}
-      [:div {:class "container"}
-        [:div {:class "navbar-header"}
-          [:button {:type "button" :class "navbar-toggle" :data-toggle "collapse" :data-target ".navbar-collapse"}
-            [:span {:class "sr-only"} "Toggle navigation"]]
-            [:a {:class "navbar-brand" :href "/"}[:img {:src "assets/img/logo_logo.png" :class "logo-top"}]]
-        ]
-        [:div {:class "collapse navbar-collapse"}
-          [:ul {:class "nav navbar-right"}
-            [:a {:href "http://github.com" :alt "View our code on Github!"}[:i {:class "fa fa-github-square github-top"}]]
-          ] 
-         ]]]))
+
 
 (defn view-content []
   (view-layout
@@ -282,9 +283,12 @@
     [:script {:src "/assets/js/client.js"}]
   ))
 
-(def app (handler/site main-routes))
 
 (defroutes main-routes
+  (GET "/js/resources/public/js/cljs.js.map.merged" [], (slurp "resources/public/js/cljs.js.map.merged"))
   (GET "/" [] (main-content))
   (GET "/try" [] (view-content))
       (route/resources "/"))
+
+
+(def app (handler/site main-routes))
