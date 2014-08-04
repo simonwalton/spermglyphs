@@ -11,7 +11,6 @@
               :hscale 8.00
               :tscale 1.50}) ; /fscale
 
-
 (def defaultsperm {:name "Blank Sperm"
           :vcl 205.26
           :vap 128.54
@@ -131,7 +130,7 @@
          hrb (* 0.5 rb)
          rbra (- rb ra)
          large-arc-flag (if (>= angle 180.0) 1 0)
-         firstsnap [ (* rb (js/Math.cos ang)) (- (* rb (js/Math.sin ang)))  ]
+         firstsnap [ (* rb (js/Math.cos ang)) (- (* rb (js/Math.sin ang))) ]
          secondsnap [ (* ra (js/Math.cos ang)) (- (* ra (js/Math.sin ang))) ]
          thirdsnap [ (* ra (js/Math.cos (deg-to-rad (+ 90.0)))) (- (* ra (js/Math.sin (deg-to-rad (+ 90.0))))) ]
          ]
@@ -347,7 +346,8 @@
    ))
 
 (defn ^:export _drawParams [div params size]
- (let [sperm {:div div :size size :origin origin :scales globals :params (js->clj params :keywordize-keys true)}]
+ (let [params (merge defaultsperm (js->clj params :keywordize-keys true))
+       sperm {:div div :size size :origin origin :scales globals :params params}]
    (->(draw sperm))))
 
 (defn ^:export _init [resourceurl] (init resourceurl))

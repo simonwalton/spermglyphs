@@ -3,6 +3,7 @@ body {
 	color:#ccc;
 	background:#222 !important;
 	font-family: 'Open Sans', sans-serif;
+    overflow-y:hidden;	
 }
 
 .cover-container {
@@ -387,7 +388,7 @@ h2, .h2 {
 
 .footer-inner {
 	width:1000px;
-	height:450px;
+	height:250px;
 	margin-right:auto;
 	margin-left:auto;
 	font-size:16pt;

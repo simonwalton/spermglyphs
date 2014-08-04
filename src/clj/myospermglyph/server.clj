@@ -85,7 +85,7 @@
           [:div {:class "inner cover col-md-4"}
            [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}]
            [:h2 {:class "cover-heading"} "Who are we?"]
-            [:p {:class "lead"} "Good question! We are the Oxford Visual Informatics Lab (aka Ovii) at Oxford University's " [:a {:href "http://www.oerc.ox.ac.uk/"} "e-Research Centre (OeRC)"], " and we are led by Professor Min Chen."] 
+            [:p {:class "lead"} "Good question! We are the Oxford Visual Informatics Lab (aka Ovii) at Oxford University's " [:a {:href "http://www.oerc.ox.ac.uk/"} "e-Research Centre (OeRC)"], " and we are led by Professor Min Chen. Our main page is at " [:a {:href "http://ovii.org"}"ovii.org"] "."] 
               [:a {:href "http://www.ovii.org/" :class "btn btn-md btn-default"} "View our Apps"]
            ]
        ]
