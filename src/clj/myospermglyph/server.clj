@@ -232,12 +232,13 @@
             ; left-hand col
           [:div {:class "col-md-6"}
             [:div {:class "logo-container"} [:img {:src "/assets/img/logo_logo.png" :class "logo-small" }]]
-            [:div {:class "alert alert-info alert-dismissible"  :role "alert"}
-              [:button {:type "button" :class "btn pull-right" :id "dismiss-instructions" :data-dismiss "alert"}
-              [:span {:aria-hidden "true"}[:i {:class "fa fa-times-circle"}] " Got it!"][:span {:class "sr-only"} "Close"]]
-              "Select a glyph below "[:i {:class "fa fa-arrow-circle-down"}] " and modify to the right " [:i {:class "fa fa-arrow-circle-right"}] ". "
-            ]
-            [:div {:id "left-grid" :class "gridster spermgrid"}
+             [:div {:id "left-grid" :class "gridster spermgrid"}
+              [:div {:class "alert alert-info alert-dismissible"  :role "alert"}
+               [:button {:type "button" :class "btn pull-right" :id "dismiss-instructions" :data-dismiss "alert"}
+                [:span {:aria-hidden "true"}[:i {:class "fa fa-times-circle"}] " Got it!"][:span {:class "sr-only"} "Close"]]
+                  [:p "Select a glyph below "[:i {:class "fa fa-arrow-circle-down"}] " and modify to the right " [:i {:class "fa fa-arrow-circle-right"}] ". "]
+                  [:p "There are multiple glyphs so that you can compare different parameter combinations. You can drag them around and resize them, too!"]
+              ]
               [:ul
                 [:li {:data-row 1 :data-col 1 :data-sizex 2 :data-sizey 2}[:div {:class "spermdiv spermdiv-selected" :id "spermbig"}]]
                 [:li {:data-row 1 :data-col 3 :data-sizex 1 :data-sizey 1}[:div {:class "spermdiv" :id "spermsmall0"}]]
@@ -303,9 +304,9 @@
                  ]
                 ]
             ; zoo
-              [:div {:class "fade tab-pane" :id "zoo"} [:h2 "Animal Presets"] [:p "Click an animal to see its sperm glyph! Scroll down for more animals." (create-zoo) ]]
+              [:div {:class "fade tab-pane zoo-container" :id "zoo"} [:h2 "Animal Presets"] [:p "Click an animal to see its sperm glyph! Scroll down for more animals." (create-zoo) ]]
             ; human presets
-              [:div {:class "fade tab-pane" :id "human"}[:h2 "Human Presets"] [:p "Click an item to see its the sperm glyph for a human sperm in that category."  (create-human-presets) ]]
+              [:div {:class "fade tab-pane zoo-container" :id "human"}[:h2 "Human Presets"] [:p "Click an item to see its the sperm glyph for a human sperm in that category."  (create-human-presets) ]]
             ; filter
               [:div {:class "fade tab-pane" :id "explore"}
                 [:div {:style "height:80px"}

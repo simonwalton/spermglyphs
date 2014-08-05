@@ -220,7 +220,8 @@ $(document).ready(function() {
 	// create the floats for the pc results
 	$('a[data-toggle=\"tab\"]').on('shown.bs.tab', function (e) {
 		if(e.target.hash == '#explore') {
-			parcoords = createSpermPC(allData, '#explore-pc', '#explore-grid', [550,600], 'group',
+			var pcdiv = $('#explore-pc');
+			parcoords = createSpermPC(allData, '#explore-pc', '#explore-grid', [pcdiv.width(),pcdiv.height()], 'group',
 					['img','name','desc','note']);
 			parcoords.render();
 			$('#left-grid').hide();
