@@ -203,9 +203,11 @@
     (html 
       [:div {:class "modal fade" :id "persist-modal" :role "dialog" :aria-hidden "true"}
         [:div {:class "modal-dialog modal-lg"}
-          [:div {:class "modal-content" :id "persist-modal-inner" :data (if (nil? params) "" (json/write-str params)) }
-           "TEST"
-           ]
+          [:div {:class "modal-content"}
+            [:div {:id "persist-modal-intro" }]
+            [:div {:id "persist-modal-inner" :data (if (nil? params) "" (json/write-str params)) }]
+            [:div {:id "persist-modal-outro" }]
+          ]
         ]
       ])))
 
@@ -288,8 +290,10 @@
                   ]
                 ; share
                 [:div {:class "row"}
-                 [:div {:class "col-sm-12"}
-                     [:div "Share your creation!"]
+                 [:div {:class "col-sm-1"} [:h3 [:i {:class "fa fa-share-alt"}]]]
+                 [:div {:class "col-sm-11"}
+                    [:div [:h4 "Share your creation!"]]
+                     [:div {:style "width:200px"} [:input {:type "email" :class "form-control input-sm sperm-name-input"  :id "name" :placeholder "Name me!"}]]
                      [:div
                       [:a {:href "javascript:void(0);" :id "shar-manual" :class "shar" }[:i {:class "fa fa-share"}] " Manual"]
                       [:a {:href "javascript:void(0);" :id "shar-twitter" :class "shar" }[:i {:class "fa fa-twitter"}] " Twitter"]

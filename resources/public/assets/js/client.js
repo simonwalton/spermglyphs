@@ -57,6 +57,7 @@ function manualProps() {
 		var sl = sliders[key];
 		obj[key] = parseFloat(sl.getValue());
 	}
+	obj.name = $('#name').val();
 	return obj;
 };
 
@@ -122,6 +123,11 @@ function updatePCGrid(selected) {
 		//div.append(paper);
 		// }
 		});
+}
+		
+function dismiss() {
+	console.log("DISMISS");
+	$('#persist-modal').modal('hide');
 }
 
 /* --------------------------- *
@@ -203,8 +209,12 @@ $(document).ready(function() {
 	// do we need to open the viewer modal?
 	var mi = $('#persist-modal-inner');
 	if(mi.attr('data') != "") {
-		$('#persist-modal').modal();
-		myospermglyph.server._drawManual(mi, [mi.width(), mi.height()], JSON.parse(mi.attr("data")));
+		var obj = JSON.parse(mi.attr("data"));
+		var name = obj.name;
+		$('#persist-modal').modal('show');
+		$('#persist-modal-intro').html('<div class="persist-intro">Hi! My name is <strong>' + name + '</strong></div>');
+		$('#persist-modal-outro').append('<div class="persist-intro"><a class="btn btn-primary" href="javascript:dismiss();"><i class="fa fa-flask"></i> Create Your Own</a></div>');
+		myospermglyph.server._drawManual(mi, [mi.width(), mi.height()], obj);
 	}
 
 	// create the floats for the pc results

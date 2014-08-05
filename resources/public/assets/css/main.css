@@ -6,8 +6,33 @@ body {
     overflow-y:hidden;	
 }
 
+.persist-intro {
+	text-align:center;
+	color:#555;
+	font-size:20pt;
+}
+
+.sperm-name-input {
+	margin-top:5px;
+	margin-bottom:5px;
+}
+
+.persist-intro strong {
+	color: #ea553c; 
+}
+
+#persist-modal-intro {
+	padding:20px;
+	color:#555;
+}
+
+#persist-modal-outro {
+	padding:20px;
+	color:#555;
+}
+
 #persist-modal-inner {
-	width:500px;
+	width:600px;
 	height:500px;
 	padding:20px;
 }
@@ -45,6 +70,15 @@ a.btn:link   { color: #333; }
 a.btn:visited { color: #333; }
 a.btn:hover   { color: #333; }
 a.btn:active  { color: #333; }
+
+a.btn-primary:visited,
+a.btn-primary:hover,
+a.btn-primary:link,
+a.btn-primary:active
+{
+	color:#fff;
+}
+
 
 .zoo-row {
 	width:98%;
