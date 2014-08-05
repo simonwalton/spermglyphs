@@ -6,6 +6,12 @@ body {
     overflow-y:hidden;	
 }
 
+#persist-modal-inner {
+	width:500px;
+	height:500px;
+	padding:20px;
+}
+
 .cover-container {
 }
 
@@ -112,8 +118,12 @@ h2, .h2 {
 	margin: 10px -5px;
 	padding: 15;
 	margin-right:-10px;
-	margin-bottom:60px;
+	margin-bottom:10px;
 	color:#ccc;
+}
+
+.shar {
+	padding:8px;
 }
 
 .form-horizontal
@@ -122,6 +132,7 @@ h2, .h2 {
 }
 
 .bs-callout div {
+	padding:0;
 	margin-top: 0;
 	float:left;
 	font-size:9pt;
@@ -150,11 +161,11 @@ h2, .h2 {
 }
 
 .bs-callout-kinematics {
-	height:380px;
+	height:340px;
 }
 
 .bs-callout-mechanics {
-	height:377px;
+	height:288px;
 }
 
 .bs-callout-morphological {

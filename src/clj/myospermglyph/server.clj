@@ -6,9 +6,13 @@
             [clojure.math.numeric-tower :as math]
             [clojure.data.json :as json]
             [clojure.string :as string]
+            [clojure.walk :as walk]
     )
   (:use [hiccup.core]
+        [com.ashafa.clutch :only [get-database put-document with-db get-document]]
         [compojure.core]))
+
+(def db-name "myosg-dev")
 
 ;
 ; /
@@ -39,7 +43,7 @@
         [:div {:class "navbar-header"}
           [:button {:type "button" :class "navbar-toggle" :data-toggle "collapse" :data-target ".navbar-collapse"}
             [:span {:class "sr-only"} "Toggle navigation"]]
-            [:a {:class "navbar-brand" :href "/"}[:img {:src "assets/img/logo_logo.png" :class "logo-top"}]]
+            [:a {:class "navbar-brand" :href "/"}[:img {:src "/assets/img/logo_logo.png" :class "logo-top"}]]
         ]
         [:div {:class "collapse navbar-collapse"}
           [:ul {:class "nav navbar-right"}
@@ -63,7 +67,7 @@
 
     [:div {:class "container-outer container"}
       [:div {:class "container container-main"}
-        [:div {:class "logo-container"} [:img {:src "assets/img/logo_logo.png" :class "logo" }]]
+        [:div {:class "logo-container"} [:img {:src "/assets/img/logo_logo.png" :class "logo" }]]
         [:div {:class "blurb"} "Glyph-Based Video Visualization for Semen Analysis"
           [:p {:class "blurb"} "Brian Duffy, Jeyarajan Thiyagalingam, Simon Walton, Anne Trefethen, Jackson C. Kirkman-Brown, Eamonn A. Gaffney and Min Chen"]]
        ; bottom content
@@ -71,19 +75,19 @@
        [:div {:class "footer-inner"} 
         [:div {:class "row clearfix"}
           [:div {:class "inner cover col-md-4"}
-           [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}] [:h2 {:class "cover-heading"} "What is it?"]
+           [:img {:src "/assets/img/logo_icon-footer.png" :class "footer-img"}] [:h2 {:class "cover-heading"} "What is it?"]
             [:p {:class "lead"} "We have devised a glyph design encoding 20 numerical measurements of a sperm cell to summarize its complex spatiotemporal motion characteristics. Do you want to see?"]
               [:a {:href "/try" :class "btn btn-md btn-default"}"Make your own Glyph!"] 
            ]
           [:div {:class "inner cover col-md-4"}
-           [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}]
+           [:img {:src "/assets/img/logo_icon-footer.png" :class "footer-img"}]
            [:h2 {:class "cover-heading"} "Our Paper"]
             [:p {:class "lead"} "For more information on our technique, including how the attributes of the sperm cell were defined and encoded, please see our TVCG paper to be presented at " [:a {:href "http://ieeevis.org"}"IEEE VIS 2014"] " in Paris."]
               [:a {:href "/assets/paper/tvcg.pdf" :class "btn btn-md btn-default"}"Read the PDF"] "&nbsp; &nbsp;"
               [:a {:href "/assets/paper/semen-glyph.bib" :class "btn btn-md btn-default"}"Get the Bibtex"]
           ]
           [:div {:class "inner cover col-md-4"}
-           [:img {:src "assets/img/logo_icon-footer.png" :class "footer-img"}]
+           [:img {:src "/assets/img/logo_icon-footer.png" :class "footer-img"}]
            [:h2 {:class "cover-heading"} "Who are we?"]
             [:p {:class "lead"} "Good question! We are the Oxford Visual Informatics Lab (aka Ovii) at Oxford University's " [:a {:href "http://www.oerc.ox.ac.uk/"} "e-Research Centre (OeRC)"], " and we are led by Professor Min Chen. Our main page is at " [:a {:href "http://ovii.org"}"ovii.org"] "."] 
               [:a {:href "http://www.ovii.org/" :class "btn btn-md btn-default"} "View our Apps"]
@@ -126,7 +130,7 @@
 (defn create-slider-group[id nicename desc sliders]
   (html
       [:div {:class (str "bs-callout bs-callout-" id)}
-       [:img {:src "assets/img/logo_icon-footer.png"}][:div [:h4 nicename] [:div desc]]
+       [:img {:src "/assets/img/logo_icon-footer.png"}][:div [:h4 nicename] [:div desc]]
           [:div {:class "form-horizontal"}
             (map (fn [x] (create-slider x)) sliders)
         ]]))
@@ -135,7 +139,7 @@
   (html
     [:div {:class "col-xs-6 col-md-3 zoo-thumbnail-container"}
         [:div {:class "thumbnail"}
-          [:a {:title desc :id id :class "animal-preset-link":href (str "javascript:selectZooPreset('" img "');")} [:img {:src (str "assets/img/species/" img) :alt desc}]]
+          [:a {:title desc :id id :class "animal-preset-link" :href (str "javascript:selectZooPreset('" img "');")} [:img {:src (str "/assets/img/species/" img) :alt desc}]]
           [:div {:class "caption"} title]
 ;              [:button {:type "button" :class "btn btn-primary btn-sm btn-zoo"}
  ;               [:span {:class "glyphicon glyphicon-eye-open"}] (str " " title)
@@ -146,7 +150,7 @@
   (let [img (if (not (string/blank? img)) img "logo_default.png")]
    (html
     [:div {:class "media sperm-preset-media-box" }
-      [:a {:class "pull-left human-preset-link" :href "#"}[:img {:class "media-object" :src (str "assets/img/human/" img) :alt title}]]
+      [:a {:class "pull-left human-preset-link" :href "#"}[:img {:class "media-object" :src (str "/assets/img/human/" img) :alt title}]]
       [:div {:class "media-body"}
         [:a {:class "human-preset-link" :id ids :href "#"} [:h4 {:class "media-heading"} title]] [:p desc [:p {:class "sperm-note"}] 
           (if (not (string/blank? note)) [:span [:i {:class "fa fa-info-circle"}] (str " " note)] "")
@@ -181,9 +185,31 @@
 (defn create-pc-grid []
   (html (map (fn [x] (html [:div {:class "pull-left pc-result-box" :id (str "pc-result-box-" (name (:id x)))}])) (all-data))))
 
+ 
+(defn uuid [] (subs (str (java.util.UUID/randomUUID)) 0 8))
 
+; persist a sperm definition and return its id
+(defn persist-new [obj]
+  (with-db db-name
+    (:_id (put-document obj :id (uuid)))))
 
-(defn view-content []
+; grab-from-persistant
+(defn persist-grab [id]
+  (with-db db-name
+    (get-document (str id))))
+
+(defn create-persist-viewer-modal [id]
+  (let [params (persist-grab id)]
+    (html 
+      [:div {:class "modal fade" :id "persist-modal" :role "dialog" :aria-hidden "true"}
+        [:div {:class "modal-dialog modal-lg"}
+          [:div {:class "modal-content" :id "persist-modal-inner" :data (if (nil? params) "" (json/write-str params)) }
+           "TEST"
+           ]
+        ]
+      ])))
+
+(defn view-content [spermid]
   (view-layout
     [:script {:src "/assets/js/raphael-min.js"}]
     [:script {:src "/assets/js/jquery.min.js"}]
@@ -194,16 +220,16 @@
     [:script {:src "/assets/js/d3.v2.js"}]
     [:script {:src "/assets/js/d3.parcoords.js"}]
     [:script {:src "/assets/js/pc-filter.js"}]
-    
+   
     (create-navbar)
+    (create-persist-viewer-modal spermid)
 
     [:div {:class "container-outer container"}
       [:div {:class "container container-main"}
-      
         [:div {:class "row"}
             ; left-hand col
           [:div {:class "col-md-6"}
-            [:div {:class "logo-container"} [:img {:src "assets/img/logo_logo.png" :class "logo-small" }]]
+            [:div {:class "logo-container"} [:img {:src "/assets/img/logo_logo.png" :class "logo-small" }]]
             [:div {:class "alert alert-info alert-dismissible"  :role "alert"}
               [:button {:type "button" :class "btn pull-right" :id "dismiss-instructions" :data-dismiss "alert"}
               [:span {:aria-hidden "true"}[:i {:class "fa fa-times-circle"}] " Got it!"][:span {:class "sr-only"} "Close"]]
@@ -260,6 +286,17 @@
                        {:id "headangle" :name "Rotation" :desc "The head's rotation, &deg" :min -50 :max 50}])
                      ]
                   ]
+                ; share
+                [:div {:class "row"}
+                 [:div {:class "col-sm-12"}
+                     [:div "Share your creation!"]
+                     [:div
+                      [:a {:href "javascript:void(0);" :id "shar-manual" :class "shar" }[:i {:class "fa fa-share"}] " Manual"]
+                      [:a {:href "javascript:void(0);" :id "shar-twitter" :class "shar" }[:i {:class "fa fa-twitter"}] " Twitter"]
+                      [:a {:href "javascript:void(0);" :id "shar-facebook" :class "shar" }[:i {:class "fa fa-facebook"}] " Facebook"]
+                     ]
+                  ]
+                 ]
                 ]
             ; zoo
               [:div {:class "fade tab-pane" :id "zoo"} [:h2 "Animal Presets"] [:p "Click an animal to see its sperm glyph! Scroll down for more animals." (create-zoo) ]]
@@ -276,24 +313,21 @@
                 ]
              ]]]]]]
 
-
     [:script " var sliders = {}; var parcoords = null; var gridster; var papers = []; var selectedDiv = null; var selectedPaper = null;"]
     [:script {:src "/auto-js/cljs.js"}]
     [:script (str "var allData = " (all-data-json) ";")]
     [:script {:src "/assets/js/client.js"}]
   ))
 
+(defn testid [id]
+  (html "here is the id " id))
 
 (defroutes main-routes
-;  (GET "/js/resources/public/js/cljs.js.map.merged" [], (slurp "resources/public/js/cljs.js.map.merged"))
- ; (GET "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/cljs/core.cljs" [], (slurp "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/cljs/core.cljs"))
-  ;(GET "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/clojure/walk.cljs" [], (slurp "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/clojure/walk.cljs"))
-  ;(GET "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/clojure/string.cljs" [], (slurp "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/clojure/string.cljs"))
- ; (GET "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/cljs/reader.cljs" [], (slurp "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/cljs/reader.cljs"))
- ; (GET "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/jayq/core.cljs" [], (slurp "/Users/sim/Documents/Sperm/myospermglyph/resources/public/js/jayq/core.cljs"))
   (GET "/" [] (main-content))
-  (GET "/try" [] (view-content))
-      (route/resources "/"))
+  (GET "/load/:id" [id] (view-content (str id)))
+  (GET "/try" [] (view-content -1))
+  (GET "/persist" [obj] (str (persist-new (json/read-str (str obj) :key-fn keyword))))
+  (route/resources "/"))
 
-
-(def app (handler/site main-routes))
+(def app 
+  (handler/site main-routes))

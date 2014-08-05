@@ -4,6 +4,8 @@
  * An implementation of Glyph-Based Video Visualization for Semen Analysis
  */
 
+var shareText = encodeURIComponent("Check out my Sperm Glyph! (no, really!) #ieeevis");
+
 /* --------------------------- *
  * general interface           *
  * --------------------------  */
@@ -175,6 +177,35 @@ $(document).ready(function() {
 
 	// reset brushes in parallel coordinates click handler
 	$('#reset-brushes').click(function() { parcoords.brushReset(); });
+
+	// share links
+	$('.shar').click(function(item) {
+		var targetid = $(item.currentTarget).attr('id');
+		$.ajax({
+			method: "GET",
+			url: "/persist",
+		    data: {obj: JSON.stringify(manualProps())},
+			success: function(id) {
+				var url = "http://" + location.host + "/load/" + id;
+				if(targetid == "shar-twitter") {
+					window.open("http://twitter.com/intent/tweet?text=" + shareText + " " + encodeURIComponent(url), '_blank');	
+				}
+				else if(targetid == "shar-facebook") {
+					window.open("https://www.facebook.com/sharer/sharer.php?u=" + url, '_blank');	
+				}
+				else {
+					alert("Share this link: " + url);
+				}
+			}
+		});
+	});
+
+	// do we need to open the viewer modal?
+	var mi = $('#persist-modal-inner');
+	if(mi.attr('data') != "") {
+		$('#persist-modal').modal();
+		myospermglyph.server._drawManual(mi, [mi.width(), mi.height()], JSON.parse(mi.attr("data")));
+	}
 
 	// create the floats for the pc results
 	$('a[data-toggle=\"tab\"]').on('shown.bs.tab', function (e) {

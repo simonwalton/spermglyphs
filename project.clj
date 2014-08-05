@@ -8,6 +8,7 @@
               [org.clojure/math.numeric-tower "0.0.4"]
                [compojure "1.1.5"]
                [jayq "2.5.1"]
+              [paddleguru/clutch "0.4.0"]
                [hiccup "1.0.4"]]
 :plugins [[lein-cljsbuild "1.0.3"]
           [lein-ring "0.8.11"]]
@@ -29,5 +30,5 @@
     }
   
   :main myospermglyph.server
-:ring {:handler myospermglyph.server/app}
+:ring {:handler myospermglyph.server/app :auto-refresh? true :auto-reload? true}
   )
