@@ -5,7 +5,9 @@
             [clojure.java.jdbc :as sql]
     )
   (:use [hiccup.core]
-        [compojure.core]))
+        [compojure.core])
+  (:gen-class)
+  )
 
 
 (def db-name (or (System/getenv "DATABASE_URL")
