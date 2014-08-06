@@ -6,14 +6,16 @@
             [clojure.math.numeric-tower :as math]
             [clojure.data.json :as json]
             [clojure.string :as string]
+            [ring.adapter.jetty :as ring]
             [clojure.walk :as walk]
             [clojure.java.jdbc :as sql]
+            [myospermglyph.model :as model]
     )
   (:use [hiccup.core]
-        [compojure.core]))
+        [compojure.core])
+  (:gen-class)
+  )
 
-(def db-name (or (System/getenv "DATABASE_URL")
-              "postgresql://localhost:5432/spermglyphs"))
 ;
 ; /
 ;
@@ -188,23 +190,8 @@
 (defn create-pc-grid []
   (html (map (fn [x] (html [:div {:class "pull-left pc-result-box" :id (str "pc-result-box-" (name (:id x)))}])) (all-data))))
 
- 
-(defn uuid [] (subs (str (java.util.UUID/randomUUID)) 0 8))
-
-; persist a sperm definition and return its id
-(defn persist-new [obj]
-  (:id (first (sql/insert! db-name :submitted {:json (json/write-str obj) }))))
-
-; grab-from-persistant
-(defn persist-grab [id]
-  (:json (first (sql/query db-name [(str "select * from submitted where id = " id)]))))
-
-; sample latest
-(defn persist-grab-latest [n]
-  (sql/query db-name ["select * from submitted"]))
-
 (defn create-persist-viewer-modal [id]
-  (let [params (persist-grab id)]
+  (let [params (model/grab id)]
     (html 
       [:div {:class "modal fade" :id "persist-modal" :role "dialog" :aria-hidden "true"}
         [:div {:class "modal-dialog modal-lg"}
@@ -340,9 +327,19 @@
   (GET "/" [] (main-content))
   (GET "/load/:id" [id] (view-content (str id)))
   (GET "/try" [] (view-content -1))
-  (GET "/usersubmitted" [] (persist-grab-latest))
-  (GET "/persist" [obj] (str (persist-new (json/read-str (str obj) :key-fn keyword))))
+  (GET "/usersubmitted" [] (model/grab-latest))
+  (GET "/persist" [obj] (str (model/create (json/read-str (str obj) :key-fn keyword))))
   (route/resources "/"))
 
 (def app 
   (handler/site main-routes))
+
+(defn start [port]
+  (ring/run-jetty app {:port port
+                               :join? false}))
+
+(defn -main []
+  (model/migrate)
+  (let [port (Integer. (or (System/getenv "PORT") "8080"))]
+    (start port)))
+

@@ -10,6 +10,7 @@
                  [jayq "2.5.1"]
                  [org.clojure/java.jdbc "0.3.2"]
                  [postgresql "9.1-901.jdbc4"]
+                 [ring/ring-jetty-adapter "1.2.1"]                 
                  [hiccup "1.0.4"]]
   :plugins [[lein-cljsbuild "1.0.3"]
             [lein-ring "0.8.11"]]
