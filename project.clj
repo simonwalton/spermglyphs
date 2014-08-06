@@ -17,6 +17,7 @@
   :source-paths ["src/clj"]
   :uberjar-name "myospermglyph-standalone.jar"
   :profiles {:uberjar {:aot :all}}
+  :min-lein-version "2.0.0"
   :cljsbuild {
     :builds {
       :main {
