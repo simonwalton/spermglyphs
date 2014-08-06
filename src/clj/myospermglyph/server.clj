@@ -7,12 +7,12 @@
             [clojure.data.json :as json]
             [clojure.string :as string]
             [clojure.walk :as walk]
+            [clojure.java.jdbc :as sql]
     )
   (:use [hiccup.core]
-        [com.ashafa.clutch :only [get-database put-document with-db get-document]]
         [compojure.core]))
 
-(def db-name "myosg-dev")
+(def db-name "postgresql://localhost:5432/spermglyphs")
 
 ;
 ; /
@@ -171,6 +171,9 @@
        "</div>"            
     )))
 
+(defn create-user-submitted-browser []
+  (html ""))
+
 (defn create-human-presets []
   (let [rows (get-human-data)
         rows (doall (map (fn [k] (create-human-preset (first k) (:img (second k)) (:name (second k)) (:desc (second k)) (:note (second k)) )) rows))]
@@ -190,13 +193,15 @@
 
 ; persist a sperm definition and return its id
 (defn persist-new [obj]
-  (with-db db-name
-    (:_id (put-document obj :id (uuid)))))
+  (:id (first (sql/insert! db-name :submitted {:json (json/write-str obj) }))))
 
 ; grab-from-persistant
 (defn persist-grab [id]
-  (with-db db-name
-    (get-document (str id))))
+  (:json (first (sql/query db-name [(str "select * from submitted where id = " id)]))))
+
+; sample latest
+(defn persist-grab-latest [n]
+  (sql/query db-name ["select * from submitted"]))
 
 (defn create-persist-viewer-modal [id]
   (let [params (persist-grab id)]
@@ -205,7 +210,7 @@
         [:div {:class "modal-dialog modal-lg"}
           [:div {:class "modal-content"}
             [:div {:id "persist-modal-intro" }]
-            [:div {:id "persist-modal-inner" :data (if (nil? params) "" (json/write-str params)) }]
+            [:div {:id "persist-modal-inner" :data (if (nil? params) "" params) }]
             [:div {:id "persist-modal-outro" }]
           ]
         ]
@@ -260,7 +265,8 @@
               [:li {:class "active"} [:a {:href "#manual" :data-toggle "tab"}[:i {:class "fa fa-cogs"}] " Manual"]]
               [:li [:a {:href "#zoo" :data-toggle "tab"}[:i {:class "fa fa-paw"}] " Animal"]]
               [:li [:a {:href "#human" :data-toggle "tab"}[:i {:class "fa fa-child"}] " Human"]]
-              [:li [:a {:href "#explore" :data-toggle "tab"}[:i {:class "fa fa-eye"}] " Explore"]]]
+              [:li [:a {:href "#explore" :data-toggle "tab"}[:i {:class "fa fa-eye"}] " Explore"]]
+              [:li [:a {:href "#submitted" :data-toggle "tab"}[:i {:class "fa fa-users"}] " User-submitted"]]]
             [:div {:class "tab-content"}
             ; manual
               [:div {:class "fade in tab-pane active" :id "manual"} 
@@ -307,7 +313,9 @@
               [:div {:class "fade tab-pane zoo-container" :id "zoo"} [:h2 "Animal Presets"] [:p "Click an animal to see its sperm glyph! Scroll down for more animals." (create-zoo) ]]
             ; human presets
               [:div {:class "fade tab-pane zoo-container" :id "human"}[:h2 "Human Presets"] [:p "Click an item to see its the sperm glyph for a human sperm in that category."  (create-human-presets) ]]
-            ; filter
+            ; submitted
+             [:div {:class "fade tab-pane" :id "submitted"} [:h2 "User-submitted"] [:p "Check out these user-submitted entries! You can submit your own using the <i>share</i> function in the <i>manual</i> tab." (create-user-submitted-browser) ]]
+             ; filter
               [:div {:class "fade tab-pane" :id "explore"}
                 [:div {:style "height:80px"}
                  [:h2 {:class "pull-left"} "Explore Dimensions"]
@@ -316,7 +324,8 @@
                   [:p "Each axis in the plot is a dimension of the cell data. You can brush to filter the sperm matching those properties, which will appear to the left."]
                   [:div {:id "explore-pc" :class "parcoords"}]
                 ]
-             ]]]]]]
+             ]
+          ]]]]]
 
     [:script " var sliders = {}; var parcoords = null; var gridster; var papers = []; var selectedDiv = null; var selectedPaper = null;"]
     [:script {:src "/auto-js/cljs.js"}]
@@ -331,6 +340,7 @@
   (GET "/" [] (main-content))
   (GET "/load/:id" [id] (view-content (str id)))
   (GET "/try" [] (view-content -1))
+  (GET "/usersubmitted" [] (persist-grab-latest))
   (GET "/persist" [obj] (str (persist-new (json/read-str (str obj) :key-fn keyword))))
   (route/resources "/"))
 

@@ -58,6 +58,7 @@ function manualProps() {
 		obj[key] = parseFloat(sl.getValue());
 	}
 	obj.name = $('#name').val();
+	obj.created = new Date();
 	return obj;
 };
 
@@ -123,6 +124,27 @@ function updatePCGrid(selected) {
 		//div.append(paper);
 		// }
 		});
+}
+
+function updateUserSubmittedGrid() {
+	$.ajax({
+		method: "GET",
+		url: "/persist",
+		data: {obj: JSON.stringify(manualProps())},
+		success: function(id) {
+			var url = "http://" + location.host + "/load/" + id;
+			if(targetid == "shar-twitter") {
+				window.open("http://twitter.com/intent/tweet?text=" + shareText + " " + encodeURIComponent(url), '_blank');	
+			}
+			else if(targetid == "shar-facebook") {
+				window.open("https://www.facebook.com/sharer/sharer.php?u=" + url, '_blank');	
+			}
+			else {
+				alert("Share this link: " + url);
+			}
+		}
+	});
+	
 }
 		
 function dismiss() {
@@ -208,7 +230,7 @@ $(document).ready(function() {
 
 	// do we need to open the viewer modal?
 	var mi = $('#persist-modal-inner');
-	if(mi.attr('data') != "") {
+	if(mi.attr('data').length > 10) {
 		var obj = JSON.parse(mi.attr("data"));
 		var name = obj.name;
 		$('#persist-modal').modal('show');
