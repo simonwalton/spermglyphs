@@ -12,8 +12,8 @@
   (:use [hiccup.core]
         [compojure.core]))
 
-(def db-name "postgresql://localhost:5432/spermglyphs")
-
+(def db-name (or (System/getenv "DATABASE_URL")
+              "postgresql://localhost:5432/spermglyphs"))
 ;
 ; /
 ;

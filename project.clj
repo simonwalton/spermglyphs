@@ -14,6 +14,8 @@
   :plugins [[lein-cljsbuild "1.0.3"]
             [lein-ring "0.8.11"]]
   :source-paths ["src/clj"]
+  :uberjar-name "myospermglyph-standalone.jar"
+  :profiles {:uberjar {:aot :all}}
   :cljsbuild {
     :builds {
       :main {
