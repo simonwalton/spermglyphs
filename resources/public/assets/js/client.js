@@ -129,26 +129,23 @@ function updatePCGrid(selected) {
 function updateUserSubmittedGrid() {
 	$.ajax({
 		method: "GET",
-		url: "/persist",
-		data: {obj: JSON.stringify(manualProps())},
-		success: function(id) {
-			var url = "http://" + location.host + "/load/" + id;
-			if(targetid == "shar-twitter") {
-				window.open("http://twitter.com/intent/tweet?text=" + shareText + " " + encodeURIComponent(url), '_blank');	
-			}
-			else if(targetid == "shar-facebook") {
-				window.open("https://www.facebook.com/sharer/sharer.php?u=" + url, '_blank');	
-			}
-			else {
-				alert("Share this link: " + url);
-			}
+		url: "/usersubmitted/40",
+		dataType: "json",
+		success: function(objects) {
+			var divs = $(".user-submitted-result-box").toArray();
+			for(i in objects) {
+				var obj = objects[i];
+				var json = JSON.parse(obj.json.replace('\\',''));
+				var d = $(divs[i]); 
+				d.attr("style","display:block");
+				myospermglyph.server._drawParams(d, json, [130,130]);
+			}	
 		}
 	});
 	
 }
 		
 function dismiss() {
-	console.log("DISMISS");
 	$('#persist-modal').modal('hide');
 }
 
@@ -158,7 +155,6 @@ function dismiss() {
 $(document).ready(function() {
 	// initialise the main cljs bits
 	myospermglyph.server._init('/assets/data/'); 
-
 	// some default sizes
 	var cellsize = [175,175];
 	var margins = [10,10];
@@ -226,6 +222,13 @@ $(document).ready(function() {
 				}
 			}
 		});
+	});
+
+	// user-submitted grid
+	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+		if(e.target.href.split('#')[1] == 'submitted') {
+			updateUserSubmittedGrid();
+		}
 	});
 
 	// do we need to open the viewer modal?

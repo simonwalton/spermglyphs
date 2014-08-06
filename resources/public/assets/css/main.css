@@ -356,6 +356,13 @@ h2, .h2 {
 	height:130px;
 }
 
+.user-submitted-result-box {
+	width:130px;
+	height:130px;
+	float:left;
+	display:none;
+}
+
 .gridster ul {
 	list-style: none;
 	margin:0px;

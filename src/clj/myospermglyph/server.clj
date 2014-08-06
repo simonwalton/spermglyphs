@@ -174,7 +174,9 @@
     )))
 
 (defn create-user-submitted-browser []
-  (html ""))
+  (html [:div {:id "submitted-grid"}
+          (html (map-indexed (fn [i x] (html [:div {:class "user-submitted-result-box" :id (str "usrb-" i)}])) (range 0 100)))
+         ]))
 
 (defn create-human-presets []
   (let [rows (get-human-data)
@@ -320,14 +322,11 @@
     [:script {:src "/assets/js/client.js"}]
   ))
 
-(defn testid [id]
-  (html "here is the id " id))
-
 (defroutes main-routes
   (GET "/" [] (main-content))
   (GET "/load/:id" [id] (view-content (str id)))
   (GET "/try" [] (view-content -1))
-  (GET "/usersubmitted" [] (model/grab-latest))
+  (GET "/usersubmitted/:n" [n] (model/grab-latest n))
   (GET "/persist" [obj] (str (model/create (json/read-str (str obj) :key-fn keyword))))
   (route/resources "/"))
 

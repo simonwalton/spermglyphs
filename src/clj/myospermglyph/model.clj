@@ -13,9 +13,11 @@
 (def db-name (or (System/getenv "DATABASE_URL")
               "postgresql://localhost:5432/spermglyphs"))
 
+(defn gen-uuid [] (subs (str (java.util.UUID/randomUUID)) 0 16))
+
 ; persist a sperm definition and return its id
 (defn create [obj]
-  (:id (first (sql/insert! db-name :submitted {:json (json/write-str obj) }))))
+  (:id (first (sql/insert! db-name :submitted {:json (json/write-str (assoc obj :id (gen-uuid))) }))))
 
 ; grab-from-persistant
 (defn grab [id]
@@ -23,7 +25,7 @@
 
 ; sample latest
 (defn grab-latest [n]
-  (sql/query db-name ["select * from submitted"]))
+  (json/write-str (map (fn [x] (dissoc x :created_at)) (sql/query db-name [(str "select * from submitted order by created_at limit " n)]))))
 
 (defn migrated? []
   (-> (sql/query db-name 
