@@ -229,7 +229,11 @@
         [:div {:class "row"}
             ; left-hand col
           [:div {:class "col-md-6"}
-            [:div {:class "logo-container"} [:img {:src "/assets/img/logo_logo.png" :class "logo-small" }]]
+            [:div {:class "logo-container-header"} [:img {:src "/assets/img/logo_logo.png" :class "logo-small" }]
+              [:a {:href "#" :id "schematic-popover" :class "pull-right" :data-container "body" 
+                      :data-toggle "popover" :data-placement "right" :data-content "<img width=\"600\" src=\"/assets/img/schematic.png\"/>"} 
+                [:i {:class "fa fa-eye"} " Toggle Glyph Explanation"]
+             ]]
              [:div {:id "left-grid" :class "gridster spermgrid"}
               [:div {:class "alert alert-info alert-dismissible"  :role "alert"}
                [:button {:type "button" :class "btn pull-right" :id "dismiss-instructions" :data-dismiss "alert"}

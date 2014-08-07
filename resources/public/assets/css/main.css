@@ -106,12 +106,25 @@ a.btn-primary:active
 	height:700px;
 }
 
+#schematic-popover {
+	margin-top:60px;
+}
+
+.popover {
+	max-width:630px !important;
+}
+
 .logo-container
 {
 	margin-top:20px;
 	width:100%;
 	margin-left:-30px;
 	text-align:center;
+}
+
+.logo-container-header {
+	height:100px;
+	width:100%;
 }
 
 .logo {

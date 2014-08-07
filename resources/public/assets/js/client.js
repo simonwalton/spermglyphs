@@ -268,4 +268,6 @@ $(document).ready(function() {
 			//freePCGrid();
 		}
 	});
+
+	$('#schematic-popover').popover({'html':true});
 });
