@@ -72,10 +72,12 @@ body {
 .alert-info > button {
 }
 
-a:link    { color: #ea553c; }
-a:visited { color: #ea553c; }
-a:hover   { color: #ea553c; }
-a:active  { color: #ea553c; }
+a:link,
+a:visited,
+a:hover,
+a:active  {
+	color: #ea553c; 
+}
 
 a.btn:link   { color: #333; }
 a.btn:visited { color: #333; }
@@ -112,6 +114,10 @@ a.btn-primary:active
 
 .popover {
 	max-width:630px !important;
+}
+
+.popover-content {
+	top:300px;
 }
 
 .logo-container
@@ -236,6 +242,7 @@ h2, .h2 {
 
 .human-preset-link {
 	color: #EA553C;
+	margin-right:10px;
 }
 
 .human-preset-box {
@@ -314,11 +321,11 @@ h2, .h2 {
 
 .alert-info {
 	background:rgba(255,255,255,0.25);
-	color: #aaa;
+	color: #ccc;
 }
 
 .spermdiv-selected {
-	box-shadow: 0 0 0 5px #EA553C inset;
+	box-shadow: 0px 0px 30px 0px #EA553C;
 	background:#fff;
 	opacity:1.0;
 }

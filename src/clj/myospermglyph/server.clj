@@ -230,9 +230,9 @@
             ; left-hand col
           [:div {:class "col-md-6"}
             [:div {:class "logo-container-header"} [:img {:src "/assets/img/logo_logo.png" :class "logo-small" }]
-              [:a {:href "#" :id "schematic-popover" :class "pull-right" :data-container "body" 
-                      :data-toggle "popover" :data-placement "right" :data-content "<img width=\"600\" src=\"/assets/img/schematic.png\"/>"} 
-                [:i {:class "fa fa-eye"} " Toggle Glyph Explanation"]
+              [:a {:href "#" :id "schematic-popover" :class "pull-right"
+                    :data-toggle "popover" :data-placement "bottom" :data-content "<img width=\"600\" src=\"/assets/img/schematic.png\"/>"} 
+                [:i {:class "fa fa-eye"}] " View Glyph Explanation"
              ]]
              [:div {:id "left-grid" :class "gridster spermgrid"}
               [:div {:class "alert alert-info alert-dismissible"  :role "alert"}
@@ -312,11 +312,11 @@
                  ]
                 ]
             ; zoo
-              [:div {:class "fade tab-pane zoo-container" :id "zoo"} [:h2 "Animal Presets"] [:p "Click an animal to see its sperm glyph! Scroll down for more animals." (create-zoo) ]]
+              [:div {:class "fade tab-pane zoo-container" :id "zoo"} [:h2 "Animal Presets"] [:p "Click an animal to see its sperm glyph! Scroll down for more animals. <small>"  (create-zoo) ]]
             ; human presets
               [:div {:class "fade tab-pane zoo-container" :id "human"}[:h2 "Human Presets"] [:p "Click an item to see its the sperm glyph for a human sperm in that category."  (create-human-presets) ]]
             ; submitted
-             [:div {:class "fade tab-pane" :id "submitted"} [:h2 "User-submitted"] [:p "Check out these user-submitted entries! You can submit your own using the <i>share</i> function in the <i>manual</i> tab. Hover over an item to see its description." (create-user-submitted-browser) ]]
+             [:div {:class "fade tab-pane" :id "submitted"} [:h2 "User-submitted"] [:p "Check out these user-submitted entries! You can submit your own using the <i>share</i> function in the <i>manual</i> tab. <p>Hover over an item to see its description, or click an item to send it to the selected cell on the left.</p>" (create-user-submitted-browser) ]]
              ; filter
               [:div {:class "fade tab-pane" :id "explore"}
                 [:div {:style "height:80px"}
