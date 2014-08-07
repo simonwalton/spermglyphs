@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/clojurescript "0.0-2197"]
                  [org.clojure/math.numeric-tower "0.0.4"]
+                 [org.clojure/algo.generic "0.1.2"]
                  [compojure "1.1.5"]
                  [jayq "2.5.1"]
                  [org.clojure/java.jdbc "0.3.2"]

@@ -8,6 +8,7 @@
             [clojure.string :as string]
             [ring.adapter.jetty :as ring]
             [clojure.walk :as walk]
+            [clojure.algo.generic.functor :as gen]
             [clojure.java.jdbc :as sql]
             [myospermglyph.model :as model]
     )
@@ -175,7 +176,7 @@
 
 (defn create-user-submitted-browser []
   (html [:div {:id "submitted-grid"}
-          (html (map-indexed (fn [i x] (html [:div {:class "user-submitted-result-box" :id (str "usrb-" i)}])) (range 0 100)))
+       ;   (html (map-indexed (fn [i x] (html [:div {:class "user-submitted-result-box" :id (str "usrb-" i)}])) (range 0 100)))
          ]))
 
 (defn create-human-presets []
@@ -184,7 +185,10 @@
     (html [:div {:class "media"} [:div {:class "media"} rows ]])))
 
 (defn all-data []
-  (map (fn [k] (merge (second k) {:id (first k)} )) (merge (doall (get-human-data)) (doall (get-zoo-data)))))
+  (map (fn [k] (merge (second k) {:id (first k)} ))
+    (merge 
+      (gen/fmap (fn [x] (assoc x :subtitle "(human)")) (get-human-data))
+      (gen/fmap (fn [x] (assoc x :subtitle "(animal)")) (get-zoo-data)))))
 
 (defn all-data-json [] 
   (json/write-str (all-data))) 
@@ -288,13 +292,18 @@
                 [:div {:class "row"}
                  [:div {:class "col-sm-1"} [:h3 [:i {:class "fa fa-share-alt"}]]]
                  [:div {:class "col-sm-11"}
-                    [:div [:h4 "Share your creation!"]]
-                     [:div {:style "width:200px"} [:input {:type "email" :class "form-control input-sm sperm-name-input"  :id "name" :placeholder "Name me!"}]]
-                     [:div
+                    [:div {:class "row"} [:h4 "Share your creation!"]
+                      [:div {:class "col-md-5"}
+                       [:div {:style "width:200px"} [:input {:type "email" :class "pull-left form-control input-sm sperm-name-input"  :id "name" :placeholder "Name me!"}]]
+                       [:div {:style "width:200px"} [:input {:type "email" :class "pull-left form-control input-sm sperm-name-input"  :id "description" :placeholder "Describe me!"}]]
+                       ]
+                      [:div {:class "col-md-7"}
+                        [:div "Where to share?"]
                       [:a {:href "javascript:void(0);" :id "shar-manual" :class "shar" }[:i {:class "fa fa-share"}] " Manual"]
                       [:a {:href "javascript:void(0);" :id "shar-twitter" :class "shar" }[:i {:class "fa fa-twitter"}] " Twitter"]
                       [:a {:href "javascript:void(0);" :id "shar-facebook" :class "shar" }[:i {:class "fa fa-facebook"}] " Facebook"]
                      ]
+                    ]
                   ]
                  ]
                 ]
@@ -303,7 +312,7 @@
             ; human presets
               [:div {:class "fade tab-pane zoo-container" :id "human"}[:h2 "Human Presets"] [:p "Click an item to see its the sperm glyph for a human sperm in that category."  (create-human-presets) ]]
             ; submitted
-             [:div {:class "fade tab-pane" :id "submitted"} [:h2 "User-submitted"] [:p "Check out these user-submitted entries! You can submit your own using the <i>share</i> function in the <i>manual</i> tab." (create-user-submitted-browser) ]]
+             [:div {:class "fade tab-pane" :id "submitted"} [:h2 "User-submitted"] [:p "Check out these user-submitted entries! You can submit your own using the <i>share</i> function in the <i>manual</i> tab. Hover over an item to see its description." (create-user-submitted-browser) ]]
              ; filter
               [:div {:class "fade tab-pane" :id "explore"}
                 [:div {:style "height:80px"}

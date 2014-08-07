@@ -3,7 +3,6 @@ body {
 	color:#ccc;
 	background-image: url('/assets/img/bg.png');
 	font-family: 'Open Sans', sans-serif;
-    overflow-y:hidden;	
 }
 
 .navbar-inverse {
@@ -14,6 +13,14 @@ body {
 	text-align:center;
 	color:#555;
 	font-size:20pt;
+	margin-top:14pt;
+}
+
+.persist-description {
+	text-align:center;
+	color:#555;
+	font-size:12pt;
+	margin-top:8pt;
 }
 
 .sperm-name-input {
@@ -161,7 +168,7 @@ h2, .h2 {
 }
 
 .shar {
-	padding:8px;
+	margin-left:8px;
 }
 
 .form-horizontal
@@ -310,9 +317,9 @@ h2, .h2 {
 
 .container-outer {
 	margin-top:50px;
+	padding-bottom:50px;
 	width:100%;
-	margin-bottom:0px;
-	padding-bottom:0px;
+	background-image: url('/assets/img/bg.png');
 }
 
 .spermgrid
@@ -357,10 +364,10 @@ h2, .h2 {
 }
 
 .user-submitted-result-box {
-	width:130px;
-	height:130px;
+	width:170px;
+	height:160px;
+	cursor:pointer;
 	float:left;
-	display:none;
 }
 
 .gridster ul {

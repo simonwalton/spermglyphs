@@ -259,11 +259,17 @@
         (attr {:stroke "#fff", :stroke-width 3})
         (.transform (gstring/format "t%.2f,%.2f" (:x (:origin sperm)) (:y (:origin sperm))))
         )))
- 
+
+; create subtitle
+
 ; create a label from the name parameter
 (defn create-label [paper sperm]
   (-> (.text paper (:x (:origin sperm)) (- (second (:size sperm)) 20) (:name (:params sperm)))
-      (attr {:font-size 12, :font-weight "bold", :text-anchor "centre",  :fill "#EA553C"})))
+      (attr {:font-size 12, :font-weight "bold", :text-anchor "centre",  :fill "#EA553C"}))
+  (->
+      (.text paper (:x (:origin sperm)) (- (second (:size sperm)) 10) (or ((:params sperm) :subtitle) ""))
+      (attr {:font-size 10,  :font-weight "normal", :text-anchor "centre",  :fill "#178487"})
+    ))
 
 ; entrypoint for drawing the entire cell
 (defn draw [sperm]

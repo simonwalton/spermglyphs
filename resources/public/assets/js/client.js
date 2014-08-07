@@ -58,6 +58,7 @@ function manualProps() {
 		obj[key] = parseFloat(sl.getValue());
 	}
 	obj.name = $('#name').val();
+	obj.description = $('#description').val();
 	obj.created = new Date();
 	return obj;
 };
@@ -117,15 +118,12 @@ function updatePCGrid(selected) {
 		var div = pcGridDivs[id].div; 
 		div.show();
 		var paper = myospermglyph.server._drawParams(div, params, [div.width(), div.height()]);
-		//pcGridDivs[id].svg = div.children().first();
-		//}
-		// else {
-		// console.log('Appending paper',paper,'to',div);
-		//div.append(paper);
-		// }
-		});
+	});
 }
 
+/*
+ * refresh the user-submitted entries grid
+ */
 function updateUserSubmittedGrid() {
 	$.ajax({
 		method: "GET",
@@ -136,9 +134,19 @@ function updateUserSubmittedGrid() {
 			for(i in objects) {
 				var obj = objects[i];
 				var json = JSON.parse(obj.json.replace('\\',''));
-				var d = $(divs[i]); 
-				d.attr("style","display:block");
-				myospermglyph.server._drawParams(d, json, [130,130]);
+				var d = $("<div>").attr("class","user-submitted-result-box")
+					.attr("id","user-submitted-"+i)
+					.attr("title", json.description != null ? json.description : "No description.")
+					.appendTo("#submitted-grid");
+				// closures are a royal pain... this should never be necessary
+				var clickfn = (function(j) {
+					return function() {
+						myospermglyph.server._drawParams(selectedDiv, j, [selectedDiv.width(),selectedDiv.height()]);
+					}
+				})(json);
+
+				d.click(clickfn);
+				myospermglyph.server._drawParams(d, json, [d.width(),d.height()]);
 			}	
 		}
 	});
@@ -236,8 +244,9 @@ $(document).ready(function() {
 	if(mi.attr('data').length > 10) {
 		var obj = JSON.parse(mi.attr("data"));
 		var name = obj.name;
+		var desc = obj.description != null ? obj.description : "Unfortunately, I don't have any description.";
 		$('#persist-modal').modal('show');
-		$('#persist-modal-intro').html('<div class="persist-intro">Hi! My name is <strong>' + name + '</strong></div>');
+		$('#persist-modal-intro').html('<div class="persist-intro">Hi! My name is <strong>' + name + '</strong></div><div class="persist-description">' + desc + '</div>');
 		$('#persist-modal-outro').append('<div class="persist-intro"><a class="btn btn-primary" href="javascript:dismiss();"><i class="fa fa-flask"></i> Create Your Own</a></div>');
 		myospermglyph.server._drawManual(mi, [mi.width(), mi.height()], obj);
 	}
