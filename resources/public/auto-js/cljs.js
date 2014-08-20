@@ -16234,23 +16234,26 @@ myospermglyph.server.draw = function(a) {
   myospermglyph.server.create_label.call(null, e, a);
   return cljs.core.clj__GT_js.call(null, myospermglyph.server.get_from_paper_stack.call(null, b));
 };
-myospermglyph.server.get_and_store_preset = function(a, b) {
-  var c = cljs.core.keyword.call(null, b), d = [cljs.core.str(a), cljs.core.str(b), cljs.core.str(".json")].join(""), e = (new cljs.core.Keyword(null, "bind", "bind", 1016928175)).cljs$core$IFn$_invoke$arity$1(jayq.core.ajax_m), f = (new cljs.core.Keyword(null, "return", "return", 4374474914)).cljs$core$IFn$_invoke$arity$1(jayq.core.ajax_m), g = (new cljs.core.Keyword(null, "zero", "zero", 1017639450)).cljs$core$IFn$_invoke$arity$1(jayq.core.ajax_m);
-  return e.call(null, new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "url", "url", 1014020321), d, new cljs.core.Keyword(null, "dataType", "dataType", 2802975094), new cljs.core.Keyword(null, "json", "json", 1017176154)], null), function(a, b, c, d, e) {
+myospermglyph.server.get_and_store_preset = function(a, b, c) {
+  var d = cljs.core.keyword.call(null, b);
+  a = [cljs.core.str(a), cljs.core.str(b), cljs.core.str(".json")].join("");
+  var e = (new cljs.core.Keyword(null, "bind", "bind", 1016928175)).cljs$core$IFn$_invoke$arity$1(jayq.core.ajax_m), f = (new cljs.core.Keyword(null, "return", "return", 4374474914)).cljs$core$IFn$_invoke$arity$1(jayq.core.ajax_m), g = (new cljs.core.Keyword(null, "zero", "zero", 1017639450)).cljs$core$IFn$_invoke$arity$1(jayq.core.ajax_m);
+  return e.call(null, new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "url", "url", 1014020321), a, new cljs.core.Keyword(null, "dataType", "dataType", 2802975094), new cljs.core.Keyword(null, "json", "json", 1017176154)], null), function(a, d, e, f, g) {
     return function(a) {
-      return b.call(null, function() {
+      return d.call(null, function() {
         console.log(cljs.core.clj__GT_js.call(null, a));
-        return cljs.core.swap_BANG_.call(null, myospermglyph.server.presets, cljs.core.assoc, d, cljs.core.js__GT_clj.call(null, a, new cljs.core.Keyword(null, "keywordize-keys", "keywordize-keys", 4191781672), !0));
+        cljs.core.swap_BANG_.call(null, myospermglyph.server.presets, cljs.core.assoc, f, cljs.core.js__GT_clj.call(null, a, new cljs.core.Keyword(null, "keywordize-keys", "keywordize-keys", 4191781672), !0));
+        return cljs.core.truth_(c) ? c.call(null, b) : null;
       }());
     };
-  }(e, f, g, c, d));
+  }(e, f, g, d, a));
 };
-myospermglyph.server.get_and_store_presets = function(a) {
-  myospermglyph.server.get_and_store_preset.call(null, a, "human");
-  return myospermglyph.server.get_and_store_preset.call(null, a, "animal");
+myospermglyph.server.get_and_store_presets = function(a, b) {
+  myospermglyph.server.get_and_store_preset.call(null, a, "human", b);
+  return myospermglyph.server.get_and_store_preset.call(null, a, "animal", b);
 };
-myospermglyph.server.init = function(a) {
-  return myospermglyph.server.get_and_store_presets.call(null, a);
+myospermglyph.server.init = function(a, b) {
+  return myospermglyph.server.get_and_store_presets.call(null, a, b);
 };
 myospermglyph.server._getDefsForPaper = function(a) {
   return cljs.core.clj__GT_js.call(null, myospermglyph.server.get_defs_for_paper.call(null, a));
@@ -16289,7 +16292,7 @@ myospermglyph.server._drawParams = function(a, b, c) {
   return myospermglyph.server.draw.call(null, a);
 };
 goog.exportSymbol("myospermglyph.server._drawParams", myospermglyph.server._drawParams);
-myospermglyph.server._init = function(a) {
-  return myospermglyph.server.init.call(null, a);
+myospermglyph.server._init = function(a, b) {
+  return myospermglyph.server.init.call(null, a, b);
 };
 goog.exportSymbol("myospermglyph.server._init", myospermglyph.server._init);

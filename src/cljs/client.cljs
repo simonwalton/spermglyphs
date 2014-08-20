@@ -306,23 +306,24 @@
   ))
  
 ; given a url, grab a json file containing a key/val dictionary of sperm parameters and store into `presets` atom under id
-(defn get-and-store-preset [url id]
+(defn get-and-store-preset [url id callback]
   (let [keyid (keyword id)
     url-complete (str url id ".json")]
     (let-ajax [j {:url url-complete
                   :dataType :json}]
       (js/console.log (clj->js j))
       (swap! presets assoc keyid (js->clj j :keywordize-keys true))
+      (if callback (callback id))
       )))
 
 ; get all known presets from server
-(defn get-and-store-presets [resourceurl]
-  (get-and-store-preset resourceurl "human")
-  (get-and-store-preset resourceurl "animal"))
+(defn get-and-store-presets [resourceurl callback]
+  (get-and-store-preset resourceurl "human" callback)
+  (get-and-store-preset resourceurl "animal" callback))
 
 ; initialise ourselves for the first time
-(defn init [resourceurl]
-  (get-and-store-presets resourceurl))
+(defn init [resourceurl callback]
+  (get-and-store-presets resourceurl callback))
 
 ; exposed functionality
 (defn ^:export _getDefsForPaper [paper] (clj->js (get-defs-for-paper paper)))
@@ -356,7 +357,7 @@
        sperm {:div div :size size :origin origin :scales globals :params params}]
    (->(draw sperm))))
 
-(defn ^:export _init [resourceurl] (init resourceurl))
+(defn ^:export _init [resourceurl callback] (init resourceurl callback))
 
 
 

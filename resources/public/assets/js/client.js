@@ -162,7 +162,11 @@ function dismiss() {
  * --------------------------  */
 $(document).ready(function() {
 	// initialise the main cljs bits
-	myospermglyph.server._init('/assets/data/'); 
+	myospermglyph.server._init('/assets/data/', function(id) {
+		if(id == 'animal') {
+			$('#main-tabs li:eq(0) a').tab('show');
+		}	
+	}); 
 	// some default sizes
 	var cellsize = [175,175];
 	var margins = [10,10];
@@ -232,13 +236,6 @@ $(document).ready(function() {
 		});
 	});
 
-	// user-submitted grid
-	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-		if(e.target.href.split('#')[1] == 'submitted') {
-			updateUserSubmittedGrid();
-		}
-	});
-
 	// do we need to open the viewer modal?
 	var mi = $('#persist-modal-inner');
 	if(mi.attr('data').length > 10) {
@@ -250,6 +247,9 @@ $(document).ready(function() {
 		$('#persist-modal-outro').append('<div class="persist-intro"><a class="btn btn-primary" href="javascript:dismiss();"><i class="fa fa-flask"></i> Create Your Own</a></div>');
 		myospermglyph.server._drawManual(mi, [mi.width(), mi.height()], obj);
 	}
+	
+	$('#left-grid').show();
+	$('#left-explore').hide();
 
 	// create the floats for the pc results
 	$('a[data-toggle=\"tab\"]').on('shown.bs.tab', function (e) {
@@ -262,10 +262,12 @@ $(document).ready(function() {
 			$('#left-explore').show();
 			parcoords.brushReset();
 		}
+		else if(e.target.href.split('#')[1] == 'submitted') {
+			updateUserSubmittedGrid();
+		}
 		else {
 			$('#left-grid').show();
 			$('#left-explore').hide();
-			//freePCGrid();
 		}
 	});
 

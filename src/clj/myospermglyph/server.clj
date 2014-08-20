@@ -72,7 +72,8 @@
       [:div {:class "container container-main"}
         [:div {:class "logo-container"} [:img {:src "/assets/img/logo_logo.png" :class "logo" }]]
         [:div {:class "blurb"} "Glyph-Based Video Visualization for Semen Analysis"
-          [:p {:class "blurb"} "Brian Duffy, Jeyarajan Thiyagalingam, Simon Walton, Anne Trefethen, Jackson C. Kirkman-Brown, Eamonn A. Gaffney and Min Chen"]]
+          [:p {:class "blurb"} "Brian Duffy, Jeyarajan Thiyagalingam, Simon Walton, David Smith, Anne Trefethen, Jackson C. Kirkman-Brown, Eamonn A. Gaffney and Min Chen"]]
+        [:div {:class "blurb"} [:a {:href "/try#zoo" :class "btn btn-md btn-default btn-enter"} "Enter SpermZoo!"]]
        ; bottom content
        [:div {:class "footer clearfix"} 
        [:div {:class "footer-inner"} 
@@ -258,11 +259,11 @@
            ]
          ; right-hand col
           [:div {:class "col-md-6 right-controls"}
-            [:ul {:class "nav nav-tabs"}
-              [:li {:class "active"} [:a {:href "#manual" :data-toggle "tab"}[:i {:class "fa fa-cogs"}] " Manual"]]
-              [:li [:a {:href "#zoo" :data-toggle "tab"}[:i {:class "fa fa-paw"}] " Animal"]]
+            [:ul {:class "nav nav-tabs" :id "main-tabs"}
+              [:li  [:a {:href "#zoo" :data-toggle "tab"}[:i {:class "fa fa-paw"}] " Animal"]]
               [:li [:a {:href "#human" :data-toggle "tab"}[:i {:class "fa fa-child"}] " Human"]]
               [:li [:a {:href "#explore" :data-toggle "tab"}[:i {:class "fa fa-eye"}] " Explore"]]
+              [:li  {:class "active"}[:a {:href "#manual" :data-toggle "tab"}[:i {:class "fa fa-cogs"}] " Create"]]
               [:li [:a {:href "#submitted" :data-toggle "tab"}[:i {:class "fa fa-users"}] " User-submitted"]]]
             [:div {:class "tab-content"}
             ; manual
@@ -293,15 +294,15 @@
                      ]
                   ]
                 ; share
-                [:div {:class "row"}
+                [:div {:class "row" :id "div-share"}
                  [:div {:class "col-sm-1"} [:h3 [:i {:class "fa fa-share-alt"}]]]
                  [:div {:class "col-sm-11"}
                     [:div {:class "row"} [:h4 "Share your creation!"]
-                      [:div {:class "col-md-5"}
-                       [:div {:style "width:200px"} [:input {:type "email" :class "pull-left form-control input-sm sperm-name-input"  :id "name" :placeholder "Name me!"}]]
-                       [:div {:style "width:200px"} [:input {:type "email" :class "pull-left form-control input-sm sperm-name-input"  :id "description" :placeholder "Describe me!"}]]
+                      [:div {:class "col-md-6"}
+                       [:div {:style "width:250px"} [:input { :class "pull-left form-control input-sm sperm-name-input"  :id "name" :placeholder "Name me!"}]]
+                       [:div {:style "width:250px"} [:textarea {:rows "3" :class "pull-left form-control input-sm sperm-name-input"  :id "description" :placeholder "Describe me!"}]]
                        ]
-                      [:div {:class "col-md-7"}
+                      [:div {:class "col-md-6"}
                         [:div "Where to share?"]
                       [:a {:href "javascript:void(0);" :id "shar-manual" :class "shar" }[:i {:class "fa fa-share"}] " Manual"]
                       [:a {:href "javascript:void(0);" :id "shar-twitter" :class "shar" }[:i {:class "fa fa-twitter"}] " Twitter"]
@@ -312,9 +313,9 @@
                  ]
                 ]
             ; zoo
-              [:div {:class "fade tab-pane zoo-container" :id "zoo"} [:h2 "Animal Presets"] [:p "Click an animal to see its sperm glyph! Scroll down for more animals. <small>"  (create-zoo) ]]
+              [:div {:class "fade tab-pane zoo-container" :id "zoo"} [:h2 "Animal Presets"] [:p "Click an animal to see its sperm glyph! Scroll down for more animals."  (create-zoo) ]]
             ; human presets
-              [:div {:class "fade tab-pane zoo-container" :id "human"}[:h2 "Human Presets"] [:p "Click an item to see its the sperm glyph for a human sperm in that category."  (create-human-presets) ]]
+              [:div {:class "fade tab-pane zoo-container" :id "human"} [:h2 "Human Presets"] [:p "Click an item to see its the sperm glyph for a human sperm in that category."  (create-human-presets) ]]
             ; submitted
              [:div {:class "fade tab-pane" :id "submitted"} [:h2 "User-submitted"] [:p "Check out these user-submitted entries! You can submit your own using the <i>share</i> function in the <i>manual</i> tab. <p>Hover over an item to see its description, or click an item to send it to the selected cell on the left.</p>" (create-user-submitted-browser) ]]
              ; filter

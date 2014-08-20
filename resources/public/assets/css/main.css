@@ -92,6 +92,27 @@ a.btn-primary:active
 	color:#fff;
 }
 
+a.btn-enter:visited,
+a.btn-enter:hover,
+a.btn-enter:link,
+a.btn-enter:active
+{
+	margin-top:50px;
+	margin-bottom:-20px;
+	padding:10px;
+	background:none;
+	background-color:#ea553c;
+	background-image: linear-gradient(#ea553c 0px, #ba352c 100%);
+	color:#fff;
+	border-radius:8px;
+	border:#ea553c;
+	font-size:14pt;
+	font-weight:bold;
+}
+
+#div-share {
+	margin-top:-100px;
+}
 
 .zoo-row {
 	width:98%;
@@ -106,6 +127,8 @@ a.btn-primary:active
 .zoo-container {
 	overflow-y: scroll;
 	height:700px;
+	padding-top:0px !important;
+	margin-top:0px;
 }
 
 #schematic-popover {
@@ -453,14 +476,14 @@ h2, .h2 {
 	text-align:center;
 	margin-left:auto;
 	margin-right:auto;
-	width:1000px;
+	width:800px;
 	font-style:italic;
 }
 
 
 .footer {
 	width:100%;
-	margin-top:80px;
+	margin-top:60px;
 }
 
 .footer-inner {
