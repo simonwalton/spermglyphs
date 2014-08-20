@@ -111,7 +111,11 @@ a.btn-enter:active
 }
 
 #div-share {
-	margin-top:-100px;
+	margin-top:0px !important;
+}
+
+#where-to-share {
+	padding-left:10px;
 }
 
 .zoo-row {
@@ -124,6 +128,10 @@ a.btn-enter:active
 	margin-bottom:-17px;
 }
 
+#manual {
+	margin-top:0px;
+}
+
 .zoo-container {
 	overflow-y: scroll;
 	height:700px;
@@ -131,8 +139,29 @@ a.btn-enter:active
 	margin-top:0px;
 }
 
+.input-manual-textbox {
+	background:none;
+	border: 1px dashed #444;
+	width:100%;
+	color:#ccc;
+	height:24px;
+	font-size:8pt;
+	padding-left:3px;
+	padding-right:3px;
+	margin-left:3px;
+	margin-top:2px;
+}
+
 #schematic-popover {
 	margin-top:60px;
+}
+
+.sperm-well {
+	background:#333;
+	border-radius: 4px;
+	padding:5px;
+	margin:0px;
+	padding-left:10px;
 }
 
 .popover {
@@ -185,11 +214,6 @@ h2, .h2 {
 	margin-bottom:-13px;
 	padding-right:20px !important;
 }
-
-.slider-track {
-}
-
-
 
 .control-label {
 	font-weight:bold;
@@ -248,15 +272,17 @@ h2, .h2 {
 }
 
 .bs-callout-kinematics {
+	margin-top:0px;
 	height:340px;
 }
 
 .bs-callout-mechanics {
-	height:312px;
+	height:260px;
+	margin-top:0px;
 }
 
 .bs-callout-morphological {
-	height: 260px;
+	height: 230px;
 }
 
 .bs-callout-uncertainty {

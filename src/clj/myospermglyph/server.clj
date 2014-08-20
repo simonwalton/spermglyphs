@@ -124,11 +124,16 @@
 
 
 (defn create-slider[s]
-  (let [step (get s :step 1.0)]
+  (let [step (get s :step 1.0)
+        txt-id (str (:id s) "-text")
+        ]
   (html
       [:div {:class "form-group"}
         [:label {:for (:id s) :class "control-label"} (:name s)] [:span {:class "control-desc"} (str " " (:desc s))]
-        [:div {:style "width:100%"} [:input {:type "text" :data-slider-min (str (:min s)) :data-slider-step (str step) :data-slider-max (str (:max s)) :id (:id s) :class "create-slider"}]]]
+        [:div {:style "width:100%" :class "row form-group"} 
+          [:div {:class "col-sm-9"} [:input {:type "text" :data-slider-min (str (:min s)) :data-slider-step (str step) :data-slider-max (str (:max s)) :id (:id s) :class "create-slider"}] ]
+          [:div {:class "col-sm-3"} [:input {:type "text" :class "form-control input-manual-textbox" :id txt-id}] ]
+           ]]
       )))
 
 (defn create-slider-group[id nicename desc sliders]
@@ -294,21 +299,23 @@
                      ]
                   ]
                 ; share
-                [:div {:class "row" :id "div-share"}
+                [:div {:class "row"}
+                  [:div {:id "div-share"}
                  [:div {:class "col-sm-1"} [:h3 [:i {:class "fa fa-share-alt"}]]]
                  [:div {:class "col-sm-11"}
-                    [:div {:class "row"} [:h4 "Share your creation!"]
+                    [:div {:class "row" } [:h4 "Share your creation!"]
                       [:div {:class "col-md-6"}
                        [:div {:style "width:250px"} [:input { :class "pull-left form-control input-sm sperm-name-input"  :id "name" :placeholder "Name me!"}]]
-                       [:div {:style "width:250px"} [:textarea {:rows "3" :class "pull-left form-control input-sm sperm-name-input"  :id "description" :placeholder "Describe me!"}]]
+                       [:div {:style "width:250px"} [:textarea {:rows "5" :class "pull-left form-control input-sm sperm-name-input"  :id "description" :placeholder "Describe me!"}]]
                        ]
                       [:div {:class "col-md-6"}
-                        [:div "Where to share?"]
+                        [:div {:id "where-to-share"} "Where to share?" ]
                       [:a {:href "javascript:void(0);" :id "shar-manual" :class "shar" }[:i {:class "fa fa-share"}] " Manual"]
                       [:a {:href "javascript:void(0);" :id "shar-twitter" :class "shar" }[:i {:class "fa fa-twitter"}] " Twitter"]
                       [:a {:href "javascript:void(0);" :id "shar-facebook" :class "shar" }[:i {:class "fa fa-facebook"}] " Facebook"]
                      ]
                     ]
+                   ]
                   ]
                  ]
                 ]

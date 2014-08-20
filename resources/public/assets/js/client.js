@@ -157,6 +157,71 @@ function dismiss() {
 	$('#persist-modal').modal('hide');
 }
 
+/*
+ * true: show the textboxes beside the sliders; false: hide the textboxes
+ */
+function showManualTextboxes(show) {
+	if(show)
+		$('.input-manual-textbox').show();
+	else
+		$('.input-manual-textbox').hide();
+}
+
+function updateSliderAndTextbox(id, val) {
+	val = parseFloat(val).toFixed(2);
+	$('#' + id + '-text').val(val);
+	sliders[id].setValue(val);
+}
+
+/*
+ * for each slider, update its textbox to the slider value
+ */
+function updateSliderTextboxesFromSliders() {
+	for(i in sliders) {
+		var textbox = $('#' + i + "-text");
+		var val = parseFloat(sliders[i].getValue());
+		updateSliderAndTextbox(i,val);
+	}	
+}
+
+/*
+ * constrain the textboxes to particular ranges
+ */
+function constrainTextboxes() {
+	var vsl = parseFloat($('#vsl-text').val());
+	var vap = parseFloat($('#vap-text').val());
+	var vcl = parseFloat($('#vcl-text').val());
+	
+	if(vsl > vap) {
+		updateSliderAndTextbox('vsl',$('#vap-text').val());
+	}
+	if(vap > vcl) {
+		updateSliderAndTextbox('vap',$('#vcl-text').val());
+	}
+}
+
+/*
+ * for each slider textbox, set the slider's value to the textbox's value
+ */
+function updateSliderValuesFromTextboxes() {
+	for(i in sliders) {
+		var textbox = $('#' + i + "-text");
+		var slider = sliders[i];
+		var val = parseFloat(textbox.val());
+		var ok = (!isNaN(val)) && val >= parseFloat(slider.min) && val <= parseFloat(slider.max);
+		if(ok)		
+			updateSliderAndTextbox(i, val);
+		
+		if(!ok)
+			textbox.parent().addClass("has-error");
+		else
+			textbox.parent().removeClass("has-error");
+	}	
+
+	constrainTextboxes();
+}
+
+
 /* --------------------------- *
  *  entry point                *
  * --------------------------  */
@@ -164,7 +229,7 @@ $(document).ready(function() {
 	// initialise the main cljs bits
 	myospermglyph.server._init('/assets/data/', function(id) {
 		if(id == 'animal') {
-			$('#main-tabs li:eq(0) a').tab('show');
+	//		$('#main-tabs li:eq(0) a').tab('show');
 		}	
 	}); 
 	// some default sizes
@@ -188,9 +253,14 @@ $(document).ready(function() {
 	$('.create-slider').each(function(i) {
 		var sl = $(this).slider({formater: function(val) { return parseFloat(val).toFixed(2); }} ).on('slide', function(ev) {
 			constrainSliders();
+			updateSliderTextboxesFromSliders();
 			myospermglyph.server._drawManual(selectedDiv, [selectedDiv.width(), selectedDiv.height()], manualProps());
 		}).data('slider');
 		sliders[$(this).prop('id')] = sl;
+	});
+
+	$('.input-manual-textbox').change(function() {
+		updateSliderValuesFromTextboxes();
 	});
 
 	// ask the rendering parts to draw the sperm onto raphael papers and store the paper objects
@@ -272,4 +342,11 @@ $(document).ready(function() {
 	});
 
 	$('#schematic-popover').popover({'html':true});
+
+	$("#chk-allow-textboxes").change(function() {
+		var show = $(this).attr("checked");
+		showManualTextboxes(show);
+	});
+
+	updateSliderTextboxesFromSliders();
 });
