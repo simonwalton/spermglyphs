@@ -181,6 +181,7 @@ function updateSliderTextboxesFromSliders() {
 		var textbox = $('#' + i + "-text");
 		var val = parseFloat(sliders[i].getValue());
 		updateSliderAndTextbox(i,val);
+		textbox.parent().removeClass("has-error");
 	}	
 }
 
