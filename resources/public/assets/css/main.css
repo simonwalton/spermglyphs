@@ -139,6 +139,32 @@ a.btn-enter:active
 	margin-top:0px;
 }
 
+#param-link-indicator {
+	border-right:1px dashed #666;
+	border-top:1px dashed #666;
+	border-bottom:1px dashed #666;
+	width:10px;
+	height:130px;
+	margin-top:-250px;
+	margin-left:250px;
+}
+
+#param-link-indicator > span {
+	display:block;
+	z-index:10000;
+	position:relative;
+	top:56px;
+	left:13px;
+}
+
+#param-link-indicator > div {
+	border-top:1px dashed #666;
+	width:7px;
+	height:10px;
+	margin-top:48px;
+	margin-left:0px;
+}
+
 .input-manual-textbox {
 	background:none;
 	border: 1px dashed #444;

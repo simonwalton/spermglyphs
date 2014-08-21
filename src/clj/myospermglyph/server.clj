@@ -314,6 +314,10 @@
                        {:id "bcf" :name "BCF" :desc "Beat Cross Frequency <i>Hz</i>" :min 0 :max 50}
                        {:id "alh" :name "ALH" :desc "Amp. of Lateral Head Disp. &micro;<i>m</i>" :min 0 :max 50}
                        {:id "mad" :name "MAD" :desc "Mean Anglular Displacement, &deg;" :min 0 :max 60}])
+                   [:div {:id "param-link-indicator"} 
+                      [:span {:class "fa fa-link" :title "Note that VSL < VAP < VCL must hold." :alt "TEST"} " "]
+                      [:div {:id "param-link-mid"} ]
+                     ]
                     (create-slider-group "uncertainty" "Uncertainty" "Machine vision uncertainty"
                       [{:id "headuncertainty" :name "Head" :desc "In capturing the head" :min 0 :max 1 :step 0.01}
                       {:id "uf" :name "Flagella" :desc "In capturing the flagella" :min 0 :max 1 :step 0.01}])
