@@ -22,27 +22,7 @@
       [:head
            [:meta {:http-equiv "Content-type"
                         :content "text/html; charset=utf-8"}]
-           [:title "Ovii | Make your own Sperm Glyph"]
-           [:link {:href "/assets/bootstrap/css/bootstrap.min.css" :rel "stylesheet"}]
-           [:link {:href "/assets/bootstrap/css/bootstrap-theme.min.css" :rel "stylesheet"}]
-           [:link {:href "/assets/css/slider.css" :rel "stylesheet"}]
-           [:link {:href "/assets/css/cover.css" :rel "stylesheet"}]
-           [:link {:href "/assets/css/main.css" :rel "stylesheet"}]
-           [:link {:href "/assets/css/d3.parcoords.css" :rel "stylesheet"}]
-           [:link {:href "/assets/css/jquery.gridster.min.css" :rel "stylesheet"}]
-           [:link {:href "/assets/css/slick.grid.css" :rel "stylesheet"}]
-           [:link {:href "//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" :rel "stylesheet"}]]
-           [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans" :rel "stylesheet" :type "text/css"}]
-      [:body content]))
-
-
-
-(defn main-layout [& content]
-  (html
-      [:head
-           [:meta {:http-equiv "Content-type"
-                        :content "text/html; charset=utf-8"}]
-           [:title "Ovii | Make your own Sperm Glyph"]
+           [:title "Ovii | Glyph-Based Video Visualization for Semen Analysis"]
            [:link {:href "/assets/bootstrap/css/bootstrap.min.css" :rel "stylesheet"}]
            [:link {:href "/assets/bootstrap/css/bootstrap-theme.min.css" :rel "stylesheet"}]
            [:link {:href "/assets/css/slider.css" :rel "stylesheet"}]
