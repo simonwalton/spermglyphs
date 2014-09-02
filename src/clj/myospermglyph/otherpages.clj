@@ -16,7 +16,7 @@
 
 
 (defn entrance-content []
-  (common/main-layout
+  (common/view-layout
     [:script {:src "/assets/js/raphael-min.js"}]
     [:script {:src "/assets/js/jquery.min.js"}]
     [:script {:src "/assets/bootstrap/js/bootstrap.min.js"}]
