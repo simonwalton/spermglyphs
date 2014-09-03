@@ -2,7 +2,7 @@
 
 ## Synopsis
 
-This project is an implementation of the glyph design contained within the paper [Glyph-Based Video Visualization for Semen Analysis`](http://www.ncbi.nlm.nih.gov/pubmed/24344092). As well as providing an example implementation of drawing the glyph from its parameters as described in the paper, the system includes many other features to provide exploration of the parameter space and the ability to choose from a number of presets.
+This project is an implementation of the glyph design contained within the paper [Glyph-Based Video Visualization for Semen Analysis](http://www.ncbi.nlm.nih.gov/pubmed/24344092). As well as providing an example implementation of drawing the glyph from its parameters as described in the paper, the system includes many other features to provide exploration of the parameter space and the ability to choose from a number of presets.
 
 This work was developed partly to demonstrate our glyph design effectively to accompany its presentation at VIS 2014 in Paris, France. 
 
@@ -20,7 +20,7 @@ Our implementation is in Clojure/Clojurescript, and [leinigen](http://leiningen.
 
 `lein deps`
 
-To fetch all of the dependencies. Then, run
+To fetch all of the dependencies. Then, run:
 
 `lein ring server`
 
@@ -32,4 +32,4 @@ A huge thankyou to Eamonn Macguire, Alfie Abdul-Rahman, and Min Chen for their h
 
 ## License
 
-Our code is licensed under GPL v3. Some aspects have a separate licence. In particular, the images used for the animal presets are creative commons licenced, and we include their attributions on the web application interface and in the image directory itself inside a text file.
+Our code is licensed under GPL v3. Please see LICENCE for details. Some aspects have a separate licence. In particular, the images used for the animal presets are creative commons licenced, and we include their attributions on the web application interface and in the image directory itself inside a text file.
