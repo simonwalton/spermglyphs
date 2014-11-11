@@ -65,7 +65,7 @@
         ]
         [:div {:class "collapse navbar-collapse"}
           [:ul {:class "nav navbar-right"}
-            [:a {:href "http://github.com" :alt "View our code on Github!"}[:i {:class "fa fa-github-square github-top"}]]
+            [:a {:href "http://github.com/simonwalton/spermglyphs" :alt "View our code on Github!"}[:i {:class "fa fa-github-square github-top"}]]
           ] 
          ]]]))
 
