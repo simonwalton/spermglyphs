@@ -24,7 +24,9 @@ To fetch all of the dependencies. Then, run:
 
 `lein ring server`
 
-To start a localhost server instance with the codebase running. 
+To start a localhost server instance with the codebase running. Or, you can create a big .jar containing all dependencies that'll execute a Jetty instance when run:
+
+`lein uberjar; java -jar target/<compiledjarfile>.jar`
 
 ## Contributors
 
