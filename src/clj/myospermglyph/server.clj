@@ -71,7 +71,7 @@
 
 (defn create-thumb[id img title desc]
   (html
-    [:div {:class "col-xs-6 col-md-3 zoo-thumbnail-container"}
+    [:div {:class "col-sm-3 zoo-thumbnail-container"}
         [:div {:class "thumbnail"}
           [:a {:title desc :id id :class "animal-preset-link" :href (str "javascript:selectZooPreset('" img "');")} [:img {:src (str "/assets/img/species/" img) :alt desc}]]
           [:div {:class "caption"} title]
@@ -159,7 +159,7 @@
       [:div {:class "container container-main"}
         [:div {:class "row"}
             ; left-hand col
-          [:div {:class "col-md-6"}
+          [:div {:class "col-sm-6"}
             [:div {:class "logo-container-header"} [:img {:src "/assets/img/logo_logo.png" :class "logo-small" }]
               [:a {:href "#" :id "schematic-popover" :class "pull-right"
                     :data-toggle "popover" :data-placement "bottom" :data-content "<img width=\"600\" src=\"/assets/img/schematic.png\"/>"} 
@@ -188,7 +188,7 @@
              ]
            ]
          ; right-hand col
-          [:div {:class "col-md-6 right-controls"}
+          [:div {:class "col-sm-6 right-controls"}
             [:ul {:class "nav nav-tabs" :id "main-tabs"}
               [:li  [:a {:href "#zoo" :data-toggle "tab"}[:i {:class "fa fa-paw"}] " Animal"]]
               [:li [:a {:href "#human" :data-toggle "tab"}[:i {:class "fa fa-child"}] " Human"]]
@@ -233,11 +233,11 @@
                  [:div {:class "col-sm-1"} [:h3 [:i {:class "fa fa-share-alt"}]]]
                  [:div {:class "col-sm-11"}
                     [:div {:class "row" } [:h4 "Share your creation!"]
-                      [:div {:class "col-md-6"}
+                      [:div {:class "col-sm-6"}
                        [:div {:style "width:250px"} [:input { :class "pull-left form-control input-sm sperm-name-input"  :id "name" :placeholder "Name me!"}]]
                        [:div {:style "width:250px"} [:textarea {:rows "5" :class "pull-left form-control input-sm sperm-name-input"  :id "description" :placeholder "Describe me!"}]]
                        ]
-                      [:div {:class "col-md-6"}
+                      [:div {:class "col-sm-6"}
                         [:div {:id "where-to-share"} "Where to share?" ]
                       [:a {:href "javascript:void(0);" :id "shar-manual" :class "shar" }[:i {:class "fa fa-share"}] " Manual"]
                       [:a {:href "javascript:void(0);" :id "shar-twitter" :class "shar" }[:i {:class "fa fa-twitter"}] " Twitter"]
@@ -290,7 +290,8 @@
                                :join? false}))
 
 (defn -main []
+  (println (str "You passed in this value: "))  
   (model/migrate)
-  (let [port (Integer. (or (System/getenv "PORT") "8080"))]
+  (let [port (Integer. (or (System/getenv "PORT") "8090"))]
     (start port)))
 

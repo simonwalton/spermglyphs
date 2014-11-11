@@ -16,7 +16,8 @@
   :plugins [[lein-cljsbuild "1.0.3"]
             [lein-ring "0.8.11"]]
   :source-paths ["src/clj"]
-  :uberjar-name "myospermglyph-standalone.jar"
+  :main ^:skip-aot myospermglyph.server
+  :uberjar-name "myospermglyph"
   :resource-paths ["resources/"]
   :profiles {:uberjar {:aot :all}}
   :min-lein-version "2.0.0"
@@ -34,6 +35,5 @@
         }
       }
     }
-  :main myospermglyph.server
   :ring {:handler myospermglyph.server/app :auto-refresh? true :auto-reload? true}
 )
