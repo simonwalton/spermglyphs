@@ -1,4 +1,4 @@
-![Alt text](/resources/public/assets/assets/img/logo_logo.png?raw=true)
+![Alt text](https://raw.githubusercontent.com/simonwalton/spermglyphs/master/resources/public/assets/img/logo_logo.png)
 
 ## Synopsis
 
