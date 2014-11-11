@@ -228,8 +228,12 @@ a.btn-enter:active
 
 .right-controls {
 	margin-top:20px;
+	min-width:580px;
 }
-
+.left-controls {
+	min-width:500px;
+}
+	
 h2, .h2 {
 	color:#ccc;
 	font-size:32px;
@@ -407,13 +411,7 @@ h2, .h2 {
 
 .container-main {
 	width:1200px;
-	padding-top:30px;
-}
-
-.container-outer {
-	margin-top:50px;
-	padding-bottom:50px;
-	width:100%;
+	padding-top:100px;
 	background-image: url('/assets/img/bg.png');
 }
 

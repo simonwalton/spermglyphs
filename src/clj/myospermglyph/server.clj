@@ -155,10 +155,10 @@
     (common/create-navbar)
     (create-persist-viewer-modal spermid)
 
-    [:div {:class "container"}
-        [:div {:class "row"}
+    [:div {:class "container container-main"}
+        [:div {:class "row" }
             ; left-hand col
-          [:div {:class "col-sm-6"}
+          [:div {:class "col-sm-6 left-controls"}
             [:div {:class "logo-container-header"} [:img {:src "/assets/img/logo_logo.png" :class "logo-small" }]
               [:a {:href "#" :id "schematic-popover" :class "pull-right"
                     :data-toggle "popover" :data-placement "bottom" :data-content "<img width=\"600\" src=\"/assets/img/schematic.png\"/>"} 
