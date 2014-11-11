@@ -1,4 +1,4 @@
-![Alt text](http://ovii.oerc.ox.ac.uk/assets/myospermglyph_logo_small.png)
+![Alt text](/resources/public/assets/assets/img/logo_logo.png?raw=true)
 
 ## Synopsis
 
