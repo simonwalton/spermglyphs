@@ -155,8 +155,7 @@
     (common/create-navbar)
     (create-persist-viewer-modal spermid)
 
-    [:div {:class "container-outer container"}
-      [:div {:class "container container-main"}
+    [:div {:class "container"}
         [:div {:class "row"}
             ; left-hand col
           [:div {:class "col-sm-6"}
@@ -265,7 +264,7 @@
                   [:div {:id "explore-pc" :class "parcoords"}]
                 ]
              ]
-          ]]]]]
+          ]]]]
 
     [:script " var sliders = {}; var parcoords = null; var gridster; var papers = []; var selectedDiv = null; var selectedPaper = null;"]
     [:script {:src "/auto-js/cljs.js"}]
