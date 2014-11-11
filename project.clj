@@ -17,7 +17,7 @@
             [lein-ring "0.8.11"]]
   :source-paths ["src/clj"]
   :main ^:skip-aot myospermglyph.server
-  :uberjar-name "myospermglyph"
+  :uberjar-name "myospermglyph-standalone.jar"
   :resource-paths ["resources/"]
   :profiles {:uberjar {:aot :all}}
   :min-lein-version "2.0.0"
