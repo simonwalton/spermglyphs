@@ -52,6 +52,7 @@
            [:link {:href "/assets/css/slick.grid.css" :rel "stylesheet"}]
            [:link {:href "//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" :rel "stylesheet"}]]
            [:link {:href "http://fonts.googleapis.com/css?family=Open+Sans" :rel "stylesheet" :type "text/css"}]
+           [:script {:src "/assets/js/ga.js"}]
       [:body content]))
 
 (defn create-navbar []
